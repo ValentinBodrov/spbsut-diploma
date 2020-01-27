@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>bodrov.valentin.spbsut</groupId>
+    <artifactId>java-image-processing</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+
+        <java.source.version>1.8</java.source.version>
+        <java.target.version>1.8</java.target.version>
+        <encoding.version>UTF-8</encoding.version>
+
+        <!-- Libraries version -->
+        <testng.version>7.0.0</testng.version>
+
+        <!-- Plugins version -->
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <javafx-maven-plugin.version>2.0</javafx-maven-plugin.version>
+
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
+                    <encoding>${encoding.version}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>${javafx-maven-plugin.version}</version>
+                <configuration>
+                    <mainClass>bodrov.valentin.spbsut.MainApp</mainClass>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
