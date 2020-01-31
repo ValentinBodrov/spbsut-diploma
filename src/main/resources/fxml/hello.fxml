@@ -1,29 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="495.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/11.0.1"
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="bodrov.valentin.spbsut.controller.MainController">
-    <children>
-        <Button fx:id="helloWorldSay" layoutX="212.0" layoutY="54.0"
-                mnemonicParsing="false" onAction="#sayHelloWorld"
-                prefHeight="56.0" prefWidth="176.0" text="Load image"/>
-        <ImageView fx:id="sampleImage" fitHeight="246.0" fitWidth="272.0"
-                   layoutX="164.0" layoutY="132.0" pickOnBounds="true"
-                   preserveRatio="true"/>
-        <Separator layoutY="467.0" prefHeight="3.0" prefWidth="600.0"
-                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                   AnchorPane.topAnchor="467.0"/>
-        <Label fx:id="statusBar" layoutX="2.0" layoutY="470.0" prefHeight="25.0"
-               prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
-               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-               AnchorPane.topAnchor="470.0"/>
-    </children>
-</AnchorPane>
+    <center>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+                    minHeight="-Infinity" minWidth="-Infinity"
+                    prefHeight="495.0" prefWidth="600.0">
+            <children>
+                <ImageView fx:id="sampleImage" fitHeight="377.0"
+                           fitWidth="523.0" layoutX="39.0" layoutY="59.0"
+                           pickOnBounds="true" preserveRatio="true"/>
+            </children>
+        </AnchorPane>
+    </center>
+    <top>
+        <MenuBar prefHeight="25.0" prefWidth="600.0"
+                 BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="openLocal" mnemonicParsing="false"
+                                  onAction="#openLocal" text="Open..."/>
+                        <MenuItem fx:id="openUrl" mnemonicParsing="false"
+                                  onAction="#openURL" text="Open URL..."/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <bottom>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <Separator prefWidth="200.0"/>
+                <Label fx:id="statusBar" prefHeight="25.0" prefWidth="600.0"/>
+            </children>
+        </VBox>
+    </bottom>
+</BorderPane>

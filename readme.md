@@ -4,11 +4,12 @@ Native Java DIP (digital image processing) application
 
 **Current features**
 
-- reading images from local drive
+- reading images from anywhere:
+    - from local drive
+    - from URLs
 
 **Future features**
 
-- reading images from anywhere (e.g. some URLs)
 - finally, processing!
 - ...
 - saving processed image
