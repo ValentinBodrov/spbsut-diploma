@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class Utils {
 
-    public static String showInputTextDialog() {
+    public static String showUrlInputTextDialog() {
         TextInputDialog dialog = new TextInputDialog();
 
         dialog.setTitle("Open URL");
