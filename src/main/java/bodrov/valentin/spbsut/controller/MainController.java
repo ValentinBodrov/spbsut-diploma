@@ -3,7 +3,6 @@ package bodrov.valentin.spbsut.controller;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -11,16 +10,15 @@ import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
-import static bodrov.valentin.spbsut.utils.Utils.showInputTextDialog;
+import static bodrov.valentin.spbsut.utils.Utils.showUrlInputTextDialog;
 
 public class MainController {
 
     public ImageView sampleImage;
     public Label statusBar;
-    public MenuItem openLocal;
-    public MenuItem openUrl;
 
     private Image currentProcessedImage;
 
@@ -76,7 +74,12 @@ public class MainController {
         BufferedImage image;
 
         try {
-            String website = showInputTextDialog();
+            String website = showUrlInputTextDialog();
+            if (!website.matches("http(|s)://.*(.(com|ru|en|eu|su|uk)/?).*")) {
+                sampleImage.setImage(null);
+                setCurrentProcessedImage(null);
+                throw new Exception("The URL is invalid");
+            }
             URL url = new URL(website);
             image = ImageIO.read(url);
             setImageToImageView(image);
@@ -84,30 +87,65 @@ public class MainController {
                     url));
         } catch (Exception e) {
             setLogs(e.getMessage());
-            sampleImage.setImage(null);
         }
     }
 
     public void doGreyscale(ActionEvent actionEvent) {
-        BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int p = image.getRGB(x, y);
-                int a = (p >> 24) & 0xff;
-                int r = (p >> 16) & 0xff;
-                int g = (p >> 8) & 0xff;
-                int b = p & 0xff;
-                int avg = (r + g + b) / 3;
-
-                p = (a << 24) | (avg << 16) | (avg << 8) | avg;
-                image.setRGB(x, y, p);
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
             }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int p = image.getRGB(x, y);
+                    int a = (p >> 24) & 0xff;
+                    int r = (p >> 16) & 0xff;
+                    int g = (p >> 8) & 0xff;
+                    int b = p & 0xff;
+                    int avg = (r + g + b) / 3;
+
+                    p = (a << 24) | (avg << 16) | (avg << 8) | avg;
+                    image.setRGB(x, y, p);
+                }
+            }
+            setLogs("The image was successfully greyscaled");
+            setImageToImageView(image);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
         }
-        setLogs("The image was successfully greyscaled");
-        setImageToImageView(image);
+    }
+
+    public void savePictureAs(ActionEvent actionEvent) {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(
+                    new File("src/main/resources/images/"));
+            File outputFile = fileChooser.showSaveDialog(null);
+
+            if (outputFile == null) {
+                throw new NullPointerException("Something goes wrong...");
+            }
+            if (!outputFile.getName().matches(".*png")) {
+                throw new Exception("The preferred file cannot be saved as image");
+            }
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            try {
+                ImageIO.write(bufferedImage, "png", outputFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            setLogs(String.format(
+                    "The image with name %s is saved", outputFile.getName()));
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
     }
 
 }
