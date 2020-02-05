@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -19,6 +20,7 @@ public class MainController {
 
     public ImageView sampleImage;
     public Label statusBar;
+    public AnchorPane centerPane;
 
     private Image currentProcessedImage;
 
@@ -33,7 +35,9 @@ public class MainController {
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
         sampleImage.setImage(imageToImport);
-        sampleImage.setPreserveRatio(false);
+        sampleImage.setFitWidth(image.getWidth());
+        sampleImage.setSmooth(true);
+        sampleImage.setCache(true);
         setCurrentProcessedImage(imageToImport);
     }
 
