@@ -145,6 +145,7 @@ public class MainController {
             }
             URL url = new URL(website);
             image = ImageIO.read(url);
+            setOriginalImage(SwingFXUtils.toFXImage(image, null));
             setImageToImageView(image);
             setLogs(String.format("The image from %s was successfully loaded",
                     url));
