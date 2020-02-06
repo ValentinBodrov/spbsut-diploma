@@ -11,6 +11,7 @@ Native Java DIP (digital image processing) application
     - greyscale
     - sepia
     - negative
+    - custom processing (influencing on red, green or blue channels)
 - saving processed image
 
 **Future features**
