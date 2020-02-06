@@ -1,8 +1,13 @@
 package bodrov.valentin.spbsut.controller;
 
+import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -21,8 +26,53 @@ public class MainController {
     public ImageView sampleImage;
     public Label statusBar;
     public AnchorPane centerPane;
+    public Slider redSlider;
+    public Slider greenSlider;
+    public Slider blueSlider;
+    public Spinner redSpinner;
+    public Spinner greenSpinner;
+    public Spinner blueSpinner;
 
     private Image currentProcessedImage;
+    private Image originalImage;
+
+    @FXML
+    private void initialize() {
+        redSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 1));
+        greenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 1));
+        blueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 1));
+
+        redSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            redSpinner.getValueFactory().setValue(newValue.intValue());
+            changeRedCustom();
+        });
+        greenSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            greenSpinner.getValueFactory().setValue(newValue.intValue());
+            changeGreenCustom();
+        });
+        blueSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            blueSpinner.getValueFactory().setValue(newValue.intValue());
+            changeBlueCustom();
+        });
+        redSpinner.getValueFactory().valueProperty().addListener((
+                ChangeListener<Number>) (observableValue, oldValue, newValue) -> {
+            redSlider.setValue(newValue.intValue());
+            changeRedCustom();
+        });
+        greenSpinner.getValueFactory().valueProperty().addListener((
+                ChangeListener<Number>) (observableValue, oldValue, newValue) -> {
+            greenSlider.setValue(newValue.intValue());
+            changeGreenCustom();
+        });
+        blueSpinner.getValueFactory().valueProperty().addListener((
+                ChangeListener<Number>) (observableValue, oldValue, newValue) -> {
+            blueSlider.setValue(newValue.intValue());
+            changeBlueCustom();
+        });
+    }
 
     private Image getCurrentProcessedImage() {
         return currentProcessedImage;
@@ -30,6 +80,14 @@ public class MainController {
 
     private void setCurrentProcessedImage(Image currentProcessedImage) {
         this.currentProcessedImage = currentProcessedImage;
+    }
+
+    public Image getOriginalImage() {
+        return originalImage;
+    }
+
+    public void setOriginalImage(Image originalImage) {
+        this.originalImage = originalImage;
     }
 
     private void setImageToImageView(BufferedImage image) {
@@ -67,6 +125,7 @@ public class MainController {
             image = new BufferedImage(
                     width, height, BufferedImage.TYPE_INT_ARGB);
             image = ImageIO.read(inputFile);
+            setOriginalImage(SwingFXUtils.toFXImage(image, null));
             setImageToImageView(image);
         } catch (Exception e) {
             setLogs(e.getMessage());
@@ -166,30 +225,19 @@ public class MainController {
                     int p = image.getRGB(x, y);
 
                     int a = (p >> 24) & 0xff;
-                    int R = (p >> 16) & 0xff;
-                    int G = (p >> 8) & 0xff;
-                    int B = p & 0xff;
+                    int r = (p >> 16) & 0xff;
+                    int g = (p >> 8) & 0xff;
+                    int b = p & 0xff;
 
-                    int newRed = (int) (0.393 * R + 0.769 * G + 0.189 * B);
-                    int newGreen = (int) (0.349 * R + 0.686 * G + 0.168 * B);
-                    int newBlue = (int) (0.272 * R + 0.534 * G + 0.131 * B);
+                    int newRed = (int) (0.393 * r + 0.769 * g + 0.189 * b);
+                    int newGreen = (int) (0.349 * r + 0.686 * g + 0.168 * b);
+                    int newBlue = (int) (0.272 * r + 0.534 * g + 0.131 * b);
 
-                    if (newRed > 255) {
-                        R = 255;
-                    } else {
-                        R = newRed;
-                    }
-                    if (newGreen > 255) {
-                        G = 255;
-                    } else {
-                        G = newGreen;
-                    }
-                    if (newBlue > 255) {
-                        B = 255;
-                    } else {
-                        B = newBlue;
-                    }
-                    p = (a << 24) | (R << 16) | (G << 8) | B;
+                    r = Math.min(newRed, 255);
+                    g = Math.min(newGreen, 255);
+                    b = Math.min(newBlue, 255);
+
+                    p = (a << 24) | (r << 16) | (g << 8) | b;
 
                     image.setRGB(x, y, p);
                 }
@@ -227,6 +275,151 @@ public class MainController {
             }
             setLogs("The negative effect was successfully applied to image");
             setImageToImageView(image);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void changeRedCustom() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage originalImage = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int p = image.getRGB(x, y);
+                    int originalP = originalImage.getRGB(x, y);
+
+                    int a = (p >> 24) & 0xff;
+                    int r;
+                    int originalR = (originalP >> 16) & 0xff;
+                    int g = (p >> 8) & 0xff;
+                    int b = p & 0xff;
+
+                    int newR = originalR + (int) redSlider.getValue();
+                    r = Math.min(newR, 255);
+
+                    p = (a << 24) | (r << 16) | (g << 8) | b;
+                    image.setRGB(x, y, p);
+                }
+            }
+            setLogs("The red channel was successfully changed");
+            setImageToImageView(image);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void changeGreenCustom() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage originalImage = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int p = image.getRGB(x, y);
+                    int originalP = originalImage.getRGB(x, y);
+
+                    int a = (p >> 24) & 0xff;
+                    int r = (p >> 16) & 0xff;
+                    int g;
+                    int originalG = (originalP >> 8) & 0xff;
+                    int b = p & 0xff;
+
+                    int newG = originalG + (int) greenSlider.getValue();
+                    g = Math.min(newG, 255);
+
+                    p = (a << 24) | (r << 16) | (g << 8) | b;
+                    image.setRGB(x, y, p);
+                }
+            }
+            setLogs("The green channel was successfully changed");
+            setImageToImageView(image);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void changeBlueCustom() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage originalImage = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int p = image.getRGB(x, y);
+                    int originalP = originalImage.getRGB(x, y);
+
+                    int a = (p >> 24) & 0xff;
+                    int r = (p >> 16) & 0xff;
+                    int g = (p >> 8) & 0xff;
+                    int b;
+                    int originalB = originalP & 0xff;
+
+                    int newB = originalB + (int) blueSlider.getValue();
+                    b = Math.min(newB, 255);
+
+                    p = (a << 24) | (r << 16) | (g << 8) | b;
+                    image.setRGB(x, y, p);
+                }
+            }
+            setLogs("The blue channel was successfully changed");
+            setImageToImageView(image);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    @Deprecated
+    public void doCringe() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int p = image.getRGB(x, y);
+                    int a = (p >> 24) & 0xff;
+                    int r = (p >> 16) & 0xff;
+                    int g = (p >> 8) & 0xff;
+                    int b = p & 0xff;
+                    r += (int) redSlider.getValue();
+                    g += (int) greenSlider.getValue();
+                    b += (int) blueSlider.getValue();
+
+                    p = (a << 24) | (r << 16) | (g << 8) | b;
+                    image.setRGB(x, y, p);
+                }
+            }
+            setLogs("The negative effect was successfully applied to image");
+            setImageToImageView(image);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void resetChanges(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            setImageToImageView(SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            setLogs("The original image was restored");
         } catch (Exception e) {
             setLogs(e.getMessage());
         }
