@@ -133,7 +133,7 @@ public class MainController {
         }
     }
 
-    public void openURL(ActionEvent actionEvent) {
+    public void openUrl(ActionEvent actionEvent) {
         BufferedImage image;
 
         try {

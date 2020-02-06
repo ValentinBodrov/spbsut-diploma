@@ -37,7 +37,7 @@
                         <MenuItem fx:id="openLocal" mnemonicParsing="false"
                                   onAction="#openLocal" text="Open..."/>
                         <MenuItem fx:id="openUrl" mnemonicParsing="false"
-                                  onAction="#openURL" text="Open URL..."/>
+                                  onAction="#openUrl" text="Open URL..."/>
                         <MenuItem fx:id="saveAs" mnemonicParsing="false"
                                   onAction="#savePictureAs" text="Save As..."/>
                     </items>
