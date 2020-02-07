@@ -4,10 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -32,6 +29,7 @@ public class MainController {
     public Spinner redSpinner;
     public Spinner greenSpinner;
     public Spinner blueSpinner;
+    public Button test;
 
     private Image currentProcessedImage;
     private Image originalImage;
@@ -276,6 +274,96 @@ public class MainController {
             }
             setLogs("The negative effect was successfully applied to image");
             setImageToImageView(image);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void doHorizontalMirroring(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            BufferedImage mirroredImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0, mirroredX = width - 1; x < width; x++, mirroredX--) {
+                    int p = image.getRGB(x, y);
+                    mirroredImage.setRGB(mirroredX, y, p);
+                }
+            }
+            setLogs("The horizontal mirroring effect was successfully applied to image");
+            setOriginalImage(SwingFXUtils.toFXImage(mirroredImage, null));
+            setImageToImageView(mirroredImage);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void doVerticalMirroring(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            BufferedImage mirroredImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            for (int y = 0, mirroredY = height - 1; y < height; y++, mirroredY--) {
+                for (int x = 0; x < width; x++) {
+                    int p = image.getRGB(x, y);
+                    mirroredImage.setRGB(x, mirroredY, p);
+                }
+            }
+            setLogs("The horizontal mirroring effect was successfully applied to image");
+            setOriginalImage(SwingFXUtils.toFXImage(mirroredImage, null));
+            setImageToImageView(mirroredImage);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void rotateRight(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0, rotatedY = height - 1; y < height; y++, rotatedY--) {
+                    rotatedImage.setRGB(rotatedY, x, image.getRGB(x, y));
+                }
+            }
+            setLogs("The left rotation effect was successfully applied to image");
+            setOriginalImage(SwingFXUtils.toFXImage(rotatedImage, null));
+            setImageToImageView(rotatedImage);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void rotateLeft(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            int width = image.getWidth();
+            int height = image.getHeight();
+            BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
+            for (int x = 0, rotatedX = width - 1; x < width; x++, rotatedX--) {
+                for (int y = 0; y < height; y++) {
+                    rotatedImage.setRGB(y, rotatedX, image.getRGB(x, y));
+                }
+            }
+            setLogs("The left rotation effect was successfully applied to image");
+            setOriginalImage(SwingFXUtils.toFXImage(rotatedImage, null));
+            setImageToImageView(rotatedImage);
         } catch (Exception e) {
             setLogs(e.getMessage());
         }
