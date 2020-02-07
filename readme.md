@@ -12,6 +12,8 @@ Native Java DIP (digital image processing) application
     - sepia
     - negative
     - custom processing (influencing on red, green or blue channels)
+    - pics rotating (on 90 grads)
+    - pics vertical and horizontal mirroring
 - saving processed image
 
 **Future features**
