@@ -6,7 +6,7 @@
 
     <groupId>bodrov.valentin.spbsut</groupId>
     <artifactId>java-image-processing</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <properties>
 
@@ -54,6 +54,23 @@
                 <version>${javafx-maven-plugin.version}</version>
                 <configuration>
                     <mainClass>bodrov.valentin.spbsut.MainApp</mainClass>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>bodrov.valentin.spbsut.MainApp
+                            </mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
 
