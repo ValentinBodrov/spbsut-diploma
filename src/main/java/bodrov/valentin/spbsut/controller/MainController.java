@@ -4,7 +4,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,16 +32,18 @@ public class MainController {
     public Spinner redSpinner;
     public Spinner greenSpinner;
     public Spinner blueSpinner;
-    public Button test;
 
     private Image currentProcessedImage;
     private Image originalImage;
 
     @FXML
     private void initialize() {
-        redSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 1));
-        greenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 1));
-        blueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255, 1));
+        redSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
+        greenSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
+        blueSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
 
         redSlider.valueProperty().addListener((
                 observableValue, oldValue, newValue) -> {
@@ -55,18 +60,21 @@ public class MainController {
             blueSpinner.getValueFactory().setValue(newValue.intValue());
             changeBlueCustom();
         });
-        redSpinner.getValueFactory().valueProperty().addListener((
-                ChangeListener<Number>) (observableValue, oldValue, newValue) -> {
+        redSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
             redSlider.setValue(newValue.intValue());
             changeRedCustom();
         });
-        greenSpinner.getValueFactory().valueProperty().addListener((
-                ChangeListener<Number>) (observableValue, oldValue, newValue) -> {
+        greenSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
             greenSlider.setValue(newValue.intValue());
             changeGreenCustom();
         });
-        blueSpinner.getValueFactory().valueProperty().addListener((
-                ChangeListener<Number>) (observableValue, oldValue, newValue) -> {
+        blueSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
             blueSlider.setValue(newValue.intValue());
             changeBlueCustom();
         });
@@ -80,11 +88,11 @@ public class MainController {
         this.currentProcessedImage = currentProcessedImage;
     }
 
-    public Image getOriginalImage() {
+    private Image getOriginalImage() {
         return originalImage;
     }
 
-    public void setOriginalImage(Image originalImage) {
+    private void setOriginalImage(Image originalImage) {
         this.originalImage = originalImage;
     }
 
@@ -108,7 +116,7 @@ public class MainController {
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(
-                    new File("src/main/resources/images/"));
+                    new File(System.getProperty("user.dir")));
             File inputFile = fileChooser.showOpenDialog(null);
 
             if (inputFile == null) {
@@ -155,20 +163,25 @@ public class MainController {
     public void savePictureAs(ActionEvent actionEvent) {
         try {
             FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter imageFilter
+                    = new FileChooser.ExtensionFilter("Image PNG Files", "*.png");
+            fileChooser.getExtensionFilters().add(imageFilter);
             fileChooser.setInitialDirectory(
-                    new File("src/main/resources/images/"));
+                    new File(System.getProperty("user.dir")));
             File outputFile = fileChooser.showSaveDialog(null);
 
             if (outputFile == null) {
-                throw new NullPointerException("Something goes wrong...");
+                throw new NullPointerException("The file isn't chosen");
             }
             if (!outputFile.getName().matches(".*png")) {
-                throw new Exception("The preferred file cannot be saved as image");
+                throw new Exception(
+                        "The preferred file cannot be saved as image");
             }
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage bufferedImage =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             try {
                 ImageIO.write(bufferedImage, "png", outputFile);
             } catch (IOException e) {
@@ -186,7 +199,8 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
 
@@ -215,7 +229,8 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
 
@@ -254,7 +269,8 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
             for (int y = 0; y < height; y++) {
@@ -284,10 +300,12 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
-            BufferedImage mirroredImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage mirroredImage = new BufferedImage(
+                    width, height, BufferedImage.TYPE_INT_ARGB);
             for (int y = 0; y < height; y++) {
                 for (int x = 0, mirroredX = width - 1; x < width; x++, mirroredX--) {
                     int p = image.getRGB(x, y);
@@ -307,10 +325,12 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
-            BufferedImage mirroredImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage mirroredImage = new BufferedImage(
+                    width, height, BufferedImage.TYPE_INT_ARGB);
             for (int y = 0, mirroredY = height - 1; y < height; y++, mirroredY--) {
                 for (int x = 0; x < width; x++) {
                     int p = image.getRGB(x, y);
@@ -330,10 +350,12 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
-            BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage rotatedImage = new BufferedImage(
+                    height, width, BufferedImage.TYPE_INT_ARGB);
             for (int x = 0; x < width; x++) {
                 for (int y = 0, rotatedY = height - 1; y < height; y++, rotatedY--) {
                     rotatedImage.setRGB(rotatedY, x, image.getRGB(x, y));
@@ -352,10 +374,12 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
-            BufferedImage rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage rotatedImage = new BufferedImage(
+                    height, width, BufferedImage.TYPE_INT_ARGB);
             for (int x = 0, rotatedX = width - 1; x < width; x++, rotatedX--) {
                 for (int y = 0; y < height; y++) {
                     rotatedImage.setRGB(y, rotatedX, image.getRGB(x, y));
@@ -369,13 +393,15 @@ public class MainController {
         }
     }
 
-    public void changeRedCustom() {
+    private void changeRedCustom() {
         try {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            BufferedImage originalImage = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage originalImage =
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
             for (int y = 0; y < height; y++) {
@@ -403,13 +429,15 @@ public class MainController {
         }
     }
 
-    public void changeGreenCustom() {
+    private void changeGreenCustom() {
         try {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            BufferedImage originalImage = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage originalImage =
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
             for (int y = 0; y < height; y++) {
@@ -437,13 +465,15 @@ public class MainController {
         }
     }
 
-    public void changeBlueCustom() {
+    private void changeBlueCustom() {
         try {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            BufferedImage originalImage = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage originalImage =
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
             for (int y = 0; y < height; y++) {
@@ -472,12 +502,13 @@ public class MainController {
     }
 
     @Deprecated
-    public void doCringe() {
+    private void doCringe() {
         try {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            BufferedImage image = SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+            BufferedImage image =
+                    SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             int width = image.getWidth();
             int height = image.getHeight();
             for (int y = 0; y < height; y++) {
@@ -495,7 +526,7 @@ public class MainController {
                     image.setRGB(x, y, p);
                 }
             }
-            setLogs("The negative effect was successfully applied to image");
+            setLogs("The cringe effect was successfully applied to image");
             setImageToImageView(image);
         } catch (Exception e) {
             setLogs(e.getMessage());
@@ -507,7 +538,8 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            setImageToImageView(SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            setImageToImageView(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
             setLogs("The original image was restored");
         } catch (Exception e) {
             setLogs(e.getMessage());
