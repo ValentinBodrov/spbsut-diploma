@@ -10,6 +10,9 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
@@ -25,13 +28,15 @@ public class MainController {
 
     public ImageView sampleImage;
     public Label statusBar;
-    public AnchorPane centerPane;
+    public Label coordinatesBar;
     public Slider redSlider;
     public Slider greenSlider;
     public Slider blueSlider;
     public Spinner redSpinner;
     public Spinner greenSpinner;
     public Spinner blueSpinner;
+    public AnchorPane centerPane;
+
 
     private Image currentProcessedImage;
     private Image originalImage;
@@ -99,7 +104,14 @@ public class MainController {
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
         sampleImage.setImage(imageToImport);
-        sampleImage.setFitWidth(image.getWidth());
+        if (imageToImport.getWidth() > imageToImport.getHeight()) {
+            if (imageToImport.getWidth() > centerPane.getPrefWidth()) {
+                sampleImage.setFitWidth(centerPane.getPrefWidth());
+            }
+            sampleImage.setFitHeight(imageToImport.getHeight());
+        } else {
+            sampleImage.setFitWidth(imageToImport.getWidth());
+        }
         sampleImage.setSmooth(true);
         sampleImage.setCache(true);
         setCurrentProcessedImage(imageToImport);
@@ -107,6 +119,10 @@ public class MainController {
 
     private void setLogs(String message) {
         statusBar.setText(message);
+    }
+
+    private void setCoordinates(double x, double y) {
+        coordinatesBar.setText(String.format("X: %f Y: %f", x, y));
     }
 
     public void openLocal(ActionEvent actionEvent) {
@@ -546,4 +562,7 @@ public class MainController {
         }
     }
 
+    public void getCoordinates(MouseEvent mouseEvent) {
+        setCoordinates(mouseEvent.getX(), mouseEvent.getY());
+    }
 }
