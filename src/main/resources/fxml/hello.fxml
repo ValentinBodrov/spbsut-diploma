@@ -8,24 +8,31 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.image.Image?>
 
 <BorderPane prefHeight="771.0" prefWidth="1156.0"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="bodrov.valentin.spbsut.controller.MainController">
     <center>
-        <AnchorPane fx:id="centerPane" maxHeight="-Infinity"
-                    maxWidth="-Infinity" minHeight="-Infinity"
-                    minWidth="-Infinity" prefHeight="578.0" prefWidth="877.0">
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+                    minHeight="-Infinity" minWidth="-Infinity"
+                    prefHeight="640.0" prefWidth="877.0">
             <children>
-                <ImageView fx:id="sampleImage" fitHeight="552.0"
-                           fitWidth="846.0" layoutX="16.0" layoutY="13.0"
-                           pickOnBounds="true" preserveRatio="true"/>
+                <AnchorPane fx:id="centerPane" layoutX="16.0" layoutY="1.0"
+                            prefHeight="638.0" prefWidth="846.0">
+                    <children>
+                        <ImageView fx:id="sampleImage" fitHeight="638.0"
+                                   fitWidth="846.0"
+                                   onMouseMoved="#getCoordinates"
+                                   pickOnBounds="true" preserveRatio="true"/>
+                    </children>
+                </AnchorPane>
             </children>
         </AnchorPane>
     </center>
@@ -60,7 +67,16 @@
         <VBox BorderPane.alignment="CENTER">
             <children>
                 <Separator prefWidth="200.0"/>
-                <Label fx:id="statusBar" prefHeight="25.0" prefWidth="600.0"/>
+                <HBox>
+                    <children>
+                        <Label fx:id="statusBar" prefHeight="25.0"
+                               prefWidth="939.0"/>
+                        <Separator orientation="VERTICAL" prefHeight="25.0"
+                                   prefWidth="3.0"/>
+                        <Label fx:id="coordinatesBar" prefHeight="25.0"
+                               prefWidth="278.0"/>
+                    </children>
+                </HBox>
             </children>
         </VBox>
     </bottom>
