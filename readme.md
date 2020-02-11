@@ -19,7 +19,13 @@ Native Java DIP (digital image processing) application
 **Future features**
 
 - different types of pics processing
+    - pics cutting
+    - watermarks and signs adding
+    - some filters
 - different types of filters (gaussian, box etc)
+    - making image blurred
+    - filtering image
+- operations with brightness and contrast
 - ...
 
 ####Necessary info about OpenCV set-up 
