@@ -14,12 +14,13 @@ Native Java DIP (digital image processing) application
     - custom processing (influencing on red, green or blue channels)
     - pics rotating (on 90 grads)
     - pics vertical and horizontal mirroring
+- selecting, selective processing and pics-cropping
+    - there are many terrible bugs with large pics, should be fixed 
 - saving processed image
 
 **Future features**
 
 - different types of pics processing
-    - pics cutting
     - watermarks and signs adding
     - some filters
 - different types of filters (gaussian, box etc)
