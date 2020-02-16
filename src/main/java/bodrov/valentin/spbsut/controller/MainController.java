@@ -1,5 +1,6 @@
 package bodrov.valentin.spbsut.controller;
 
+import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -10,10 +11,11 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseDragEvent;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -37,9 +39,48 @@ public class MainController {
     public Spinner blueSpinner;
     public AnchorPane centerPane;
 
-
     private Image currentProcessedImage;
     private Image originalImage;
+    private Image selectedImage;
+
+    private int startX;
+    private int startY;
+    private int releaseX;
+    private int releaseY;
+
+    private Rectangle selectionRectangle;
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public void setStartX(int startX) {
+        this.startX = startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public void setStartY(int startY) {
+        this.startY = startY;
+    }
+
+    public int getReleaseX() {
+        return releaseX;
+    }
+
+    public void setReleaseX(int releaseX) {
+        this.releaseX = releaseX;
+    }
+
+    public int getReleaseY() {
+        return releaseY;
+    }
+
+    public void setReleaseY(int releaseY) {
+        this.releaseY = releaseY;
+    }
 
     @FXML
     private void initialize() {
@@ -100,6 +141,15 @@ public class MainController {
     private void setOriginalImage(Image originalImage) {
         this.originalImage = originalImage;
     }
+
+    public Image getSelectedImage() {
+        return selectedImage;
+    }
+
+    public void setSelectedImage(Image selectedImage) {
+        this.selectedImage = selectedImage;
+    }
+
 
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
@@ -564,5 +614,49 @@ public class MainController {
 
     public void getCoordinates(MouseEvent mouseEvent) {
         setCoordinates(mouseEvent.getX(), mouseEvent.getY());
+    }
+
+    public void testPressed(MouseEvent mouseEvent) {
+        setLogs(mouseEvent.getX() + ": " + mouseEvent.getY());
+        setStartX((int) mouseEvent.getX());
+        setStartY((int) mouseEvent.getY());
+    }
+
+    public void testReleased(MouseEvent mouseEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            centerPane.getChildren().remove(selectionRectangle);
+            setLogs(mouseEvent.getX() + ": " + mouseEvent.getY());
+            setReleaseX((int) mouseEvent.getX());
+            setReleaseY((int) mouseEvent.getY());
+            if (getStartY() > getReleaseY()) {
+                int tempStartY = getStartY();
+                int tempReleaseY = getReleaseY();
+                setStartY(tempReleaseY);
+                setReleaseY(tempStartY);
+            }
+            if (getStartX() > getReleaseX()) {
+                int tempStartX = getStartX();
+                int tempReleaseX = getReleaseX();
+                setStartX(tempReleaseX);
+                setReleaseX(tempStartX);
+            }
+            int newWidth = Math.abs(getReleaseX() - getStartX());
+            int newHeight = Math.abs(getReleaseY() - getStartY());
+            selectionRectangle = new Rectangle(startX, startY, newWidth, newHeight);
+            selectionRectangle.setStroke(Color.WHITE);
+            selectionRectangle.setStrokeWidth(1);
+            selectionRectangle.getStrokeDashArray().addAll(10d, 10d);
+            selectionRectangle.setFill(null);
+            centerPane.getChildren().add(selectionRectangle);
+
+            Image oldImage = getCurrentProcessedImage();
+            Image imageToBeSelected = new WritableImage(oldImage.getPixelReader(), startX, startY, newWidth, newHeight);
+            setSelectedImage(imageToBeSelected);
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
     }
 }
