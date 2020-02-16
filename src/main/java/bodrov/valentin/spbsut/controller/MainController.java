@@ -38,6 +38,8 @@ public class MainController {
     public Spinner greenSpinner;
     public Spinner blueSpinner;
     public AnchorPane centerPane;
+    public ImageView selectionImageView;
+    public ImageView cutImageView;
 
     private Image currentProcessedImage;
     private Image originalImage;
@@ -47,8 +49,10 @@ public class MainController {
     private int startY;
     private int releaseX;
     private int releaseY;
-
     private Rectangle selectionRectangle;
+
+    private boolean gointToBeSelected = false;
+    private boolean gointToBeCut = false;
 
     public int getStartX() {
         return startX;
@@ -604,6 +608,7 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
+            centerPane.getChildren().remove(selectionRectangle);
             setImageToImageView(
                     SwingFXUtils.fromFXImage(getOriginalImage(), null));
             setLogs("The original image was restored");
@@ -617,18 +622,19 @@ public class MainController {
     }
 
     public void testPressed(MouseEvent mouseEvent) {
-        setLogs(mouseEvent.getX() + ": " + mouseEvent.getY());
         setStartX((int) mouseEvent.getX());
         setStartY((int) mouseEvent.getY());
     }
 
     public void testReleased(MouseEvent mouseEvent) {
         try {
+            centerPane.getChildren().remove(selectionRectangle);
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            centerPane.getChildren().remove(selectionRectangle);
-            setLogs(mouseEvent.getX() + ": " + mouseEvent.getY());
+            if (!gointToBeSelected) {
+                throw new Exception("Click the 'Select'-button first!");
+            }
             setReleaseX((int) mouseEvent.getX());
             setReleaseY((int) mouseEvent.getY());
             if (getStartY() > getReleaseY()) {
@@ -645,6 +651,7 @@ public class MainController {
             }
             int newWidth = Math.abs(getReleaseX() - getStartX());
             int newHeight = Math.abs(getReleaseY() - getStartY());
+            setLogs(String.format("Width: %d Height: %d", newWidth, newHeight));
             selectionRectangle = new Rectangle(startX, startY, newWidth, newHeight);
             selectionRectangle.setStroke(Color.WHITE);
             selectionRectangle.setStrokeWidth(1);
@@ -657,6 +664,36 @@ public class MainController {
             setSelectedImage(imageToBeSelected);
         } catch (Exception e) {
             setLogs(e.getMessage());
+        }
+    }
+
+    public void doSelection(ActionEvent actionEvent) {
+        if (!gointToBeSelected) {
+            gointToBeSelected = true;
+            setLogs("goingToBeSelected: " + gointToBeSelected);
+            selectionImageView.setImage(new Image("icons/selection_clicked.png"));
+            return;
+        }
+        if (gointToBeSelected) {
+            gointToBeSelected = false;
+            setLogs("goingToBeSelected: " + gointToBeSelected);
+            selectionImageView.setImage(new Image("icons/selection.png"));
+            return;
+        }
+    }
+
+    public void doCut(ActionEvent actionEvent) {
+        if (!gointToBeCut) {
+            gointToBeCut = true;
+            setLogs("goingToBeCut: " + gointToBeCut);
+            cutImageView.setImage(new Image("icons/cut_clicked.png"));
+            return;
+        }
+        if (gointToBeCut) {
+            gointToBeCut = false;
+            setLogs("goingToBeCut: " + gointToBeCut);
+            cutImageView.setImage(new Image("icons/cut.png"));
+            return;
         }
     }
 }
