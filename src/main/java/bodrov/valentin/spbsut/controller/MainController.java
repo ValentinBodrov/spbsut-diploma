@@ -1,14 +1,11 @@
 package bodrov.valentin.spbsut.controller;
 
-import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -40,6 +37,7 @@ public class MainController {
     public AnchorPane centerPane;
     public ImageView selectionImageView;
     public ImageView cutImageView;
+    public Button cut;
 
     private Image currentProcessedImage;
     private Image originalImage;
@@ -52,37 +50,37 @@ public class MainController {
     private Rectangle selectionRectangle;
 
     private boolean gointToBeSelected = false;
-    private boolean gointToBeCut = false;
+    private boolean gointToBeCropped = false;
 
-    public int getStartX() {
+    private int getStartX() {
         return startX;
     }
 
-    public void setStartX(int startX) {
+    private void setStartX(int startX) {
         this.startX = startX;
     }
 
-    public int getStartY() {
+    private int getStartY() {
         return startY;
     }
 
-    public void setStartY(int startY) {
+    private void setStartY(int startY) {
         this.startY = startY;
     }
 
-    public int getReleaseX() {
+    private int getReleaseX() {
         return releaseX;
     }
 
-    public void setReleaseX(int releaseX) {
+    private void setReleaseX(int releaseX) {
         this.releaseX = releaseX;
     }
 
-    public int getReleaseY() {
+    private int getReleaseY() {
         return releaseY;
     }
 
-    public void setReleaseY(int releaseY) {
+    private void setReleaseY(int releaseY) {
         this.releaseY = releaseY;
     }
 
@@ -146,17 +144,17 @@ public class MainController {
         this.originalImage = originalImage;
     }
 
-    public Image getSelectedImage() {
+    private Image getSelectedImage() {
         return selectedImage;
     }
 
-    public void setSelectedImage(Image selectedImage) {
+    private void setSelectedImage(Image selectedImage) {
         this.selectedImage = selectedImage;
     }
 
-
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
+
         sampleImage.setImage(imageToImport);
         if (imageToImport.getWidth() > imageToImport.getHeight()) {
             if (imageToImport.getWidth() > centerPane.getPrefWidth()) {
@@ -166,9 +164,17 @@ public class MainController {
         } else {
             sampleImage.setFitWidth(imageToImport.getWidth());
         }
+
         sampleImage.setSmooth(true);
         sampleImage.setCache(true);
         setCurrentProcessedImage(imageToImport);
+        centerPane.getChildren().remove(selectionRectangle);
+        System.out.println("imageToImport width: " + imageToImport.getWidth());
+        System.out.println("imageToImport height: " + imageToImport.getHeight());
+        System.out.println("centerPane width: " + centerPane.getWidth());
+        System.out.println("centerPane height: " + centerPane.getHeight());
+        System.out.println("sampleImage width: " + sampleImage.getFitWidth());
+        System.out.println("sampleImage height: " + sampleImage.getFitHeight());
     }
 
     private void setLogs(String message) {
@@ -180,8 +186,6 @@ public class MainController {
     }
 
     public void openLocal(ActionEvent actionEvent) {
-        int width = 960;
-        int height = 760;
         BufferedImage image;
         try {
             FileChooser fileChooser = new FileChooser();
@@ -198,8 +202,6 @@ public class MainController {
             setLogs(String.format(
                     "The image with name %s is loaded", inputFile.getName()));
 
-            image = new BufferedImage(
-                    width, height, BufferedImage.TYPE_INT_ARGB);
             image = ImageIO.read(inputFile);
             setOriginalImage(SwingFXUtils.toFXImage(image, null));
             setImageToImageView(image);
@@ -271,20 +273,35 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            int width = image.getWidth();
-            int height = image.getHeight();
+            if (getSelectedImage() != null && gointToBeSelected) {
+                for (int y = startY; y < releaseY; y++) {
+                    for (int x = startX; x < releaseX; x++) {
+                        int p = image.getRGB(x, y);
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
+                        int avg = (r + g + b) / 3;
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int p = image.getRGB(x, y);
-                    int a = (p >> 24) & 0xff;
-                    int r = (p >> 16) & 0xff;
-                    int g = (p >> 8) & 0xff;
-                    int b = p & 0xff;
-                    int avg = (r + g + b) / 3;
+                        p = (a << 24) | (avg << 16) | (avg << 8) | avg;
+                        image.setRGB(x, y, p);
+                    }
+                }
+            } else {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int p = image.getRGB(x, y);
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
+                        int avg = (r + g + b) / 3;
 
-                    p = (a << 24) | (avg << 16) | (avg << 8) | avg;
-                    image.setRGB(x, y, p);
+                        p = (a << 24) | (avg << 16) | (avg << 8) | avg;
+                        image.setRGB(x, y, p);
+                    }
                 }
             }
             setLogs("The greyscale effect was successfully applied to image");
@@ -301,29 +318,53 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            int width = image.getWidth();
-            int height = image.getHeight();
+            if (getSelectedImage() != null && gointToBeSelected) {
+                for (int y = startY; y < releaseY; y++) {
+                    for (int x = startX; x < releaseX; x++) {
+                        int p = image.getRGB(x, y);
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int p = image.getRGB(x, y);
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
 
-                    int a = (p >> 24) & 0xff;
-                    int r = (p >> 16) & 0xff;
-                    int g = (p >> 8) & 0xff;
-                    int b = p & 0xff;
+                        int newRed = (int) (0.393 * r + 0.769 * g + 0.189 * b);
+                        int newGreen = (int) (0.349 * r + 0.686 * g + 0.168 * b);
+                        int newBlue = (int) (0.272 * r + 0.534 * g + 0.131 * b);
 
-                    int newRed = (int) (0.393 * r + 0.769 * g + 0.189 * b);
-                    int newGreen = (int) (0.349 * r + 0.686 * g + 0.168 * b);
-                    int newBlue = (int) (0.272 * r + 0.534 * g + 0.131 * b);
+                        r = Math.min(newRed, 255);
+                        g = Math.min(newGreen, 255);
+                        b = Math.min(newBlue, 255);
 
-                    r = Math.min(newRed, 255);
-                    g = Math.min(newGreen, 255);
-                    b = Math.min(newBlue, 255);
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
 
-                    p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
+                }
+            } else {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int p = image.getRGB(x, y);
 
-                    image.setRGB(x, y, p);
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
+
+                        int newRed = (int) (0.393 * r + 0.769 * g + 0.189 * b);
+                        int newGreen = (int) (0.349 * r + 0.686 * g + 0.168 * b);
+                        int newBlue = (int) (0.272 * r + 0.534 * g + 0.131 * b);
+
+                        r = Math.min(newRed, 255);
+                        g = Math.min(newGreen, 255);
+                        b = Math.min(newBlue, 255);
+
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+
+                        image.setRGB(x, y, p);
+                    }
                 }
             }
 
@@ -341,21 +382,39 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            int width = image.getWidth();
-            int height = image.getHeight();
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int p = image.getRGB(x, y);
-                    int a = (p >> 24) & 0xff;
-                    int r = (p >> 16) & 0xff;
-                    int g = (p >> 8) & 0xff;
-                    int b = p & 0xff;
-                    r = 255 - r;
-                    g = 255 - g;
-                    b = 255 - b;
+            if (getSelectedImage() != null && gointToBeSelected) {
+                for (int y = startY; y < releaseY; y++) {
+                    for (int x = startX; x < releaseX; x++) {
+                        int p = image.getRGB(x, y);
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
+                        r = 255 - r;
+                        g = 255 - g;
+                        b = 255 - b;
 
-                    p = (a << 24) | (r << 16) | (g << 8) | b;
-                    image.setRGB(x, y, p);
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
+                }
+            } else {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int p = image.getRGB(x, y);
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
+                        r = 255 - r;
+                        g = 255 - g;
+                        b = 255 - b;
+
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
                 }
             }
             setLogs("The negative effect was successfully applied to image");
@@ -426,6 +485,7 @@ public class MainController {
             int height = image.getHeight();
             BufferedImage rotatedImage = new BufferedImage(
                     height, width, BufferedImage.TYPE_INT_ARGB);
+
             for (int x = 0; x < width; x++) {
                 for (int y = 0, rotatedY = height - 1; y < height; y++, rotatedY--) {
                     rotatedImage.setRGB(rotatedY, x, image.getRGB(x, y));
@@ -472,24 +532,45 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage originalImage =
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
-            int width = image.getWidth();
-            int height = image.getHeight();
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int p = image.getRGB(x, y);
-                    int originalP = originalImage.getRGB(x, y);
+            if (getSelectedImage() != null && gointToBeSelected) {
+                for (int y = startY; y < releaseY; y++) {
+                    for (int x = startX; x < releaseX; x++) {
+                        int p = image.getRGB(x, y);
+                        int originalP = originalImage.getRGB(x, y);
 
-                    int a = (p >> 24) & 0xff;
-                    int r;
-                    int originalR = (originalP >> 16) & 0xff;
-                    int g = (p >> 8) & 0xff;
-                    int b = p & 0xff;
+                        int a = (p >> 24) & 0xff;
+                        int r;
+                        int originalR = (originalP >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
 
-                    int newR = originalR + (int) redSlider.getValue();
-                    r = Math.min(newR, 255);
+                        int newR = originalR + (int) redSlider.getValue();
+                        r = Math.min(newR, 255);
 
-                    p = (a << 24) | (r << 16) | (g << 8) | b;
-                    image.setRGB(x, y, p);
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
+                }
+            } else {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int p = image.getRGB(x, y);
+                        int originalP = originalImage.getRGB(x, y);
+
+                        int a = (p >> 24) & 0xff;
+                        int r;
+                        int originalR = (originalP >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b = p & 0xff;
+
+                        int newR = originalR + (int) redSlider.getValue();
+                        r = Math.min(newR, 255);
+
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
                 }
             }
             setLogs("The red channel was successfully changed");
@@ -508,24 +589,45 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage originalImage =
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
-            int width = image.getWidth();
-            int height = image.getHeight();
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int p = image.getRGB(x, y);
-                    int originalP = originalImage.getRGB(x, y);
+            if (getSelectedImage() != null && gointToBeSelected) {
+                for (int y = startY; y < releaseY; y++) {
+                    for (int x = startX; x < releaseX; x++) {
+                        int p = image.getRGB(x, y);
+                        int originalP = originalImage.getRGB(x, y);
 
-                    int a = (p >> 24) & 0xff;
-                    int r = (p >> 16) & 0xff;
-                    int g;
-                    int originalG = (originalP >> 8) & 0xff;
-                    int b = p & 0xff;
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g;
+                        int originalG = (originalP >> 8) & 0xff;
+                        int b = p & 0xff;
 
-                    int newG = originalG + (int) greenSlider.getValue();
-                    g = Math.min(newG, 255);
+                        int newG = originalG + (int) greenSlider.getValue();
+                        g = Math.min(newG, 255);
 
-                    p = (a << 24) | (r << 16) | (g << 8) | b;
-                    image.setRGB(x, y, p);
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
+                }
+            } else {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int p = image.getRGB(x, y);
+                        int originalP = originalImage.getRGB(x, y);
+
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g;
+                        int originalG = (originalP >> 8) & 0xff;
+                        int b = p & 0xff;
+
+                        int newG = originalG + (int) greenSlider.getValue();
+                        g = Math.min(newG, 255);
+
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
                 }
             }
             setLogs("The green channel was successfully changed");
@@ -544,24 +646,45 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage originalImage =
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
-            int width = image.getWidth();
-            int height = image.getHeight();
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int p = image.getRGB(x, y);
-                    int originalP = originalImage.getRGB(x, y);
+            if (getSelectedImage() != null && gointToBeSelected) {
+                for (int y = startY; y < releaseY; y++) {
+                    for (int x = startX; x < releaseX; x++) {
+                        int p = image.getRGB(x, y);
+                        int originalP = originalImage.getRGB(x, y);
 
-                    int a = (p >> 24) & 0xff;
-                    int r = (p >> 16) & 0xff;
-                    int g = (p >> 8) & 0xff;
-                    int b;
-                    int originalB = originalP & 0xff;
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b;
+                        int originalB = originalP & 0xff;
 
-                    int newB = originalB + (int) blueSlider.getValue();
-                    b = Math.min(newB, 255);
+                        int newB = originalB + (int) blueSlider.getValue();
+                        b = Math.min(newB, 255);
 
-                    p = (a << 24) | (r << 16) | (g << 8) | b;
-                    image.setRGB(x, y, p);
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
+                }
+            } else {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int p = image.getRGB(x, y);
+                        int originalP = originalImage.getRGB(x, y);
+
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        int g = (p >> 8) & 0xff;
+                        int b;
+                        int originalB = originalP & 0xff;
+
+                        int newB = originalB + (int) blueSlider.getValue();
+                        b = Math.min(newB, 255);
+
+                        p = (a << 24) | (r << 16) | (g << 8) | b;
+                        image.setRGB(x, y, p);
+                    }
                 }
             }
             setLogs("The blue channel was successfully changed");
@@ -621,12 +744,12 @@ public class MainController {
         setCoordinates(mouseEvent.getX(), mouseEvent.getY());
     }
 
-    public void testPressed(MouseEvent mouseEvent) {
+    public void onPressed(MouseEvent mouseEvent) {
         setStartX((int) mouseEvent.getX());
         setStartY((int) mouseEvent.getY());
     }
 
-    public void testReleased(MouseEvent mouseEvent) {
+    public void onReleased(MouseEvent mouseEvent) {
         try {
             centerPane.getChildren().remove(selectionRectangle);
             if (getCurrentProcessedImage() == null) {
@@ -658,10 +781,21 @@ public class MainController {
             selectionRectangle.getStrokeDashArray().addAll(10d, 10d);
             selectionRectangle.setFill(null);
             centerPane.getChildren().add(selectionRectangle);
-
-            Image oldImage = getCurrentProcessedImage();
+            Image oldImage = getOriginalImage();
             Image imageToBeSelected = new WritableImage(oldImage.getPixelReader(), startX, startY, newWidth, newHeight);
-            setSelectedImage(imageToBeSelected);
+            if (gointToBeSelected) {
+                setSelectedImage(imageToBeSelected);
+            }
+            cut.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    gointToBeSelected = false;
+                    selectionImageView.setImage(new Image("icons/selection.png"));
+                    setSelectedImage(null);
+                    setImageToImageView(SwingFXUtils.fromFXImage(imageToBeSelected, null));
+                    setOriginalImage(imageToBeSelected);
+                }
+            });
         } catch (Exception e) {
             setLogs(e.getMessage());
         }
@@ -670,30 +804,15 @@ public class MainController {
     public void doSelection(ActionEvent actionEvent) {
         if (!gointToBeSelected) {
             gointToBeSelected = true;
-            setLogs("goingToBeSelected: " + gointToBeSelected);
             selectionImageView.setImage(new Image("icons/selection_clicked.png"));
             return;
         }
         if (gointToBeSelected) {
             gointToBeSelected = false;
-            setLogs("goingToBeSelected: " + gointToBeSelected);
             selectionImageView.setImage(new Image("icons/selection.png"));
+            setSelectedImage(null);
             return;
         }
     }
 
-    public void doCut(ActionEvent actionEvent) {
-        if (!gointToBeCut) {
-            gointToBeCut = true;
-            setLogs("goingToBeCut: " + gointToBeCut);
-            cutImageView.setImage(new Image("icons/cut_clicked.png"));
-            return;
-        }
-        if (gointToBeCut) {
-            gointToBeCut = false;
-            setLogs("goingToBeCut: " + gointToBeCut);
-            cutImageView.setImage(new Image("icons/cut.png"));
-            return;
-        }
-    }
 }
