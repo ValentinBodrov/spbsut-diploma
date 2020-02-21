@@ -3,6 +3,8 @@ package bodrov.valentin.spbsut.controller;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,15 +26,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -855,30 +853,32 @@ public class MainController {
             addSignStage.setScene(new Scene(vBox));
             addSignStage.show();
 
+            Font font = new Font("Impact", Font.PLAIN, 40);
+
             ChangeListener<String> textFieldChangeListener = new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    setSign(upperSignTextField.getText(), bottomSignTextField.getText());
+                    setSign(upperSignTextField.getText(), bottomSignTextField.getText(), font);
                 }
             };
 
             upperSignTextField.textProperty().addListener(textFieldChangeListener);
             bottomSignTextField.textProperty().addListener(textFieldChangeListener);
 
-//            secondStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-//                @Override
-//                public void handle(WindowEvent event) {
-//                    setImageToImageView(SwingFXUtils.fromFXImage(getOriginalImage(), null));
-//                }
-//            });
-//            ok.setOnAction(new EventHandler<ActionEvent>() {
-//                @Override
-//                public void handle(ActionEvent event) {
-//                    setOriginalImage(sampleImage.getImage());
-//                    setCurrentProcessedImage(sampleImage.getImage());
-//                    secondStage.close();
-//                }
-//            });
+            addSignStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    setImageToImageView(SwingFXUtils.fromFXImage(getOriginalImage(), null));
+                }
+            });
+            confirm.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    setOriginalImage(sampleImage.getImage());
+                    setCurrentProcessedImage(sampleImage.getImage());
+                    addSignStage.close();
+                }
+            });
         } catch (Exception e) {
             setLogs(e.getMessage());
         }
@@ -889,29 +889,89 @@ public class MainController {
     }
 
     public void addLobsterSign(ActionEvent actionEvent) {
-//        try {
-//            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/lobster.ttf"));
-//            graphics.setFont(font.deriveFont(20f));
-//        } catch (FontFormatException | IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+
+            Stage addSignStage = new Stage();
+            addSignStage.setTitle("Add Lobster Sign");
+            addSignStage.setHeight(135);
+            addSignStage.setWidth(260);
+            addSignStage.setResizable(false);
+
+            HBox bottomHBox = new HBox(3);
+            Label bottomLabel = new Label("Bottom string: ");
+            TextField bottomSignTextField = new TextField();
+            bottomHBox.getChildren().addAll(bottomLabel, bottomSignTextField);
+            bottomHBox.setAlignment(Pos.CENTER);
+
+            HBox elementsHBox = new HBox(3);
+            Button confirm = new Button("Confirm");
+
+            Font font = null;
+            try {
+                font = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/lobster.ttf"));
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+            }
+
+            elementsHBox.getChildren().addAll(confirm);
+            elementsHBox.setAlignment(Pos.CENTER);
+
+            VBox vBox = new VBox(4);
+            vBox.getChildren().addAll(bottomHBox, elementsHBox);
+            vBox.setAlignment(Pos.CENTER);
+
+            addSignStage.setScene(new Scene(vBox));
+            addSignStage.show();
+
+            Font finalFont = font;
+            ChangeListener<String> textFieldChangeListener = new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    setSign("", bottomSignTextField.getText(), finalFont.deriveFont(45f));
+                }
+            };
+
+            bottomSignTextField.textProperty().addListener(textFieldChangeListener);
+
+            addSignStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    setImageToImageView(SwingFXUtils.fromFXImage(getOriginalImage(), null));
+                }
+            });
+            confirm.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    setOriginalImage(sampleImage.getImage());
+                    setCurrentProcessedImage(sampleImage.getImage());
+                    addSignStage.close();
+                }
+            });
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+
     }
 
     public void addWatermark(ActionEvent actionEvent) {
 
     }
 
-    private void setSign(String upperString, String bottomString) {
+    private void setSign(String upperString, String bottomString, Font font) {
         BufferedImage imageWithFont = SwingFXUtils.fromFXImage(getOriginalImage(), null);
 
         int upperX = (imageWithFont.getWidth() / 2) - (upperString.length() * 40) / 4;
         int upperY = (int) (imageWithFont.getHeight() * 0.2);
-
         int bottomX = (imageWithFont.getWidth() / 2) - (bottomString.length() * 40) / 4;
         int bottomY = (int) (imageWithFont.getHeight() * 0.9);
 
-        Graphics2D upperSignGraphics = Utils.getGraphics(imageWithFont, upperX, upperY, upperString);
-        Graphics2D bottomSignGraphics = Utils.getGraphics(imageWithFont, bottomX, bottomY, bottomString);
+        Graphics2D upperSignGraphics = Utils.getGraphics(imageWithFont,
+                upperX, upperY, upperString, font);
+        Graphics2D bottomSignGraphics = Utils.getGraphics(imageWithFont,
+                bottomX, bottomY, bottomString, font);
 
         sampleImage.setImage(SwingFXUtils.toFXImage(imageWithFont, null));
     }

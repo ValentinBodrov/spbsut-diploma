@@ -1,7 +1,5 @@
 package bodrov.valentin.spbsut.utils;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextInputDialog;
 
 import java.awt.*;
@@ -27,7 +25,9 @@ public class Utils {
         return dialog.getEditor().getText();
     }
 
-    public static Graphics2D getGraphics(BufferedImage imageWithFont, int x, int y, String upperString) {
+    public static Graphics2D getGraphics(BufferedImage imageWithFont,
+                                         int x, int y, String string,
+                                         Font font) {
         Graphics2D graphics2D = imageWithFont.createGraphics();
 
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -36,8 +36,8 @@ public class Utils {
                 RenderingHints.VALUE_RENDER_QUALITY);
 
         FontRenderContext frc = graphics2D.getFontRenderContext();
-        Font font = new Font("Impact", Font.PLAIN, 40);
-        GlyphVector gv = font.createGlyphVector(frc, upperString);
+
+        GlyphVector gv = font.createGlyphVector(frc, string);
         graphics2D.drawGlyphVector(gv, x, y);
         AffineTransform transform;
         Shape outline = gv.getOutline();
