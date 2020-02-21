@@ -12,10 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -30,11 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Graphics2D;
-import java.awt.AlphaComposite;
-import java.awt.FontMetrics;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -788,15 +781,17 @@ public class MainController {
             }
             int newWidth = Math.abs(getReleaseX() - getStartX());
             int newHeight = Math.abs(getReleaseY() - getStartY());
-            setLogs(String.format("Width: %d Height: %d", newWidth, newHeight));
-            selectionRectangle = new Rectangle(startX, startY, newWidth, newHeight);
+            selectionRectangle =
+                    new Rectangle(startX, startY, newWidth, newHeight);
             selectionRectangle.setStroke(Color.WHITE);
             selectionRectangle.setStrokeWidth(1);
             selectionRectangle.getStrokeDashArray().addAll(10d, 10d);
             selectionRectangle.setFill(null);
             centerPane.getChildren().add(selectionRectangle);
             Image oldImage = getOriginalImage();
-            Image imageToBeSelected = new WritableImage(oldImage.getPixelReader(), startX, startY, newWidth, newHeight);
+            Image imageToBeSelected =
+                    new WritableImage(oldImage.getPixelReader(),
+                            startX, startY, newWidth, newHeight);
             if (goingToBeSelected) {
                 setSelectedImage(imageToBeSelected);
             }
@@ -806,7 +801,8 @@ public class MainController {
                     goingToBeSelected = false;
                     selectionImageView.setImage(new Image("icons/selection.png"));
                     setSelectedImage(null);
-                    setImageToImageView(SwingFXUtils.fromFXImage(imageToBeSelected, null));
+                    setImageToImageView(
+                            SwingFXUtils.fromFXImage(imageToBeSelected, null));
                     setOriginalImage(imageToBeSelected);
                 }
             });
@@ -818,7 +814,8 @@ public class MainController {
     public void doSelection(ActionEvent actionEvent) {
         if (!goingToBeSelected) {
             goingToBeSelected = true;
-            selectionImageView.setImage(new Image("icons/selection_clicked.png"));
+            selectionImageView.setImage(
+                    new Image("icons/selection_clicked.png"));
             return;
         }
         if (goingToBeSelected) {
@@ -862,20 +859,27 @@ public class MainController {
 
             Font font = new Font("Impact", Font.PLAIN, 40);
 
-            ChangeListener<String> textFieldChangeListener = new ChangeListener<String>() {
+            ChangeListener<String>
+                    textFieldChangeListener = new ChangeListener<String>() {
                 @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    setSign(upperSignTextField.getText(), bottomSignTextField.getText(), font);
+                public void changed(ObservableValue<? extends String>
+                                            observable,
+                                    String oldValue, String newValue) {
+                    setSign(upperSignTextField.getText(),
+                            bottomSignTextField.getText(), font);
                 }
             };
 
-            upperSignTextField.textProperty().addListener(textFieldChangeListener);
-            bottomSignTextField.textProperty().addListener(textFieldChangeListener);
+            upperSignTextField.textProperty().
+                    addListener(textFieldChangeListener);
+            bottomSignTextField.textProperty().
+                    addListener(textFieldChangeListener);
 
             addSignStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-                    setImageToImageView(SwingFXUtils.fromFXImage(getOriginalImage(), null));
+                    setImageToImageView(SwingFXUtils.fromFXImage(
+                            getOriginalImage(), null));
                 }
             });
             confirm.setOnAction(new EventHandler<ActionEvent>() {
@@ -909,13 +913,8 @@ public class MainController {
             bottomHBox.getChildren().addAll(bottomLabel, bottomSignTextField);
             bottomHBox.setAlignment(Pos.CENTER);
 
-//            HBox elementsHBox = new HBox(3);
-            Button confirm = new Button("Confirm");
-
-//            elementsHBox.getChildren().addAll(confirm);
-//            elementsHBox.setAlignment(Pos.CENTER);
-
             VBox vBox = new VBox(4);
+            Button confirm = new Button("Confirm");
             vBox.getChildren().addAll(bottomHBox, confirm);
             vBox.setAlignment(Pos.CENTER);
 
@@ -924,23 +923,31 @@ public class MainController {
 
             Font font = null;
             try {
-                font = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/lobster.ttf"));
+                font = Font.createFont(
+                        Font.TRUETYPE_FONT,
+                        new File("src/main/resources/fonts/lobster.ttf"));
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
             }
             Font finalFont = font;
 
-            bottomSignTextField.textProperty().addListener(new ChangeListener<String>() {
+            bottomSignTextField.textProperty().
+                    addListener(new ChangeListener<String>() {
                 @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    setSign("", bottomSignTextField.getText(), finalFont.deriveFont(48f));
+                public void changed(ObservableValue<? extends String>
+                                            observable,
+                                    String oldValue, String newValue) {
+                    setSign("",
+                            bottomSignTextField.getText(),
+                            finalFont.deriveFont(48f));
                 }
             });
 
             addSignStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-                    setImageToImageView(SwingFXUtils.fromFXImage(getOriginalImage(), null));
+                    setImageToImageView(SwingFXUtils.fromFXImage(
+                            getOriginalImage(), null));
                 }
             });
             confirm.setOnAction(new EventHandler<ActionEvent>() {
@@ -975,17 +982,21 @@ public class MainController {
             });
             String watermark = dialog.getEditor().getText();
 
-            BufferedImage imageWithWatermark = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            BufferedImage imageWithWatermark =
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null);
             Graphics2D graphics = imageWithWatermark.createGraphics();
 
-            AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
+            AlphaComposite alphaChannel =
+                    AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
             graphics.setComposite(alphaChannel);
             graphics.setColor(java.awt.Color.BLUE);
             graphics.setFont(new Font("Arial", Font.BOLD, 20));
             FontMetrics fontMetrics = graphics.getFontMetrics();
-            Rectangle2D rect = fontMetrics.getStringBounds(watermark, graphics);
+            Rectangle2D rect =
+                    fontMetrics.getStringBounds(watermark, graphics);
 
-            int bottomX = (int) (imageWithWatermark.getWidth() * 0.75) - (watermark.length() * 20) / 4;
+            int bottomX = (int) (imageWithWatermark.getWidth() * 0.75) -
+                    (watermark.length() * 20) / 4;
             int bottomY = (int) (imageWithWatermark.getHeight() * 0.9);
 
             graphics.drawString(watermark, bottomX, bottomY);
@@ -1001,11 +1012,14 @@ public class MainController {
     }
 
     private void setSign(String upperString, String bottomString, Font font) {
-        BufferedImage imageWithFont = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+        BufferedImage imageWithFont =
+                SwingFXUtils.fromFXImage(getOriginalImage(), null);
 
-        int upperX = (imageWithFont.getWidth() / 2) - (upperString.length() * 40) / 4;
+        int upperX = (imageWithFont.getWidth() / 2) -
+                (upperString.length() * 40) / 4;
         int upperY = (int) (imageWithFont.getHeight() * 0.2);
-        int bottomX = (imageWithFont.getWidth() / 2) - (bottomString.length() * 40) / 4;
+        int bottomX = (imageWithFont.getWidth() / 2) -
+                (bottomString.length() * 40) / 4;
         int bottomY = (int) (imageWithFont.getHeight() * 0.9);
 
         Graphics2D upperSignGraphics = Utils.getGraphics(imageWithFont,

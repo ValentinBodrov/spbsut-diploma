@@ -2,10 +2,7 @@ package bodrov.valentin.spbsut.utils;
 
 import javafx.scene.control.TextInputDialog;
 
-import java.awt.Graphics2D;
-import java.awt.Font;
-import java.awt.RenderingHints;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
