@@ -24,8 +24,8 @@
                     minHeight="-Infinity" minWidth="-Infinity"
                     prefHeight="725.0" prefWidth="930.0">
             <children>
-                <AnchorPane fx:id="centerPane" prefHeight="725.0"
-                            prefWidth="930.0" layoutX="-5.0" layoutY="-1.0">
+                <AnchorPane fx:id="centerPane" layoutX="-5.0" layoutY="-1.0"
+                            prefHeight="725.0" prefWidth="930.0">
                     <children>
                         <ImageView fx:id="sampleImage" fitHeight="725.0"
                                    fitWidth="930.0"
@@ -60,6 +60,18 @@
                                   onAction="#doSepia" text="Sepia"/>
                         <MenuItem fx:id="negative" mnemonicParsing="false"
                                   onAction="#doNegative" text="Negative"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Sign">
+                    <items>
+                        <MenuItem fx:id="simpleSign" mnemonicParsing="false"
+                                  onAction="#addSimpleSign"
+                                  text="Simple sign..."/>
+                        <MenuItem fx:id="lobsterSign" mnemonicParsing="false"
+                                  onAction="#addLobsterSign"
+                                  text="Lobster sign..."/>
+                        <MenuItem fx:id="waternark" mnemonicParsing="false"
+                                  onAction="#addWatermark" text="Waternark..."/>
                     </items>
                 </Menu>
             </menus>
@@ -121,56 +133,7 @@
         <AnchorPane prefHeight="718.0" prefWidth="72.0"
                     BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="rotateLeft" layoutX="5.0" layoutY="280.0"
-                        mnemonicParsing="false" onAction="#rotateLeft">
-                    <graphic>
-                        <ImageView fitHeight="49.0" fitWidth="46.0"
-                                   pickOnBounds="true" preserveRatio="true"
-                                   smooth="true">
-                            <image>
-                                <Image url="@/icons/rotate_left.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-                <Button fx:id="rotateRight" layoutX="5.0" layoutY="380.0"
-                        mnemonicParsing="false" onAction="#rotateRight">
-                    <graphic>
-                        <ImageView fitHeight="49.0" fitWidth="46.0"
-                                   pickOnBounds="true" preserveRatio="true"
-                                   smooth="true">
-                            <image>
-                                <Image url="@/icons/rotate_right.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-                <Button fx:id="horizontalMirroring" layoutX="5.0"
-                        layoutY="480.0" mnemonicParsing="false"
-                        onAction="#doHorizontalMirroring">
-                    <graphic>
-                        <ImageView fitHeight="49.0" fitWidth="46.0"
-                                   pickOnBounds="true" preserveRatio="true"
-                                   smooth="true">
-                            <image>
-                                <Image url="@/icons/mirror_horizontally.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-                <Button fx:id="verticalMirroring" layoutX="5.0" layoutY="580.0"
-                        mnemonicParsing="false" onAction="#doVerticalMirroring">
-                    <graphic>
-                        <ImageView fitHeight="49.0" fitWidth="46.0"
-                                   pickOnBounds="true" preserveRatio="true"
-                                   smooth="true">
-                            <image>
-                                <Image url="@/icons/mirror_vertically.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-                <Button fx:id="select" layoutX="5.0" layoutY="80.0"
+                <Button fx:id="select" layoutX="5.0" layoutY="130.0"
                         mnemonicParsing="false" onAction="#doSelection"
                         prefWidth="26.0">
                     <graphic>
@@ -183,7 +146,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="cut" layoutX="5.0" layoutY="180.0"
+                <Button fx:id="cut" layoutX="5.0" layoutY="230.0"
                         mnemonicParsing="false" prefWidth="26.0">
                     <graphic>
                         <ImageView fx:id="cutImageView" fitHeight="49.0"
@@ -191,6 +154,55 @@
                                    preserveRatio="true" smooth="true">
                             <image>
                                 <Image url="@/icons/cut.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="rotateLeft" layoutX="5.0" layoutY="330.0"
+                        mnemonicParsing="false" onAction="#rotateLeft">
+                    <graphic>
+                        <ImageView fitHeight="49.0" fitWidth="46.0"
+                                   pickOnBounds="true" preserveRatio="true"
+                                   smooth="true">
+                            <image>
+                                <Image url="@/icons/rotate_left.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="rotateRight" layoutX="5.0" layoutY="430.0"
+                        mnemonicParsing="false" onAction="#rotateRight">
+                    <graphic>
+                        <ImageView fitHeight="49.0" fitWidth="46.0"
+                                   pickOnBounds="true" preserveRatio="true"
+                                   smooth="true">
+                            <image>
+                                <Image url="@/icons/rotate_right.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="horizontalMirroring" layoutX="5.0"
+                        layoutY="530.0" mnemonicParsing="false"
+                        onAction="#doHorizontalMirroring">
+                    <graphic>
+                        <ImageView fitHeight="49.0" fitWidth="46.0"
+                                   pickOnBounds="true" preserveRatio="true"
+                                   smooth="true">
+                            <image>
+                                <Image url="@/icons/mirror_horizontally.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="verticalMirroring" layoutX="5.0" layoutY="630.0"
+                        mnemonicParsing="false" onAction="#doVerticalMirroring">
+                    <graphic>
+                        <ImageView fitHeight="49.0" fitWidth="46.0"
+                                   pickOnBounds="true" preserveRatio="true"
+                                   smooth="true">
+                            <image>
+                                <Image url="@/icons/mirror_vertically.png"/>
                             </image>
                         </ImageView>
                     </graphic>

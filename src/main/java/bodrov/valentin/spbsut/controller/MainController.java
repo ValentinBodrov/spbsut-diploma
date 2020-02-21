@@ -1,25 +1,39 @@
 package bodrov.valentin.spbsut.controller;
 
+import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 
 import static bodrov.valentin.spbsut.utils.Utils.showUrlInputTextDialog;
 
@@ -49,8 +63,7 @@ public class MainController {
     private int releaseY;
     private Rectangle selectionRectangle;
 
-    private boolean gointToBeSelected = false;
-    private boolean gointToBeCropped = false;
+    private boolean goingToBeSelected = false;
 
     private int getStartX() {
         return startX;
@@ -111,21 +124,21 @@ public class MainController {
         redSpinner.getValueFactory().valueProperty().
                 addListener((ChangeListener<Number>)
                         (observableValue, oldValue, newValue) -> {
-            redSlider.setValue(newValue.intValue());
-            changeRedCustom();
-        });
+                            redSlider.setValue(newValue.intValue());
+                            changeRedCustom();
+                        });
         greenSpinner.getValueFactory().valueProperty().
                 addListener((ChangeListener<Number>)
                         (observableValue, oldValue, newValue) -> {
-            greenSlider.setValue(newValue.intValue());
-            changeGreenCustom();
-        });
+                            greenSlider.setValue(newValue.intValue());
+                            changeGreenCustom();
+                        });
         blueSpinner.getValueFactory().valueProperty().
                 addListener((ChangeListener<Number>)
                         (observableValue, oldValue, newValue) -> {
-            blueSlider.setValue(newValue.intValue());
-            changeBlueCustom();
-        });
+                            blueSlider.setValue(newValue.intValue());
+                            changeBlueCustom();
+                        });
     }
 
     private Image getCurrentProcessedImage() {
@@ -169,12 +182,6 @@ public class MainController {
         sampleImage.setCache(true);
         setCurrentProcessedImage(imageToImport);
         centerPane.getChildren().remove(selectionRectangle);
-        System.out.println("imageToImport width: " + imageToImport.getWidth());
-        System.out.println("imageToImport height: " + imageToImport.getHeight());
-        System.out.println("centerPane width: " + centerPane.getWidth());
-        System.out.println("centerPane height: " + centerPane.getHeight());
-        System.out.println("sampleImage width: " + sampleImage.getFitWidth());
-        System.out.println("sampleImage height: " + sampleImage.getFitHeight());
     }
 
     private void setLogs(String message) {
@@ -273,7 +280,7 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            if (getSelectedImage() != null && gointToBeSelected) {
+            if (getSelectedImage() != null && goingToBeSelected) {
                 for (int y = startY; y < releaseY; y++) {
                     for (int x = startX; x < releaseX; x++) {
                         int p = image.getRGB(x, y);
@@ -318,7 +325,7 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            if (getSelectedImage() != null && gointToBeSelected) {
+            if (getSelectedImage() != null && goingToBeSelected) {
                 for (int y = startY; y < releaseY; y++) {
                     for (int x = startX; x < releaseX; x++) {
                         int p = image.getRGB(x, y);
@@ -382,7 +389,7 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            if (getSelectedImage() != null && gointToBeSelected) {
+            if (getSelectedImage() != null && goingToBeSelected) {
                 for (int y = startY; y < releaseY; y++) {
                     for (int x = startX; x < releaseX; x++) {
                         int p = image.getRGB(x, y);
@@ -532,7 +539,7 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage originalImage =
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
-            if (getSelectedImage() != null && gointToBeSelected) {
+            if (getSelectedImage() != null && goingToBeSelected) {
                 for (int y = startY; y < releaseY; y++) {
                     for (int x = startX; x < releaseX; x++) {
                         int p = image.getRGB(x, y);
@@ -589,7 +596,7 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage originalImage =
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
-            if (getSelectedImage() != null && gointToBeSelected) {
+            if (getSelectedImage() != null && goingToBeSelected) {
                 for (int y = startY; y < releaseY; y++) {
                     for (int x = startX; x < releaseX; x++) {
                         int p = image.getRGB(x, y);
@@ -646,7 +653,7 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage originalImage =
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
-            if (getSelectedImage() != null && gointToBeSelected) {
+            if (getSelectedImage() != null && goingToBeSelected) {
                 for (int y = startY; y < releaseY; y++) {
                     for (int x = startX; x < releaseX; x++) {
                         int p = image.getRGB(x, y);
@@ -755,7 +762,7 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            if (!gointToBeSelected) {
+            if (!goingToBeSelected) {
                 throw new Exception("Click the 'Select'-button first!");
             }
             setReleaseX((int) mouseEvent.getX());
@@ -774,25 +781,28 @@ public class MainController {
             }
             int newWidth = Math.abs(getReleaseX() - getStartX());
             int newHeight = Math.abs(getReleaseY() - getStartY());
-            setLogs(String.format("Width: %d Height: %d", newWidth, newHeight));
-            selectionRectangle = new Rectangle(startX, startY, newWidth, newHeight);
+            selectionRectangle =
+                    new Rectangle(startX, startY, newWidth, newHeight);
             selectionRectangle.setStroke(Color.WHITE);
             selectionRectangle.setStrokeWidth(1);
             selectionRectangle.getStrokeDashArray().addAll(10d, 10d);
             selectionRectangle.setFill(null);
             centerPane.getChildren().add(selectionRectangle);
             Image oldImage = getOriginalImage();
-            Image imageToBeSelected = new WritableImage(oldImage.getPixelReader(), startX, startY, newWidth, newHeight);
-            if (gointToBeSelected) {
+            Image imageToBeSelected =
+                    new WritableImage(oldImage.getPixelReader(),
+                            startX, startY, newWidth, newHeight);
+            if (goingToBeSelected) {
                 setSelectedImage(imageToBeSelected);
             }
             cut.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    gointToBeSelected = false;
+                    goingToBeSelected = false;
                     selectionImageView.setImage(new Image("icons/selection.png"));
                     setSelectedImage(null);
-                    setImageToImageView(SwingFXUtils.fromFXImage(imageToBeSelected, null));
+                    setImageToImageView(
+                            SwingFXUtils.fromFXImage(imageToBeSelected, null));
                     setOriginalImage(imageToBeSelected);
                 }
             });
@@ -802,17 +812,222 @@ public class MainController {
     }
 
     public void doSelection(ActionEvent actionEvent) {
-        if (!gointToBeSelected) {
-            gointToBeSelected = true;
-            selectionImageView.setImage(new Image("icons/selection_clicked.png"));
+        if (!goingToBeSelected) {
+            goingToBeSelected = true;
+            selectionImageView.setImage(
+                    new Image("icons/selection_clicked.png"));
             return;
         }
-        if (gointToBeSelected) {
-            gointToBeSelected = false;
+        if (goingToBeSelected) {
+            goingToBeSelected = false;
             selectionImageView.setImage(new Image("icons/selection.png"));
             setSelectedImage(null);
             return;
         }
+    }
+
+    public void addSimpleSign(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+
+            Stage addSignStage = new Stage();
+            addSignStage.setTitle("Add Sign");
+            addSignStage.setHeight(135);
+            addSignStage.setWidth(260);
+            addSignStage.setResizable(false);
+            HBox upperHBox = new HBox(3);
+            Label upperLabel = new Label("Upper string: ");
+            TextField upperSignTextField = new TextField();
+            upperHBox.getChildren().addAll(upperLabel, upperSignTextField);
+            upperHBox.setAlignment(Pos.CENTER);
+
+            HBox bottomHBox = new HBox(3);
+            Label bottomLabel = new Label("Bottom string: ");
+            TextField bottomSignTextField = new TextField();
+            bottomHBox.getChildren().addAll(bottomLabel, bottomSignTextField);
+            bottomHBox.setAlignment(Pos.CENTER);
+
+            VBox vBox = new VBox(4);
+            Button confirm = new Button("Confirm");
+            vBox.getChildren().addAll(upperHBox, bottomHBox, confirm);
+            vBox.setAlignment(Pos.CENTER);
+
+            addSignStage.setScene(new Scene(vBox));
+            addSignStage.show();
+
+            Font font = new Font("Impact", Font.PLAIN, 40);
+
+            ChangeListener<String>
+                    textFieldChangeListener = new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String>
+                                            observable,
+                                    String oldValue, String newValue) {
+                    setSign(upperSignTextField.getText(),
+                            bottomSignTextField.getText(), font);
+                }
+            };
+
+            upperSignTextField.textProperty().
+                    addListener(textFieldChangeListener);
+            bottomSignTextField.textProperty().
+                    addListener(textFieldChangeListener);
+
+            addSignStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    setImageToImageView(SwingFXUtils.fromFXImage(
+                            getOriginalImage(), null));
+                }
+            });
+            confirm.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    setOriginalImage(sampleImage.getImage());
+                    setCurrentProcessedImage(sampleImage.getImage());
+                    addSignStage.close();
+                }
+            });
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void addLobsterSign(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+
+            Stage addSignStage = new Stage();
+            addSignStage.setTitle("Add Lobster Sign");
+            addSignStage.setHeight(115);
+            addSignStage.setWidth(260);
+            addSignStage.setResizable(false);
+
+            HBox bottomHBox = new HBox(3);
+            Label bottomLabel = new Label("Bottom string: ");
+            TextField bottomSignTextField = new TextField();
+            bottomHBox.getChildren().addAll(bottomLabel, bottomSignTextField);
+            bottomHBox.setAlignment(Pos.CENTER);
+
+            VBox vBox = new VBox(4);
+            Button confirm = new Button("Confirm");
+            vBox.getChildren().addAll(bottomHBox, confirm);
+            vBox.setAlignment(Pos.CENTER);
+
+            addSignStage.setScene(new Scene(vBox));
+            addSignStage.show();
+
+            Font font = null;
+            try {
+                font = Font.createFont(
+                        Font.TRUETYPE_FONT,
+                        new File("src/main/resources/fonts/lobster.ttf"));
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+            }
+            Font finalFont = font;
+
+            bottomSignTextField.textProperty().
+                    addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String>
+                                            observable,
+                                    String oldValue, String newValue) {
+                    setSign("",
+                            bottomSignTextField.getText(),
+                            finalFont.deriveFont(48f));
+                }
+            });
+
+            addSignStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    setImageToImageView(SwingFXUtils.fromFXImage(
+                            getOriginalImage(), null));
+                }
+            });
+            confirm.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    setOriginalImage(sampleImage.getImage());
+                    setCurrentProcessedImage(sampleImage.getImage());
+                    addSignStage.close();
+                }
+            });
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+
+    }
+
+    public void addWatermark(ActionEvent actionEvent) throws Exception {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+
+            TextInputDialog dialog = new TextInputDialog();
+
+            dialog.setTitle("Set watermark text");
+            dialog.setHeaderText("Enter your Watermark:");
+            dialog.setContentText("Watermark:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> {
+
+            });
+            String watermark = dialog.getEditor().getText();
+
+            BufferedImage imageWithWatermark =
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            Graphics2D graphics = imageWithWatermark.createGraphics();
+
+            AlphaComposite alphaChannel =
+                    AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
+            graphics.setComposite(alphaChannel);
+            graphics.setColor(java.awt.Color.BLUE);
+            graphics.setFont(new Font("Arial", Font.BOLD, 20));
+            FontMetrics fontMetrics = graphics.getFontMetrics();
+            Rectangle2D rect =
+                    fontMetrics.getStringBounds(watermark, graphics);
+
+            int bottomX = (int) (imageWithWatermark.getWidth() * 0.75) -
+                    (watermark.length() * 20) / 4;
+            int bottomY = (int) (imageWithWatermark.getHeight() * 0.9);
+
+            graphics.drawString(watermark, bottomX, bottomY);
+            graphics.dispose();
+
+            setImageToImageView(imageWithWatermark);
+            setOriginalImage(sampleImage.getImage());
+            setCurrentProcessedImage(sampleImage.getImage());
+
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    private void setSign(String upperString, String bottomString, Font font) {
+        BufferedImage imageWithFont =
+                SwingFXUtils.fromFXImage(getOriginalImage(), null);
+
+        int upperX = (imageWithFont.getWidth() / 2) -
+                (upperString.length() * 40) / 4;
+        int upperY = (int) (imageWithFont.getHeight() * 0.2);
+        int bottomX = (imageWithFont.getWidth() / 2) -
+                (bottomString.length() * 40) / 4;
+        int bottomY = (int) (imageWithFont.getHeight() * 0.9);
+
+        Graphics2D upperSignGraphics = Utils.getGraphics(imageWithFont,
+                upperX, upperY, upperString, font);
+        Graphics2D bottomSignGraphics = Utils.getGraphics(imageWithFont,
+                bottomX, bottomY, bottomString, font);
+
+        setImageToImageView(imageWithFont);
     }
 
 }
