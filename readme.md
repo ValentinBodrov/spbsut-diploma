@@ -16,6 +16,7 @@ Native Java DIP (digital image processing) application
     - pics vertical and horizontal mirroring
 - selecting, selective processing and pics-cropping
     - there are many terrible bugs with large pics, should be fixed 
+- adding labels and captions on image
 - saving processed image
 
 **Future features**
