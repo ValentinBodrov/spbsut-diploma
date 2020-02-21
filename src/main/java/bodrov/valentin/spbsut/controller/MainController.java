@@ -899,7 +899,7 @@ public class MainController {
 
             Stage addSignStage = new Stage();
             addSignStage.setTitle("Add Lobster Sign");
-            addSignStage.setHeight(135);
+            addSignStage.setHeight(115);
             addSignStage.setWidth(260);
             addSignStage.setResizable(false);
 
@@ -909,8 +909,18 @@ public class MainController {
             bottomHBox.getChildren().addAll(bottomLabel, bottomSignTextField);
             bottomHBox.setAlignment(Pos.CENTER);
 
-            HBox elementsHBox = new HBox(3);
+//            HBox elementsHBox = new HBox(3);
             Button confirm = new Button("Confirm");
+
+//            elementsHBox.getChildren().addAll(confirm);
+//            elementsHBox.setAlignment(Pos.CENTER);
+
+            VBox vBox = new VBox(4);
+            vBox.getChildren().addAll(bottomHBox, confirm);
+            vBox.setAlignment(Pos.CENTER);
+
+            addSignStage.setScene(new Scene(vBox));
+            addSignStage.show();
 
             Font font = null;
             try {
@@ -918,17 +928,6 @@ public class MainController {
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
             }
-
-            elementsHBox.getChildren().addAll(confirm);
-            elementsHBox.setAlignment(Pos.CENTER);
-
-            VBox vBox = new VBox(4);
-            vBox.getChildren().addAll(bottomHBox, elementsHBox);
-            vBox.setAlignment(Pos.CENTER);
-
-            addSignStage.setScene(new Scene(vBox));
-            addSignStage.show();
-
             Font finalFont = font;
 
             bottomSignTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -966,9 +965,9 @@ public class MainController {
 
             TextInputDialog dialog = new TextInputDialog();
 
-            dialog.setTitle("Open URL");
-            dialog.setHeaderText("Enter your URL:");
-            dialog.setContentText("URL:");
+            dialog.setTitle("Set watermark text");
+            dialog.setHeaderText("Enter your Watermark:");
+            dialog.setContentText("Watermark:");
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> {
@@ -999,7 +998,6 @@ public class MainController {
         } catch (Exception e) {
             setLogs(e.getMessage());
         }
-
     }
 
     private void setSign(String upperString, String bottomString, Font font) {
@@ -1017,4 +1015,5 @@ public class MainController {
 
         setImageToImageView(imageWithFont);
     }
+
 }
