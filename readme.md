@@ -29,7 +29,7 @@ Native Java DIP (digital image processing) application
 - operations with brightness and contrast
 - ...
 
-**Bugs those should be fixed**
+**Bugs those should be fixed** 
 - bugs with selection and cropping of large images
 - bugs with buttons (png instead png with background)
 - ...

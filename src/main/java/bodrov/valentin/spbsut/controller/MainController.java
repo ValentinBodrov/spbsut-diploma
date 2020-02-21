@@ -3,8 +3,6 @@ package bodrov.valentin.spbsut.controller;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +12,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.*;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -29,11 +30,17 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.Graphics2D;
+import java.awt.AlphaComposite;
+import java.awt.FontMetrics;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 
 import static bodrov.valentin.spbsut.utils.Utils.showUrlInputTextDialog;
 
@@ -884,10 +891,6 @@ public class MainController {
         }
     }
 
-    public void addDemotivatorSign(ActionEvent actionEvent) {
-
-    }
-
     public void addLobsterSign(ActionEvent actionEvent) {
         try {
             if (getCurrentProcessedImage() == null) {
@@ -927,14 +930,13 @@ public class MainController {
             addSignStage.show();
 
             Font finalFont = font;
-            ChangeListener<String> textFieldChangeListener = new ChangeListener<String>() {
+
+            bottomSignTextField.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    setSign("", bottomSignTextField.getText(), finalFont.deriveFont(45f));
+                    setSign("", bottomSignTextField.getText(), finalFont.deriveFont(48f));
                 }
-            };
-
-            bottomSignTextField.textProperty().addListener(textFieldChangeListener);
+            });
 
             addSignStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
@@ -956,7 +958,47 @@ public class MainController {
 
     }
 
-    public void addWatermark(ActionEvent actionEvent) {
+    public void addWatermark(ActionEvent actionEvent) throws Exception {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+
+            TextInputDialog dialog = new TextInputDialog();
+
+            dialog.setTitle("Open URL");
+            dialog.setHeaderText("Enter your URL:");
+            dialog.setContentText("URL:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> {
+
+            });
+            String watermark = dialog.getEditor().getText();
+
+            BufferedImage imageWithWatermark = SwingFXUtils.fromFXImage(getOriginalImage(), null);
+            Graphics2D graphics = imageWithWatermark.createGraphics();
+
+            AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
+            graphics.setComposite(alphaChannel);
+            graphics.setColor(java.awt.Color.BLUE);
+            graphics.setFont(new Font("Arial", Font.BOLD, 20));
+            FontMetrics fontMetrics = graphics.getFontMetrics();
+            Rectangle2D rect = fontMetrics.getStringBounds(watermark, graphics);
+
+            int bottomX = (int) (imageWithWatermark.getWidth() * 0.75) - (watermark.length() * 20) / 4;
+            int bottomY = (int) (imageWithWatermark.getHeight() * 0.9);
+
+            graphics.drawString(watermark, bottomX, bottomY);
+            graphics.dispose();
+
+            setImageToImageView(imageWithWatermark);
+            setOriginalImage(sampleImage.getImage());
+            setCurrentProcessedImage(sampleImage.getImage());
+
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
 
     }
 
@@ -973,6 +1015,6 @@ public class MainController {
         Graphics2D bottomSignGraphics = Utils.getGraphics(imageWithFont,
                 bottomX, bottomY, bottomString, font);
 
-        sampleImage.setImage(SwingFXUtils.toFXImage(imageWithFont, null));
+        setImageToImageView(imageWithFont);
     }
 }
