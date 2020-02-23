@@ -281,9 +281,11 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage greyscaledImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                greyscaledImage = Processings.getGreyscaledImage(image, startX, startY, releaseX, releaseY);
+                greyscaledImage = Processings.getGreyscaledImage(image,
+                        startX, startY, releaseX, releaseY);
             } else {
-                greyscaledImage = Processings.getGreyscaledImage(image, 0, 0, image.getWidth(), image.getHeight());
+                greyscaledImage = Processings.getGreyscaledImage(image,
+                        0, 0, image.getWidth(), image.getHeight());
             }
             setLogs("The greyscale effect was successfully applied to image");
             setImageToImageView(greyscaledImage);
@@ -301,9 +303,11 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage sepiaImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                sepiaImage = Processings.getSepiaImage(image, startX, startY, releaseX, releaseY);
+                sepiaImage = Processings.getSepiaImage(image,
+                        startX, startY, releaseX, releaseY);
             } else {
-                sepiaImage = Processings.getSepiaImage(image, 0, 0, image.getWidth(), image.getHeight());
+                sepiaImage = Processings.getSepiaImage(image,
+                        0, 0, image.getWidth(), image.getHeight());
             }
             setLogs("The sepia effect was successfully applied to image");
             setImageToImageView(sepiaImage);
@@ -321,9 +325,11 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage negativeImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                negativeImage = Processings.getNegativeImage(image, startX, startY, releaseX, releaseY);
+                negativeImage = Processings.getNegativeImage(image,
+                        startX, startY, releaseX, releaseY);
             } else {
-                negativeImage = Processings.getNegativeImage(image, 0, 0, image.getWidth(), image.getHeight());
+                negativeImage = Processings.getNegativeImage(image,
+                        0, 0, image.getWidth(), image.getHeight());
             }
             setLogs("The negative effect was successfully applied to image");
             setImageToImageView(negativeImage);
@@ -339,7 +345,8 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            BufferedImage mirroredImage = Processings.getMirroredImage(image, Processings.HORIZONTAL);
+            BufferedImage mirroredImage =
+                    Processings.getMirroredImage(image, Processings.HORIZONTAL);
             setLogs("The horizontal mirroring effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(mirroredImage, null));
             setImageToImageView(mirroredImage);
@@ -355,7 +362,8 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            BufferedImage mirroredImage = Processings.getMirroredImage(image, Processings.VERTICAL);
+            BufferedImage mirroredImage =
+                    Processings.getMirroredImage(image, Processings.VERTICAL);
             setLogs("The vertical mirroring effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(mirroredImage, null));
             setImageToImageView(mirroredImage);
@@ -371,7 +379,8 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            BufferedImage rotatedImage = Processings.getRotatedImage(image, Processings.RIGHT);
+            BufferedImage rotatedImage =
+                    Processings.getRotatedImage(image, Processings.RIGHT);
             setLogs("The left rotation effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(rotatedImage, null));
             setImageToImageView(rotatedImage);
@@ -387,7 +396,8 @@ public class MainController {
             }
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
-            BufferedImage rotatedImage = Processings.getRotatedImage(image, Processings.LEFT);
+            BufferedImage rotatedImage =
+                    Processings.getRotatedImage(image, Processings.LEFT);
             setLogs("The left rotation effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(rotatedImage, null));
             setImageToImageView(rotatedImage);
@@ -407,9 +417,22 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
             BufferedImage changedImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                changedImage = Processings.getChangedImage(image, originalImage, startX, startY, releaseX, releaseY, redSlider.getValue(), Processings.RED);
+                changedImage = Processings.getChangedImage(image,
+                        originalImage,
+                        startX,
+                        startY,
+                        releaseX,
+                        releaseY,
+                        redSlider.getValue(),
+                        Processings.RED);
             } else {
-                changedImage = Processings.getChangedImage(image, originalImage, 0, 0, image.getWidth(), image.getHeight(), redSlider.getValue(), Processings.RED);
+                changedImage = Processings.getChangedImage(image,
+                        originalImage,
+                        0, 0,
+                        image.getWidth(),
+                        image.getHeight(),
+                        redSlider.getValue(),
+                        Processings.RED);
             }
             setLogs("The red channel was successfully changed");
             setImageToImageView(changedImage);
@@ -429,9 +452,21 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
             BufferedImage changedImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                changedImage = Processings.getChangedImage(image, originalImage, startX, startY, releaseX, releaseY, greenSlider.getValue(), Processings.GREEN);
+                changedImage = Processings.getChangedImage(image,
+                        originalImage,
+                        startX,
+                        startY,
+                        releaseX,
+                        releaseY,
+                        greenSlider.getValue(),
+                        Processings.GREEN);
             } else {
-                changedImage = Processings.getChangedImage(image, originalImage, 0, 0, image.getWidth(), image.getHeight(), greenSlider.getValue(), Processings.GREEN);
+                changedImage = Processings.getChangedImage(image,
+                        originalImage, 0, 0,
+                        image.getWidth(),
+                        image.getHeight(),
+                        greenSlider.getValue(),
+                        Processings.GREEN);
             }
             setLogs("The green channel was successfully changed");
             setImageToImageView(changedImage);
@@ -451,9 +486,23 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
             BufferedImage changedImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                changedImage = Processings.getChangedImage(image, originalImage, startX, startY, releaseX, releaseY, blueSlider.getValue(), Processings.BLUE);
+                changedImage =
+                        Processings.getChangedImage(image,
+                                originalImage,
+                                startX,
+                                startY,
+                                releaseX,
+                                releaseY,
+                                blueSlider.getValue(),
+                                Processings.BLUE);
             } else {
-                changedImage = Processings.getChangedImage(image, originalImage, 0, 0, image.getWidth(), image.getHeight(), blueSlider.getValue(), Processings.BLUE);
+                changedImage = Processings.getChangedImage(image,
+                        originalImage,
+                        0, 0,
+                        image.getWidth(),
+                        image.getHeight(),
+                        blueSlider.getValue(),
+                        Processings.BLUE);
             }
             setLogs("The blue channel was successfully changed");
             setImageToImageView(changedImage);
@@ -508,7 +557,9 @@ public class MainController {
             }
             int newWidth = Math.abs(getReleaseX() - getStartX());
             int newHeight = Math.abs(getReleaseY() - getStartY());
-            selectionRectangle = Utils.getSelectionRectangle(startX, startY, newWidth, newHeight);
+            selectionRectangle =
+                    Utils.getSelectionRectangle(startX,
+                            startY, newWidth, newHeight);
             centerPane.getChildren().add(selectionRectangle);
             Image oldImage = getOriginalImage();
             Image imageToBeSelected =

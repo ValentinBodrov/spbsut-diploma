@@ -12,7 +12,11 @@ public class Processings {
     public static final int GREEN = 5;
     public static final int BLUE = 6;
 
-    public static BufferedImage getGreyscaledImage(BufferedImage image, int startX, int startY, int width, int height) {
+    public static BufferedImage getGreyscaledImage(BufferedImage image,
+                                                   int startX,
+                                                   int startY,
+                                                   int width,
+                                                   int height) {
         for (int y = startY; y < height; y++) {
             for (int x = startX; x < width; x++) {
                 int p = image.getRGB(x, y);
@@ -29,7 +33,11 @@ public class Processings {
         return image;
     }
 
-    public static BufferedImage getSepiaImage(BufferedImage image, int startX, int startY, int width, int height) {
+    public static BufferedImage getSepiaImage(BufferedImage image,
+                                              int startX,
+                                              int startY,
+                                              int width,
+                                              int height) {
         for (int y = startY; y < height; y++) {
             for (int x = startX; x < width; x++) {
                 int p = image.getRGB(x, y);
@@ -52,7 +60,11 @@ public class Processings {
         return image;
     }
 
-    public static BufferedImage getNegativeImage(BufferedImage image, int startX, int startY, int width, int height) {
+    public static BufferedImage getNegativeImage(BufferedImage image,
+                                                 int startX,
+                                                 int startY,
+                                                 int width,
+                                                 int height) {
         for (int y = startY; y < height; y++) {
             for (int x = startX; x < width; x++) {
                 int p = image.getRGB(x, y);
@@ -71,11 +83,13 @@ public class Processings {
         return image;
     }
 
-    public static BufferedImage getMirroredImage(BufferedImage image, int directionFlag) {
+    public static BufferedImage getMirroredImage(BufferedImage image,
+                                                 int directionFlag) {
         int width = image.getWidth();
         int height = image.getHeight();
         BufferedImage mirroredImage = new BufferedImage(
-                image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                image.getWidth(), image.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
         if (directionFlag == Processings.HORIZONTAL) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0, mirroredX = width - 1; x < width; x++, mirroredX--) {
@@ -95,7 +109,8 @@ public class Processings {
         return mirroredImage;
     }
 
-    public static BufferedImage getRotatedImage(BufferedImage image, int directionFlag) {
+    public static BufferedImage getRotatedImage(BufferedImage image,
+                                                int directionFlag) {
         int width = image.getWidth();
         int height = image.getHeight();
         BufferedImage rotatedImage = new BufferedImage(
@@ -116,7 +131,14 @@ public class Processings {
         return rotatedImage;
     }
 
-    public static BufferedImage getChangedImage(BufferedImage image, BufferedImage originalImage, int startX, int startY, int width, int height, double sliderValue, int colorFlag) {
+    public static BufferedImage getChangedImage(BufferedImage image,
+                                                BufferedImage originalImage,
+                                                int startX,
+                                                int startY,
+                                                int width,
+                                                int height,
+                                                double sliderValue,
+                                                int colorFlag) {
         for (int y = startY; y < height; y++) {
             for (int x = startX; x < width; x++) {
                 int p = image.getRGB(x, y);

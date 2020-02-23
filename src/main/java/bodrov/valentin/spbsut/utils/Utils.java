@@ -1,18 +1,9 @@
 package bodrov.valentin.spbsut.utils;
 
-import javafx.beans.value.ChangeListener;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.shape.Rectangle;
 
 import java.awt.*;
-
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
@@ -20,10 +11,6 @@ import java.awt.image.BufferedImage;
 import java.util.Optional;
 
 public class Utils {
-
-    public static final int SIMPLE_SIGN = 0;
-    public static final int LOBSTER_SIGN = 1;
-    public static final int WATERMARK = 2;
 
     public static String showUrlInputTextDialog() {
         TextInputDialog dialog = new TextInputDialog();
@@ -65,8 +52,12 @@ public class Utils {
         return graphics2D;
     }
 
-    public static Rectangle getSelectionRectangle(int startX, int startY, int width, int height) {
-        Rectangle selectionRectangle = new Rectangle(startX, startY, width, height);
+    public static Rectangle getSelectionRectangle(int startX,
+                                                  int startY,
+                                                  int width,
+                                                  int height) {
+        Rectangle selectionRectangle =
+                new Rectangle(startX, startY, width, height);
         selectionRectangle.setStroke(javafx.scene.paint.Color.WHITE);
         selectionRectangle.setStrokeWidth(1);
         selectionRectangle.getStrokeDashArray().addAll(10d, 10d);
