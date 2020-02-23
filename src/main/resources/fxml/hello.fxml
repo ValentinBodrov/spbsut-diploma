@@ -67,9 +67,6 @@
                         <MenuItem fx:id="simpleSign" mnemonicParsing="false"
                                   onAction="#addSimpleSign"
                                   text="Simple sign..."/>
-                        <MenuItem fx:id="lobsterSign" mnemonicParsing="false"
-                                  onAction="#addLobsterSign"
-                                  text="Lobster sign..."/>
                         <MenuItem fx:id="waternark" mnemonicParsing="false"
                                   onAction="#addWatermark" text="Waternark..."/>
                     </items>
