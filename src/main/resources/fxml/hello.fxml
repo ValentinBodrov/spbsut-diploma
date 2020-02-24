@@ -5,32 +5,47 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.image.Image?>
 
-<BorderPane prefHeight="771.0" prefWidth="1156.0"
+<BorderPane prefHeight="823.0" prefWidth="1296.0"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="bodrov.valentin.spbsut.controller.MainController">
     <center>
-        <AnchorPane fx:id="centerPane" maxHeight="-Infinity"
-                    maxWidth="-Infinity" minHeight="-Infinity"
-                    minWidth="-Infinity" prefHeight="578.0" prefWidth="877.0">
+        <AnchorPane fx:id="centerAnchorPane" prefHeight="709.0"
+                    prefWidth="922.0"
+                    onKeyPressed="#handleHotKeys"
+                    onDragDropped="#handleDrop"
+                    onDragOver="#handleDragOver">
             <children>
-                <ImageView fx:id="sampleImage" fitHeight="552.0"
-                           fitWidth="846.0" layoutX="16.0" layoutY="13.0"
-                           pickOnBounds="true" preserveRatio="true"/>
+                <ScrollPane fx:id="centerPane" prefHeight="770.0"
+                            prefWidth="945.0" AnchorPane.bottomAnchor="0.0"
+                            AnchorPane.leftAnchor="0.0"
+                            AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="0.0">
+                    <content>
+                        <ImageView fx:id="sampleImage" fitHeight="768.0"
+                                   fitWidth="943.0"
+                                   onMouseMoved="#getCoordinates"
+                                   onMousePressed="#onPressed"
+                                   onMouseReleased="#onReleased"
+                                   pickOnBounds="true" preserveRatio="true"/>
+                    </content>
+                </ScrollPane>
             </children>
         </AnchorPane>
     </center>
     <top>
-        <MenuBar prefHeight="25.0" prefWidth="600.0"
+        <MenuBar prefHeight="23.0" prefWidth="1296.0"
                  BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
@@ -53,6 +68,15 @@
                                   onAction="#doNegative" text="Negative"/>
                     </items>
                 </Menu>
+                <Menu mnemonicParsing="false" text="Sign">
+                    <items>
+                        <MenuItem fx:id="simpleSign" mnemonicParsing="false"
+                                  onAction="#addSimpleSign"
+                                  text="Simple sign..."/>
+                        <MenuItem fx:id="waternark" mnemonicParsing="false"
+                                  onAction="#addWatermark" text="Waternark..."/>
+                    </items>
+                </Menu>
             </menus>
         </MenuBar>
     </top>
@@ -60,7 +84,16 @@
         <VBox BorderPane.alignment="CENTER">
             <children>
                 <Separator prefWidth="200.0"/>
-                <Label fx:id="statusBar" prefHeight="25.0" prefWidth="600.0"/>
+                <HBox>
+                    <children>
+                        <Label fx:id="statusBar" prefHeight="25.0"
+                               prefWidth="939.0"/>
+                        <Separator orientation="VERTICAL" prefHeight="25.0"
+                                   prefWidth="3.0"/>
+                        <Label fx:id="coordinatesBar" prefHeight="25.0"
+                               prefWidth="278.0"/>
+                    </children>
+                </HBox>
             </children>
         </VBox>
     </bottom>
@@ -103,7 +136,32 @@
         <AnchorPane prefHeight="718.0" prefWidth="72.0"
                     BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="rotateLeft" layoutX="5.0" layoutY="150.0"
+                <Button fx:id="select" layoutX="5.0" layoutY="130.0"
+                        mnemonicParsing="false" onAction="#doSelection"
+                        prefWidth="26.0">
+                    <graphic>
+                        <ImageView fx:id="selectionImageView" fitHeight="49.0"
+                                   fitWidth="46.0" pickOnBounds="true"
+                                   preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@/icons/selection.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="cut" layoutX="5.0" layoutY="230.0"
+                        mnemonicParsing="false" prefWidth="26.0">
+                    <graphic>
+                        <ImageView fx:id="cutImageView" fitHeight="49.0"
+                                   fitWidth="46.0" pickOnBounds="true"
+                                   preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@/icons/cut.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="rotateLeft" layoutX="5.0" layoutY="330.0"
                         mnemonicParsing="false" onAction="#rotateLeft">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"
@@ -115,7 +173,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="rotateRight" layoutX="5.0" layoutY="250.0"
+                <Button fx:id="rotateRight" layoutX="5.0" layoutY="430.0"
                         mnemonicParsing="false" onAction="#rotateRight">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"
@@ -128,7 +186,7 @@
                     </graphic>
                 </Button>
                 <Button fx:id="horizontalMirroring" layoutX="5.0"
-                        layoutY="350.0" mnemonicParsing="false"
+                        layoutY="530.0" mnemonicParsing="false"
                         onAction="#doHorizontalMirroring">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"
@@ -140,7 +198,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="verticalMirroring" layoutX="5.0" layoutY="450.0"
+                <Button fx:id="verticalMirroring" layoutX="5.0" layoutY="630.0"
                         mnemonicParsing="false" onAction="#doVerticalMirroring">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"
