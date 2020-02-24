@@ -4,19 +4,19 @@ import bodrov.valentin.spbsut.utils.Processings;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 
-import static bodrov.valentin.spbsut.utils.Utils.showUrlInputTextDialog;
-
 public class MainController {
 
     public ImageView sampleImage;
@@ -46,21 +44,19 @@ public class MainController {
     public Spinner<Integer> redSpinner;
     public Spinner<Integer> greenSpinner;
     public Spinner<Integer> blueSpinner;
-    public AnchorPane centerPane;
     public ImageView selectionImageView;
     public ImageView cutImageView;
     public Button cut;
-
+    public ScrollPane centerPane;
+    public AnchorPane centerAnchorPane;
     private Image currentProcessedImage;
     private Image originalImage;
     private Image selectedImage;
-
     private int startX;
     private int startY;
     private int releaseX;
     private int releaseY;
     private Rectangle selectionRectangle;
-
     private boolean goingToBeSelected = false;
 
     private int getStartX() {
@@ -97,48 +93,54 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        if (redSpinner != null) {
-            redSpinner.setValueFactory(new SpinnerValueFactory.
-                    IntegerSpinnerValueFactory(0, 255, 1));
-            greenSpinner.setValueFactory(new SpinnerValueFactory.
-                    IntegerSpinnerValueFactory(0, 255, 1));
-            blueSpinner.setValueFactory(new SpinnerValueFactory.
-                    IntegerSpinnerValueFactory(0, 255, 1));
+        redSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
+        greenSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
+        blueSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
 
-            redSlider.valueProperty().addListener((
-                    observableValue, oldValue, newValue) -> {
-                redSpinner.getValueFactory().setValue(newValue.intValue());
-                changeRedCustom();
-            });
-            greenSlider.valueProperty().addListener((
-                    observableValue, oldValue, newValue) -> {
-                greenSpinner.getValueFactory().setValue(newValue.intValue());
-                changeGreenCustom();
-            });
-            blueSlider.valueProperty().addListener((
-                    observableValue, oldValue, newValue) -> {
-                blueSpinner.getValueFactory().setValue(newValue.intValue());
-                changeBlueCustom();
-            });
-            redSpinner.getValueFactory().valueProperty().
-                    addListener((ChangeListener<Number>)
-                            (observableValue, oldValue, newValue) -> {
-                                redSlider.setValue(newValue.intValue());
-                                changeRedCustom();
-                            });
-            greenSpinner.getValueFactory().valueProperty().
-                    addListener((ChangeListener<Number>)
-                            (observableValue, oldValue, newValue) -> {
-                                greenSlider.setValue(newValue.intValue());
-                                changeGreenCustom();
-                            });
-            blueSpinner.getValueFactory().valueProperty().
-                    addListener((ChangeListener<Number>)
-                            (observableValue, oldValue, newValue) -> {
-                                blueSlider.setValue(newValue.intValue());
-                                changeBlueCustom();
-                            });
-        }
+        redSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            redSpinner.getValueFactory().setValue(newValue.intValue());
+            changeRedCustom();
+        });
+        greenSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            greenSpinner.getValueFactory().setValue(newValue.intValue());
+            changeGreenCustom();
+        });
+        blueSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            blueSpinner.getValueFactory().setValue(newValue.intValue());
+            changeBlueCustom();
+        });
+        redSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
+                            redSlider.setValue(newValue.intValue());
+                            changeRedCustom();
+                        });
+        greenSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
+                            greenSlider.setValue(newValue.intValue());
+                            changeGreenCustom();
+                        });
+        blueSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
+                            blueSlider.setValue(newValue.intValue());
+                            changeBlueCustom();
+                        });
+
+        KeyCombination kc =
+                new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        centerAnchorPane.setOnKeyPressed(event -> {
+            if (kc.match(event)) {
+                savePictureAs();
+            }
+        });
     }
 
     private Image getCurrentProcessedImage() {
@@ -168,20 +170,13 @@ public class MainController {
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
 
+        sampleImage.setFitWidth(imageToImport.getWidth());
+        sampleImage.setFitHeight(imageToImport.getHeight());
         sampleImage.setImage(imageToImport);
-        if (imageToImport.getWidth() > imageToImport.getHeight()) {
-            if (imageToImport.getWidth() > centerPane.getPrefWidth()) {
-                sampleImage.setFitWidth(centerPane.getPrefWidth());
-            }
-            sampleImage.setFitHeight(imageToImport.getHeight());
-        } else {
-            sampleImage.setFitWidth(imageToImport.getWidth());
-        }
-
         sampleImage.setSmooth(true);
         sampleImage.setCache(true);
         setCurrentProcessedImage(imageToImport);
-        centerPane.getChildren().remove(selectionRectangle);
+        centerAnchorPane.getChildren().remove(selectionRectangle);
     }
 
     private void setLogs(String message) {
@@ -221,7 +216,7 @@ public class MainController {
     public void openUrl() {
         BufferedImage image;
         try {
-            String website = showUrlInputTextDialog();
+            String website = Utils.showUrlInputTextDialog();
             if (!website.matches("http(|s)://.*(.(com|ru|en|eu|su|uk)/?).*")) {
                 sampleImage.setImage(null);
                 setCurrentProcessedImage(null);
@@ -516,7 +511,7 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            centerPane.getChildren().remove(selectionRectangle);
+            centerAnchorPane.getChildren().remove(selectionRectangle);
             setImageToImageView(
                     SwingFXUtils.fromFXImage(getOriginalImage(), null));
             setLogs("The original image was restored");
@@ -536,7 +531,7 @@ public class MainController {
 
     public void onReleased(MouseEvent mouseEvent) {
         try {
-            centerPane.getChildren().remove(selectionRectangle);
+            centerAnchorPane.getChildren().remove(selectionRectangle);
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
@@ -555,12 +550,19 @@ public class MainController {
                 setStartX(getReleaseX());
                 setReleaseX(temp);
             }
+            if (getReleaseX() > sampleImage.getFitWidth()) {
+                setReleaseX((int) sampleImage.getFitWidth());
+            }
+            if (getReleaseY() > sampleImage.getFitHeight()) {
+                setReleaseY((int) sampleImage.getFitHeight());
+            }
             int newWidth = Math.abs(getReleaseX() - getStartX());
             int newHeight = Math.abs(getReleaseY() - getStartY());
             selectionRectangle =
                     Utils.getSelectionRectangle(startX,
                             startY, newWidth, newHeight);
-            centerPane.getChildren().add(selectionRectangle);
+            centerAnchorPane.getChildren().add(selectionRectangle);
+
             Image oldImage = getOriginalImage();
             Image imageToBeSelected =
                     new WritableImage(oldImage.getPixelReader(),
@@ -569,10 +571,13 @@ public class MainController {
                 setSelectedImage(imageToBeSelected);
             }
             cut.setOnAction(event -> {
-                doSelection();
-                setImageToImageView(
-                        SwingFXUtils.fromFXImage(imageToBeSelected, null));
-                setOriginalImage(imageToBeSelected);
+                if (goingToBeSelected) {
+                    doSelection();
+                    setImageToImageView(
+                            SwingFXUtils.fromFXImage(imageToBeSelected, null));
+                    setOriginalImage(imageToBeSelected);
+                }
+
             });
         } catch (Exception e) {
             setLogs(e.getMessage());

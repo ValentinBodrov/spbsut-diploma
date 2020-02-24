@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Spinner?>
@@ -20,26 +21,28 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="bodrov.valentin.spbsut.controller.MainController">
     <center>
-        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-                    minHeight="-Infinity" minWidth="-Infinity"
-                    prefHeight="725.0" prefWidth="930.0">
+        <AnchorPane fx:id="centerAnchorPane" prefHeight="709.0"
+                    prefWidth="922.0">
             <children>
-                <AnchorPane fx:id="centerPane" layoutX="-5.0" layoutY="-1.0"
-                            prefHeight="725.0" prefWidth="930.0">
-                    <children>
-                        <ImageView fx:id="sampleImage" fitHeight="725.0"
-                                   fitWidth="930.0"
+                <ScrollPane fx:id="centerPane" prefHeight="770.0"
+                            prefWidth="945.0" AnchorPane.bottomAnchor="0.0"
+                            AnchorPane.leftAnchor="0.0"
+                            AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="0.0">
+                    <content>
+                        <ImageView fx:id="sampleImage" fitHeight="768.0"
+                                   fitWidth="943.0"
                                    onMouseMoved="#getCoordinates"
                                    onMousePressed="#onPressed"
                                    onMouseReleased="#onReleased"
                                    pickOnBounds="true" preserveRatio="true"/>
-                    </children>
-                </AnchorPane>
+                    </content>
+                </ScrollPane>
             </children>
         </AnchorPane>
     </center>
     <top>
-        <MenuBar prefHeight="25.0" prefWidth="600.0"
+        <MenuBar prefHeight="23.0" prefWidth="1296.0"
                  BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
