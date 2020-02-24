@@ -63,6 +63,9 @@ public class MainController {
 
     private boolean goingToBeSelected = false;
 
+    private final double SAMPLE_IMAGE_WIDTH = 943;
+    private final double SAMPLE_IMAGE_HEIGHT = 768;
+
     private int getStartX() {
         return startX;
     }
@@ -168,18 +171,12 @@ public class MainController {
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
 
-//        if (imageToImport.getWidth() > imageToImport.getHeight()) {
-//            if (imageToImport.getWidth() > centerPane.getPrefWidth()) {
-//                sampleImage.setFitWidth(centerPane.getPrefWidth());
-//            }
-//            sampleImage.setFitHeight(imageToImport.getHeight());
-//        } else {
-//            sampleImage.setFitWidth(imageToImport.getWidth());
-//        }
+//        sampleImage.setFitWidth(SAMPLE_IMAGE_WIDTH);
+//        sampleImage.setFitHeight(SAMPLE_IMAGE_HEIGHT);
+        /*
+        SET SAMPLE IMAGE SIZES BY DEFAUT
+         */
 
-//        if (imageToImport.getWidth() > centerAnchorPane.getPrefWidth()) {
-//            sampleImage.setFitWidth(imageToImport.getWidth());
-//        }
         sampleImage.setFitWidth(imageToImport.getWidth());
         sampleImage.setFitHeight(imageToImport.getHeight());
 
