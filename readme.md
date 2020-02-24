@@ -25,6 +25,7 @@ Native Java DIP (digital image processing) application
 
 - different types of pics processing
     - ...
+- dealing with scalability of image
 - different types of filters (gaussian, box etc)
     - making image blurred
     - filtering image
@@ -32,7 +33,9 @@ Native Java DIP (digital image processing) application
 - ...
 
 **Bugs those should be fixed** 
-- some .png pics cannot be opened via using ctrl+v hotkeys
+- some .png pics cannot be opened via using ctrl+v hot-keys
+- signs on large images aren't scalable
+- too slow on extra large pics!!!
 
 **Necessary info about OpenCV set-up**
  
