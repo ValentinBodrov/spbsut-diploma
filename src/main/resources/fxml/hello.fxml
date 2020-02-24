@@ -22,7 +22,10 @@
             fx:controller="bodrov.valentin.spbsut.controller.MainController">
     <center>
         <AnchorPane fx:id="centerAnchorPane" prefHeight="709.0"
-                    prefWidth="922.0">
+                    prefWidth="922.0"
+                    onKeyPressed="#handleHotKeys"
+                    onDragDropped="#handleDrop"
+                    onDragOver="#handleDragOver">
             <children>
                 <ScrollPane fx:id="centerPane" prefHeight="770.0"
                             prefWidth="945.0" AnchorPane.bottomAnchor="0.0"

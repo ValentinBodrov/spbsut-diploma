@@ -4,10 +4,10 @@ import bodrov.valentin.spbsut.utils.Processings;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -28,9 +28,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 
 public class MainController {
@@ -133,14 +133,6 @@ public class MainController {
                             blueSlider.setValue(newValue.intValue());
                             changeBlueCustom();
                         });
-
-        KeyCombination kc =
-                new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-        centerAnchorPane.setOnKeyPressed(event -> {
-            if (kc.match(event)) {
-                savePictureAs();
-            }
-        });
     }
 
     private Image getCurrentProcessedImage() {
@@ -187,6 +179,44 @@ public class MainController {
         coordinatesBar.setText(String.format("X: %f Y: %f", x, y));
     }
 
+    public void handleDragOver(DragEvent dragEvent) {
+        if (dragEvent.getDragboard().hasFiles()) {
+            dragEvent.acceptTransferModes(TransferMode.ANY);
+        }
+    }
+
+    public void handleDrop(DragEvent dragEvent) throws FileNotFoundException {
+        List<File> files = dragEvent.getDragboard().getFiles();
+        Image img = new Image(new FileInputStream(files.get(0)));
+        setImageToImageView(SwingFXUtils.fromFXImage(img, null));
+    }
+
+    public void handleHotKeys(KeyEvent keyEvent) {
+        KeyCombination saveImageKeyCombination =
+                new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        KeyCombination loadImageKeyCombination =
+                new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
+        KeyCombination copyImageKeyCombination =
+                new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
+        if (saveImageKeyCombination.match(keyEvent)) {
+            savePictureAs();
+        }
+        if (loadImageKeyCombination.match(keyEvent)) {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            if (clipboard.hasImage()) {
+                Image image = clipboard.getImage();
+                setImageToImageView(SwingFXUtils.fromFXImage(image, null));
+            }
+        }
+        if (copyImageKeyCombination.match(keyEvent)) {
+            WritableImage snapshot = sampleImage.snapshot(new SnapshotParameters(), null);
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(snapshot);
+            clipboard.setContent(content);
+        }
+    }
+
     public void openLocal() {
         BufferedImage image;
         try {
@@ -217,7 +247,7 @@ public class MainController {
         BufferedImage image;
         try {
             String website = Utils.showUrlInputTextDialog();
-            if (!website.matches("http(|s)://.*(.(com|ru|en|eu|su|uk)/?).*")) {
+            if (!website.matches("http(|s)://.*(.([a-zA-z]{2,3})/?).*")) {
                 sampleImage.setImage(null);
                 setCurrentProcessedImage(null);
                 throw new Exception("The URL is invalid");
@@ -642,9 +672,30 @@ public class MainController {
                 Font font = null;
                 if (lobster.isSelected()) {
                     try {
+                        File file = null;
+                        String resource = "/fonts/lobster.ttf";
+                        URL res = getClass().getResource(resource);
+                        if (res.getProtocol().equals("jar")) {
+                            try {
+                                InputStream input = getClass().getResourceAsStream(resource);
+                                file = File.createTempFile("tempfile", ".tmp");
+                                OutputStream out = new FileOutputStream(file);
+                                int read;
+                                byte[] bytes = new byte[1024];
+                                while ((read = input.read(bytes)) != -1) {
+                                    out.write(bytes, 0, read);
+                                }
+                                out.close();
+                                file.deleteOnExit();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            file = new File(res.getFile());
+                        }
                         font = Font.createFont(
                                 Font.TRUETYPE_FONT,
-                                new File("src/main/resources/fonts/lobster.ttf"));
+                                file);
                     } catch (FontFormatException | IOException e) {
                         e.printStackTrace();
                     }
@@ -691,9 +742,7 @@ public class MainController {
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> {
-
             });
-
             String watermark = dialog.getEditor().getText();
 
             BufferedImage imageWithWatermark =

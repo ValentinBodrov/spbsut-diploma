@@ -15,7 +15,9 @@ Native Java DIP (digital image processing) application
     - pics rotating (on 90 grads)
     - pics vertical and horizontal mirroring
 - selecting, selective processing and pics-cropping
-    - there are many terrible bugs with large pics, should be fixed 
+    - there are many terrible bugs with large pics, should be fixed
+- drag-and-drop feature support
+    - drag and drop an image from everywhere to process it 
 - adding labels and captions on image
 - saving processed image
 
@@ -30,21 +32,7 @@ Native Java DIP (digital image processing) application
 - ...
 
 **Bugs those should be fixed** 
-- try to find them!
+- some .png pics cannot be opened via using ctrl+v hotkeys
 
 ####Necessary info about OpenCV set-up 
-This project uses OpenCV libraries, and before starting the work with code they
-should be installed. 
-1. Download and install OpenCV
-2. In ur project go to File -> Project Structure
-3. Select Modules -> Dependencies tab. Click the "+"-icon
-to add a dependency. Select the "Add JAR/Directory" option
-4. Browse to the path where you installed the OpenCv and select
-build/java/opencv-***.jar, then click OK. (*** is ur version)
-5. Double click on the open opencv-***.jar
-6. Click on the "+"-icon to add the Native Library Location
-7. Browse to the location where u installed OpenCV and 
-select build/java/x64. (or x86 in case of other system specification). 
-8. Click OK and apply the changes
-
-NB! The instructions below belong to InteliJ IDEA 
+This project could use OpenCV libraries, but their using is temporary stopped.
