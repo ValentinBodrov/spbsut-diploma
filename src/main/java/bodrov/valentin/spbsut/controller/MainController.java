@@ -4,10 +4,10 @@ import bodrov.valentin.spbsut.utils.Processings;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -29,8 +29,11 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 
 public class MainController {
@@ -133,14 +136,6 @@ public class MainController {
                             blueSlider.setValue(newValue.intValue());
                             changeBlueCustom();
                         });
-
-        KeyCombination kc =
-                new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-        centerAnchorPane.setOnKeyPressed(event -> {
-            if (kc.match(event)) {
-                savePictureAs();
-            }
-        });
     }
 
     private Image getCurrentProcessedImage() {
@@ -185,6 +180,52 @@ public class MainController {
 
     private void setCoordinates(double x, double y) {
         coordinatesBar.setText(String.format("X: %f Y: %f", x, y));
+    }
+
+    public void handleDragDetected(MouseEvent mouseEvent) {
+        Dragboard dragboard = sampleImage.startDragAndDrop(TransferMode.ANY);
+        final ClipboardContent content = new ClipboardContent();
+        content.putImage(sampleImage.getImage());
+        dragboard.setContent(content);
+        mouseEvent.consume();
+    }
+
+    public void handleDragOver(DragEvent dragEvent) {
+        if (dragEvent.getDragboard().hasFiles()) {
+            dragEvent.acceptTransferModes(TransferMode.ANY);
+        }
+    }
+
+    public void handleDrop(DragEvent dragEvent) throws FileNotFoundException {
+        List<File> files = dragEvent.getDragboard().getFiles();
+        Image img = new Image(new FileInputStream(files.get(0)));
+        setImageToImageView(SwingFXUtils.fromFXImage(img, null));
+    }
+
+    public void handleHotKeys(KeyEvent keyEvent) {
+        KeyCombination saveImageKeyCombination =
+                new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        KeyCombination loadImageKeyCombination =
+                new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
+        KeyCombination copyImageKeyCombination =
+                new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
+        if (saveImageKeyCombination.match(keyEvent)) {
+            savePictureAs();
+        }
+        if (loadImageKeyCombination.match(keyEvent)) {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            if (clipboard.hasImage()) {
+                Image image = clipboard.getImage();
+                setImageToImageView(SwingFXUtils.fromFXImage(image, null));
+            }
+        }
+        if (copyImageKeyCombination.match(keyEvent)) {
+            WritableImage snapshot = sampleImage.snapshot(new SnapshotParameters(), null);
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(snapshot);
+            clipboard.setContent(content);
+        }
     }
 
     public void openLocal() {
