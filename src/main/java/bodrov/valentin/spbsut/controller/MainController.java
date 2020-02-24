@@ -28,10 +28,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -683,9 +680,30 @@ public class MainController {
                 Font font = null;
                 if (lobster.isSelected()) {
                     try {
+                        File file = null;
+                        String resource = "/fonts/lobster.ttf";
+                        URL res = getClass().getResource(resource);
+                        if (res.getProtocol().equals("jar")) {
+                            try {
+                                InputStream input = getClass().getResourceAsStream(resource);
+                                file = File.createTempFile("tempfile", ".tmp");
+                                OutputStream out = new FileOutputStream(file);
+                                int read;
+                                byte[] bytes = new byte[1024];
+                                while ((read = input.read(bytes)) != -1) {
+                                    out.write(bytes, 0, read);
+                                }
+                                out.close();
+                                file.deleteOnExit();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            file = new File(res.getFile());
+                        }
                         font = Font.createFont(
                                 Font.TRUETYPE_FONT,
-                                new File("src/main/resources/fonts/lobster.ttf"));
+                                file);
                     } catch (FontFormatException | IOException e) {
                         e.printStackTrace();
                     }
@@ -732,9 +750,7 @@ public class MainController {
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> {
-
             });
-
             String watermark = dialog.getEditor().getText();
 
             BufferedImage imageWithWatermark =
