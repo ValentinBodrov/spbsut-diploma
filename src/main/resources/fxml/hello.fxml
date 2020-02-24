@@ -24,7 +24,6 @@
         <AnchorPane fx:id="centerAnchorPane" prefHeight="709.0"
                     prefWidth="922.0"
                     onKeyPressed="#handleHotKeys"
-                    onDragDetected="#handleDragDetected"
                     onDragDropped="#handleDrop"
                     onDragOver="#handleDragOver">
             <children>

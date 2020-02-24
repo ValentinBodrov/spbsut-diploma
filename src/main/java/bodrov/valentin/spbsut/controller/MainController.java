@@ -179,14 +179,6 @@ public class MainController {
         coordinatesBar.setText(String.format("X: %f Y: %f", x, y));
     }
 
-    public void handleDragDetected(MouseEvent mouseEvent) {
-        Dragboard dragboard = sampleImage.startDragAndDrop(TransferMode.ANY);
-        final ClipboardContent content = new ClipboardContent();
-        content.putImage(sampleImage.getImage());
-        dragboard.setContent(content);
-        mouseEvent.consume();
-    }
-
     public void handleDragOver(DragEvent dragEvent) {
         if (dragEvent.getDragboard().hasFiles()) {
             dragEvent.acceptTransferModes(TransferMode.ANY);
@@ -255,7 +247,7 @@ public class MainController {
         BufferedImage image;
         try {
             String website = Utils.showUrlInputTextDialog();
-            if (!website.matches("http(|s)://.*(.(com|ru|en|eu|su|uk)/?).*")) {
+            if (!website.matches("http(|s)://.*(.([a-zA-z]{2,3})/?).*")) {
                 sampleImage.setImage(null);
                 setCurrentProcessedImage(null);
                 throw new Exception("The URL is invalid");
