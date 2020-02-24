@@ -5,12 +5,11 @@ import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -46,10 +45,11 @@ public class MainController {
     public Spinner<Integer> redSpinner;
     public Spinner<Integer> greenSpinner;
     public Spinner<Integer> blueSpinner;
-    public AnchorPane centerPane;
     public ImageView selectionImageView;
     public ImageView cutImageView;
     public Button cut;
+    public ScrollPane centerPane;
+    public AnchorPane centerAnchorPane;
 
     private Image currentProcessedImage;
     private Image originalImage;
@@ -168,20 +168,27 @@ public class MainController {
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
 
+//        if (imageToImport.getWidth() > imageToImport.getHeight()) {
+//            if (imageToImport.getWidth() > centerPane.getPrefWidth()) {
+//                sampleImage.setFitWidth(centerPane.getPrefWidth());
+//            }
+//            sampleImage.setFitHeight(imageToImport.getHeight());
+//        } else {
+//            sampleImage.setFitWidth(imageToImport.getWidth());
+//        }
+
+//        if (imageToImport.getWidth() > centerAnchorPane.getPrefWidth()) {
+//            sampleImage.setFitWidth(imageToImport.getWidth());
+//        }
+        sampleImage.setFitWidth(imageToImport.getWidth());
+        sampleImage.setFitHeight(imageToImport.getHeight());
+
         sampleImage.setImage(imageToImport);
-        if (imageToImport.getWidth() > imageToImport.getHeight()) {
-            if (imageToImport.getWidth() > centerPane.getPrefWidth()) {
-                sampleImage.setFitWidth(centerPane.getPrefWidth());
-            }
-            sampleImage.setFitHeight(imageToImport.getHeight());
-        } else {
-            sampleImage.setFitWidth(imageToImport.getWidth());
-        }
 
         sampleImage.setSmooth(true);
         sampleImage.setCache(true);
         setCurrentProcessedImage(imageToImport);
-        centerPane.getChildren().remove(selectionRectangle);
+        centerAnchorPane.getChildren().remove(selectionRectangle);
     }
 
     private void setLogs(String message) {
@@ -516,7 +523,7 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            centerPane.getChildren().remove(selectionRectangle);
+            centerAnchorPane.getChildren().remove(selectionRectangle);
             setImageToImageView(
                     SwingFXUtils.fromFXImage(getOriginalImage(), null));
             setLogs("The original image was restored");
@@ -536,7 +543,7 @@ public class MainController {
 
     public void onReleased(MouseEvent mouseEvent) {
         try {
-            centerPane.getChildren().remove(selectionRectangle);
+            centerAnchorPane.getChildren().remove(selectionRectangle);
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
@@ -555,12 +562,19 @@ public class MainController {
                 setStartX(getReleaseX());
                 setReleaseX(temp);
             }
+            if (getReleaseX() > sampleImage.getFitWidth()) {
+                setReleaseX((int) sampleImage.getFitWidth());
+            }
+            if (getReleaseY() > sampleImage.getFitHeight()) {
+                setReleaseY((int) sampleImage.getFitHeight());
+            }
             int newWidth = Math.abs(getReleaseX() - getStartX());
             int newHeight = Math.abs(getReleaseY() - getStartY());
             selectionRectangle =
                     Utils.getSelectionRectangle(startX,
                             startY, newWidth, newHeight);
-            centerPane.getChildren().add(selectionRectangle);
+            centerAnchorPane.getChildren().add(selectionRectangle);
+
             Image oldImage = getOriginalImage();
             Image imageToBeSelected =
                     new WritableImage(oldImage.getPixelReader(),
