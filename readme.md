@@ -1,4 +1,4 @@
-##My project
+**My project**
 
 Native Java DIP (digital image processing) application
 
@@ -34,5 +34,6 @@ Native Java DIP (digital image processing) application
 **Bugs those should be fixed** 
 - some .png pics cannot be opened via using ctrl+v hotkeys
 
-####Necessary info about OpenCV set-up 
+**Necessary info about OpenCV set-up**
+ 
 This project could use OpenCV libraries, but their using is temporary stopped.
