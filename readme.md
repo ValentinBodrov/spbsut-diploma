@@ -30,8 +30,7 @@ Native Java DIP (digital image processing) application
 - ...
 
 **Bugs those should be fixed** 
-- bugs with selection and cropping of large images
-- ...
+- try to find them!
 
 ####Necessary info about OpenCV set-up 
 This project uses OpenCV libraries, and before starting the work with code they

@@ -50,21 +50,15 @@ public class MainController {
     public Button cut;
     public ScrollPane centerPane;
     public AnchorPane centerAnchorPane;
-
     private Image currentProcessedImage;
     private Image originalImage;
     private Image selectedImage;
-
     private int startX;
     private int startY;
     private int releaseX;
     private int releaseY;
     private Rectangle selectionRectangle;
-
     private boolean goingToBeSelected = false;
-
-    private final double SAMPLE_IMAGE_WIDTH = 943;
-    private final double SAMPLE_IMAGE_HEIGHT = 768;
 
     private int getStartX() {
         return startX;
@@ -171,17 +165,9 @@ public class MainController {
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
 
-//        sampleImage.setFitWidth(SAMPLE_IMAGE_WIDTH);
-//        sampleImage.setFitHeight(SAMPLE_IMAGE_HEIGHT);
-        /*
-        SET SAMPLE IMAGE SIZES BY DEFAUT
-         */
-
         sampleImage.setFitWidth(imageToImport.getWidth());
         sampleImage.setFitHeight(imageToImport.getHeight());
-
         sampleImage.setImage(imageToImport);
-
         sampleImage.setSmooth(true);
         sampleImage.setCache(true);
         setCurrentProcessedImage(imageToImport);
@@ -580,10 +566,13 @@ public class MainController {
                 setSelectedImage(imageToBeSelected);
             }
             cut.setOnAction(event -> {
-                doSelection();
-                setImageToImageView(
-                        SwingFXUtils.fromFXImage(imageToBeSelected, null));
-                setOriginalImage(imageToBeSelected);
+                if (goingToBeSelected) {
+                    doSelection();
+                    setImageToImageView(
+                            SwingFXUtils.fromFXImage(imageToBeSelected, null));
+                    setOriginalImage(imageToBeSelected);
+                }
+
             });
         } catch (Exception e) {
             setLogs(e.getMessage());
