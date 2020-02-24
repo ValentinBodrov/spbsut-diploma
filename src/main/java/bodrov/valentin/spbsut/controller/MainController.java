@@ -4,6 +4,7 @@ import bodrov.valentin.spbsut.utils.Processings;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,7 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -31,8 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
-
-import static bodrov.valentin.spbsut.utils.Utils.showUrlInputTextDialog;
 
 public class MainController {
 
@@ -94,48 +93,54 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        if (redSpinner != null) {
-            redSpinner.setValueFactory(new SpinnerValueFactory.
-                    IntegerSpinnerValueFactory(0, 255, 1));
-            greenSpinner.setValueFactory(new SpinnerValueFactory.
-                    IntegerSpinnerValueFactory(0, 255, 1));
-            blueSpinner.setValueFactory(new SpinnerValueFactory.
-                    IntegerSpinnerValueFactory(0, 255, 1));
+        redSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
+        greenSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
+        blueSpinner.setValueFactory(new SpinnerValueFactory.
+                IntegerSpinnerValueFactory(0, 255, 1));
 
-            redSlider.valueProperty().addListener((
-                    observableValue, oldValue, newValue) -> {
-                redSpinner.getValueFactory().setValue(newValue.intValue());
-                changeRedCustom();
-            });
-            greenSlider.valueProperty().addListener((
-                    observableValue, oldValue, newValue) -> {
-                greenSpinner.getValueFactory().setValue(newValue.intValue());
-                changeGreenCustom();
-            });
-            blueSlider.valueProperty().addListener((
-                    observableValue, oldValue, newValue) -> {
-                blueSpinner.getValueFactory().setValue(newValue.intValue());
-                changeBlueCustom();
-            });
-            redSpinner.getValueFactory().valueProperty().
-                    addListener((ChangeListener<Number>)
-                            (observableValue, oldValue, newValue) -> {
-                                redSlider.setValue(newValue.intValue());
-                                changeRedCustom();
-                            });
-            greenSpinner.getValueFactory().valueProperty().
-                    addListener((ChangeListener<Number>)
-                            (observableValue, oldValue, newValue) -> {
-                                greenSlider.setValue(newValue.intValue());
-                                changeGreenCustom();
-                            });
-            blueSpinner.getValueFactory().valueProperty().
-                    addListener((ChangeListener<Number>)
-                            (observableValue, oldValue, newValue) -> {
-                                blueSlider.setValue(newValue.intValue());
-                                changeBlueCustom();
-                            });
-        }
+        redSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            redSpinner.getValueFactory().setValue(newValue.intValue());
+            changeRedCustom();
+        });
+        greenSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            greenSpinner.getValueFactory().setValue(newValue.intValue());
+            changeGreenCustom();
+        });
+        blueSlider.valueProperty().addListener((
+                observableValue, oldValue, newValue) -> {
+            blueSpinner.getValueFactory().setValue(newValue.intValue());
+            changeBlueCustom();
+        });
+        redSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
+                            redSlider.setValue(newValue.intValue());
+                            changeRedCustom();
+                        });
+        greenSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
+                            greenSlider.setValue(newValue.intValue());
+                            changeGreenCustom();
+                        });
+        blueSpinner.getValueFactory().valueProperty().
+                addListener((ChangeListener<Number>)
+                        (observableValue, oldValue, newValue) -> {
+                            blueSlider.setValue(newValue.intValue());
+                            changeBlueCustom();
+                        });
+
+        KeyCombination kc =
+                new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        centerAnchorPane.setOnKeyPressed(event -> {
+            if (kc.match(event)) {
+                savePictureAs();
+            }
+        });
     }
 
     private Image getCurrentProcessedImage() {
@@ -211,7 +216,7 @@ public class MainController {
     public void openUrl() {
         BufferedImage image;
         try {
-            String website = showUrlInputTextDialog();
+            String website = Utils.showUrlInputTextDialog();
             if (!website.matches("http(|s)://.*(.(com|ru|en|eu|su|uk)/?).*")) {
                 sampleImage.setImage(null);
                 setCurrentProcessedImage(null);
