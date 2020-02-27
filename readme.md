@@ -15,7 +15,6 @@ Native Java DIP (digital image processing) application
     - pics rotating (on 90 grads)
     - pics vertical and horizontal mirroring
 - selecting, selective processing and pics-cropping
-    - there are many terrible bugs with large pics, should be fixed
 - drag-and-drop feature support
     - drag and drop an image from everywhere to process it 
 - adding labels and captions on image
@@ -25,6 +24,7 @@ Native Java DIP (digital image processing) application
 
 - different types of pics processing
     - ...
+- dealing with scalability of image
 - different types of filters (gaussian, box etc)
     - making image blurred
     - filtering image
@@ -32,7 +32,9 @@ Native Java DIP (digital image processing) application
 - ...
 
 **Bugs those should be fixed** 
-- some .png pics cannot be opened via using ctrl+v hotkeys
+- some .png pics cannot be opened via using ctrl+v hot-keys
+- signs on large images aren't scalable
+- too slow on extra large pics!!!
 
 **Necessary info about OpenCV set-up**
  
