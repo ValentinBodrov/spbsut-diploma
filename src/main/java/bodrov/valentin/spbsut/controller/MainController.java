@@ -189,6 +189,7 @@ public class MainController {
         List<File> files = dragEvent.getDragboard().getFiles();
         Image img = new Image(new FileInputStream(files.get(0)));
         setImageToImageView(SwingFXUtils.fromFXImage(img, null));
+        setOriginalImage(img);
     }
 
     public void handleHotKeys(KeyEvent keyEvent) {
@@ -206,6 +207,7 @@ public class MainController {
             if (clipboard.hasImage()) {
                 Image image = clipboard.getImage();
                 setImageToImageView(SwingFXUtils.fromFXImage(image, null));
+                setOriginalImage(image);
             }
         }
         if (copyImageKeyCombination.match(keyEvent)) {
