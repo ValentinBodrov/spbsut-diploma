@@ -1,59 +1,63 @@
 package bodrov.valentin.spbsut.api;
 
 import bodrov.valentin.spbsut.api.steps.TestSteps;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.awt.image.BufferedImage;
 
-public class ApiTest {
+public class ApiTest extends AbstractTest {
 
-    private static String FILENAME = "src/test/resources/images/violets.jpg";
-    private static String NEWFILENAME = "src/test/resources/images/new_file.png";
-    private static String WEBSITE = "https://images-na.ssl-images-amazon.com/images/I/716-9OEYC5L._AC_SY450_.jpg";
-
-    @Test
-    public void testOpenLocal() {
-        BufferedImage openImage = TestSteps.openLocalFile(FILENAME);
-        TestSteps.localFileShouldBeOpened(openImage, FILENAME);
-    }
-
-    @Test
-    public void testOpenUrl() {
-        BufferedImage openImage = TestSteps.openUrlFile(WEBSITE);
-        TestSteps.urlFileShouldBeOpened(openImage, WEBSITE);
-    }
-
-    @Test
-    public void testSavePicturesAs() {
-        boolean isSaved = TestSteps.savePictureAs(TestSteps.openLocalFile(FILENAME), NEWFILENAME);
-        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
-        TestSteps.fileShouldExist(NEWFILENAME);
-    }
-
-    @Test(description = "loading -> processing -> saving")
-    public void testTheFistScenario() {
-        /*
-            loading
-         */
+    @Test(description = "loading from local drive -> greyscaling -> saving")
+    public void testLocalLoadingAndGreyScaling() {
         BufferedImage openImage = TestSteps.openLocalFile(FILENAME);
         TestSteps.localFileShouldBeOpened(openImage, FILENAME);
 
-        /*
-            processing
-         */
         BufferedImage greyscaledImage = TestSteps.makeImageGreyScaled(openImage);
-        /*
-            saving
-         */
+
         boolean isSaved = TestSteps.savePictureAs(greyscaledImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
         TestSteps.fileShouldExist(NEWFILENAME);
     }
 
-    @AfterClass(enabled = false)
-    public void tearDown() {
-        TestSteps.deleteFile(NEWFILENAME);
+    @Test(description = "loading from URL -> mirroring -> rotating -> saving")
+    public void testUrlLoadingAndMirroring() {
+        BufferedImage openImage = TestSteps.openUrlFile(WEBSITE);
+        TestSteps.urlFileShouldBeOpened(openImage, WEBSITE);
+
+        BufferedImage mirroredImage = TestSteps.makeImageHorizontallyMirrored(openImage);
+        BufferedImage leftRotatedImage = TestSteps.makeImageLeftRotated(mirroredImage);
+
+        boolean isSaved = TestSteps.savePictureAs(leftRotatedImage, NEWFILENAME);
+        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
+        TestSteps.fileShouldExist(NEWFILENAME);
+    }
+
+    @Test(description = "loading from local -> negative -> double rotating -> saving")
+    public void testLocalLoadingNegativeAndRotatingTwice() {
+        BufferedImage openImage = TestSteps.openLocalFile(FILENAME);
+        TestSteps.localFileShouldBeOpened(openImage, FILENAME);
+
+        BufferedImage negativedImage = TestSteps.makeImageNegative(openImage);
+        BufferedImage rightRotatedImage = TestSteps.makeImageRightRotated(negativedImage);
+        BufferedImage doubleRotatedImage = TestSteps.makeImageRightRotated(rightRotatedImage);
+
+        boolean isSaved = TestSteps.savePictureAs(doubleRotatedImage, NEWFILENAME);
+        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
+        TestSteps.fileShouldExist(NEWFILENAME);
+    }
+
+    @Test(description = "loading from url -> sepia -> negative -> vertical mirroring -> saving")
+    public void testUrlLoadingSepiaNegativeAndMirroring() {
+        BufferedImage openImage = TestSteps.openUrlFile(WEBSITE);
+        TestSteps.urlFileShouldBeOpened(openImage, WEBSITE);
+
+        BufferedImage sepiaImage = TestSteps.makeImageSepia(openImage);
+        BufferedImage negativedImage = TestSteps.makeImageNegative(sepiaImage);
+        BufferedImage mirroredImage = TestSteps.makeImageVerticallyMirrored(negativedImage);
+
+        boolean isSaved = TestSteps.savePictureAs(mirroredImage, NEWFILENAME);
+        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
+        TestSteps.fileShouldExist(NEWFILENAME);
     }
 
 }

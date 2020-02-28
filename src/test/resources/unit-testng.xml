@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Unit-tests for Java Image Processor">
+
+    <test name="Unit Tests">
+        <classes>
+            <class name="bodrov.valentin.spbsut.api.UnitTest"/>
+        </classes>
+    </test>
+
+</suite>

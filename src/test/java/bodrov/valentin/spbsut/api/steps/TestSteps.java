@@ -1,12 +1,11 @@
 package bodrov.valentin.spbsut.api.steps;
 
 import bodrov.valentin.spbsut.api.ImageProcessingApi;
+import bodrov.valentin.spbsut.utils.Processings;
 import org.testng.Assert;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class TestSteps {
 
@@ -42,7 +41,7 @@ public class TestSteps {
     public static void deleteFile(String newFilename) {
         File f = new File(newFilename);
         if (f.delete()) {
-            System.out.println("deleted");
+            System.out.println("File is deleted");
         }
     }
 
@@ -50,4 +49,37 @@ public class TestSteps {
         return ImageProcessingApi.doGreyScale(
                 openImage, 0, 0, openImage.getWidth(), openImage.getHeight());
     }
+
+    public static BufferedImage makeImageSepia(BufferedImage openImage) {
+        return ImageProcessingApi.doSepia(
+                openImage, 0, 0, openImage.getWidth(), openImage.getHeight());
+    }
+
+    public static BufferedImage makeImageNegative(BufferedImage openImage) {
+        return ImageProcessingApi.doNegative(
+                openImage, 0, 0, openImage.getWidth(), openImage.getHeight());
+    }
+
+    public static BufferedImage makeImageVerticallyMirrored(BufferedImage openImage) {
+        return ImageProcessingApi.getMirroredImage(
+                openImage, Processings.VERTICAL);
+    }
+
+    public static BufferedImage makeImageHorizontallyMirrored(BufferedImage openImage) {
+        return ImageProcessingApi.getMirroredImage(
+                openImage, Processings.HORIZONTAL);
+    }
+
+    public static BufferedImage makeImageLeftRotated(BufferedImage openImage) {
+        return ImageProcessingApi.getRotatedImage(
+                openImage, Processings.LEFT);
+    }
+
+    public static BufferedImage makeImageRightRotated(BufferedImage openImage) {
+        return ImageProcessingApi.getRotatedImage(
+                openImage, Processings.RIGHT);
+    }
+
+
+
 }

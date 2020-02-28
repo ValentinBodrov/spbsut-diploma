@@ -1,5 +1,7 @@
 package bodrov.valentin.spbsut.api;
 
+import bodrov.valentin.spbsut.utils.Processings;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -67,4 +69,101 @@ public class ImageProcessingApi {
         }
         return openImage;
     }
+
+    public static BufferedImage doSepia(BufferedImage openImage,
+                                        int startX,
+                                        int startY,
+                                        int width, int height) {
+        for (int y = startY; y < height; y++) {
+            for (int x = startX; x < width; x++) {
+                int p = openImage.getRGB(x, y);
+                int a = (p >> 24) & 0xff;
+                int r = (p >> 16) & 0xff;
+                int g = (p >> 8) & 0xff;
+                int b = p & 0xff;
+
+                int newRed = (int) (0.393 * r + 0.769 * g + 0.189 * b);
+                int newGreen = (int) (0.349 * r + 0.686 * g + 0.168 * b);
+                int newBlue = (int) (0.272 * r + 0.534 * g + 0.131 * b);
+                r = Math.min(newRed, 255);
+                g = Math.min(newGreen, 255);
+                b = Math.min(newBlue, 255);
+
+                p = (a << 24) | (r << 16) | (g << 8) | b;
+                openImage.setRGB(x, y, p);
+            }
+        }
+        return openImage;
+    }
+
+    public static BufferedImage doNegative(BufferedImage openImage,
+                                           int startX,
+                                           int startY,
+                                           int width, int height) {
+        for (int y = startY; y < height; y++) {
+            for (int x = startX; x < width; x++) {
+                int p = openImage.getRGB(x, y);
+                int a = (p >> 24) & 0xff;
+                int r = (p >> 16) & 0xff;
+                int g = (p >> 8) & 0xff;
+                int b = p & 0xff;
+                r = 255 - r;
+                g = 255 - g;
+                b = 255 - b;
+
+                p = (a << 24) | (r << 16) | (g << 8) | b;
+                openImage.setRGB(x, y, p);
+            }
+        }
+        return openImage;
+    }
+
+    public static BufferedImage getMirroredImage(BufferedImage image,
+                                                 int directionFlag) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage mirroredImage = new BufferedImage(
+                image.getWidth(), image.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        if (directionFlag == Processings.HORIZONTAL) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0, mirroredX = width - 1; x < width; x++, mirroredX--) {
+                    int p = image.getRGB(x, y);
+                    mirroredImage.setRGB(mirroredX, y, p);
+                }
+            }
+        } else if (directionFlag == Processings.VERTICAL) {
+            for (int y = 0, mirroredY = height - 1; y < height; y++, mirroredY--) {
+                for (int x = 0; x < width; x++) {
+                    int p = image.getRGB(x, y);
+                    mirroredImage.setRGB(x, mirroredY, p);
+                }
+            }
+        }
+
+        return mirroredImage;
+    }
+
+    public static BufferedImage getRotatedImage(BufferedImage image,
+                                                int directionFlag) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage rotatedImage = new BufferedImage(
+                height, width, BufferedImage.TYPE_INT_ARGB);
+        if (directionFlag == Processings.RIGHT) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0, rotatedY = height - 1; y < height; y++, rotatedY--) {
+                    rotatedImage.setRGB(rotatedY, x, image.getRGB(x, y));
+                }
+            }
+        } else if (directionFlag == Processings.LEFT) {
+            for (int x = 0, rotatedX = width - 1; x < width; x++, rotatedX--) {
+                for (int y = 0; y < height; y++) {
+                    rotatedImage.setRGB(y, rotatedX, image.getRGB(x, y));
+                }
+            }
+        }
+        return rotatedImage;
+    }
+
 }
