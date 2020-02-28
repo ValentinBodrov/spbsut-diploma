@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Functional tests for Java Image Processor">
+
+    <test name="Functional Tests">
+        <classes>
+            <class name="bodrov.valentin.spbsut.api.ApiTest"/>
+        </classes>
+    </test>
+
+</suite>

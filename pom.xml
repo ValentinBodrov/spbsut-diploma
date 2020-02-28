@@ -6,7 +6,7 @@
 
     <groupId>bodrov.valentin.spbsut</groupId>
     <artifactId>java-image-processing</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.2.0b-SNAPSHOT</version>
 
     <properties>
 
@@ -20,8 +20,35 @@
         <!-- Plugins version -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <javafx-maven-plugin.version>2.0</javafx-maven-plugin.version>
+        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
 
     </properties>
+
+    <profiles>
+
+        <profile>
+            <id>UnitTests</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <suite.file>src/test/resources/unit-testng.xml
+                </suite.file>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>FunctionalTests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <suite.file>src/test/resources/functional-testng.xml
+                </suite.file>
+            </properties>
+        </profile>
+
+    </profiles>
 
     <dependencies>
 
@@ -71,6 +98,19 @@
                             </mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.plugin.version}</version>
+                <configuration>
+                    <reuseForks>false</reuseForks>
+                    <forkCount>0</forkCount>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suite.file}</suiteXmlFile>
+                    </suiteXmlFiles>
                 </configuration>
             </plugin>
 
