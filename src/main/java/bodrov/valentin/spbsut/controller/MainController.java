@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.opencv.core.Core;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -133,6 +134,8 @@ public class MainController {
                             blueSlider.setValue(newValue.intValue());
                             changeBlueCustom();
                         });
+
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
     private Image getCurrentProcessedImage() {
@@ -220,7 +223,7 @@ public class MainController {
     }
 
     public void openLocal() {
-        BufferedImage image;
+        BufferedImage image = null;
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(
