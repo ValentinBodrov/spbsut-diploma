@@ -35,7 +35,6 @@ Native Java DIP (digital image processing) application
 - some .png pics cannot be opened via using ctrl+v hot-keys
 - signs on large images aren't scalable
 - too slow on extra large pics!!!
-- transformations from OpenCV images to Java Images are weird, colors are replaced
 
 **Necessary info about OpenCV set-up**
  

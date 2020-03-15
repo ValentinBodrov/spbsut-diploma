@@ -1,14 +1,13 @@
 package bodrov.valentin.spbsut.utils;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
@@ -18,6 +17,8 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 public class Utils {
@@ -77,42 +78,43 @@ public class Utils {
 
     public static Mat javaImageToMat(BufferedImage image) {
         DataBuffer dataBuffer = image.getRaster().getDataBuffer();
-        byte[] pixels = null;
-        Mat cvImage = null;
+        byte[] imgPixels = null;
+        Mat mat = null;
 
         int width = image.getWidth();
         int height = image.getHeight();
 
         if (dataBuffer instanceof DataBufferByte) {
-            pixels = ((DataBufferByte) dataBuffer).getData();
+            imgPixels = ((DataBufferByte) dataBuffer).getData();
         }
 
         if (dataBuffer instanceof DataBufferInt) {
+
             int byteSize = width * height;
-            pixels = new byte[byteSize * 3];
+            imgPixels = new byte[byteSize * 3];
 
             int[] imgIntegerPixels = ((DataBufferInt) dataBuffer).getData();
 
             for (int p = 0; p < byteSize; p++) {
-                pixels[p * 3] = (byte) ((imgIntegerPixels[p] & 0x00FF0000) >> 16);
-                pixels[p * 3 + 1] = (byte) ((imgIntegerPixels[p] & 0x0000FF00) >> 8);
-                pixels[p * 3 + 2] = (byte) (imgIntegerPixels[p] & 0x000000FF);
+                imgPixels[p * 3 + 2] = (byte) ((imgIntegerPixels[p] >> 16) & 0xff);
+                imgPixels[p * 3 + 1] = (byte) ((imgIntegerPixels[p] >> 8) & 0xff);
+                imgPixels[p * 3 + 0] = (byte) (imgIntegerPixels[p] & 0xff);
             }
         }
 
-        if (pixels != null) {
-            cvImage = new Mat(height, width, CvType.CV_8UC3);
-            cvImage.put(0, 0, pixels);
+        if (imgPixels != null) {
+            mat = new Mat(height, width, CvType.CV_8UC3);
+            mat.put(0, 0, imgPixels);
         }
-        return cvImage;
+
+        return mat;
     }
 
-    public static BufferedImage matToJavaImage(Mat cvImage) {
+    public static BufferedImage matToJavaImage(Mat cvImage) throws IOException {
         MatOfByte buffer = new MatOfByte();
         Imgcodecs.imencode(".png", cvImage, buffer);
-        Image javaImage = new Image(new ByteArrayInputStream(buffer.toArray()));
-        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(javaImage, null);
-
-        return bufferedImage;
+        byte[] byteArray = buffer.toArray();
+        InputStream in = new ByteArrayInputStream(byteArray);
+        return ImageIO.read(in);
     }
 }
