@@ -18,6 +18,8 @@ Native Java DIP (digital image processing) application
 - drag-and-drop feature support
     - drag and drop an image from everywhere to process it 
 - adding labels and captions on image
+- some kinds of OpenCV-processing:
+    - operations with brightness and contrast
 - saving processed image
 
 **Future features**
@@ -28,7 +30,6 @@ Native Java DIP (digital image processing) application
 - different types of filters (gaussian, box etc)
     - making image blurred
     - filtering image
-- operations with brightness and contrast
 - ...
 
 **Bugs those should be fixed** 

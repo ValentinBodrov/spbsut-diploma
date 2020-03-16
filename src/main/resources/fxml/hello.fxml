@@ -78,7 +78,11 @@
                 <Menu mnemonicParsing="false" text="OpenCV">
                     <items>
                         <MenuItem mnemonicParsing="false"
-                                  text="Simple sign..."/>
+                                  onAction="#enhanceContrast"
+                                  text="Enhance greyscale contrast"/>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#enhanceBrightness"
+                                  text="Enhance brightness of image"/>
                     </items>
                 </Menu>
             </menus>
