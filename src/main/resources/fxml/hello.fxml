@@ -82,7 +82,13 @@
                                   text="Enhance greyscale contrast"/>
                         <MenuItem mnemonicParsing="false"
                                   onAction="#enhanceBrightness"
-                                  text="Enhance brightness of image"/>
+                                  text="Enhance brightness of image..."/>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#doBlur"
+                                  text="Blur"/>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#doMedianBlur"
+                                  text="Median Blur"/>
                     </items>
                 </Menu>
             </menus>
