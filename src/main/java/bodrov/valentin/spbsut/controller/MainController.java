@@ -4,6 +4,7 @@ import bodrov.valentin.spbsut.utils.Processings;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,6 +25,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -718,10 +721,8 @@ public class MainController {
             bottomSignTextField.textProperty().
                     addListener(textFieldChangeListener);
 
-            addSignStage.setOnCloseRequest(event -> {
-                setImageToImageView(SwingFXUtils.fromFXImage(
-                        getOriginalImage(), null));
-            });
+            addSignStage.setOnCloseRequest(event -> setImageToImageView(SwingFXUtils.fromFXImage(
+                    getOriginalImage(), null)));
 
             confirm.setOnAction(event -> {
                 setOriginalImage(sampleImage.getImage());
@@ -798,4 +799,92 @@ public class MainController {
         setImageToImageView(imageWithFont);
     }
 
+    public void enhanceContrast() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+
+            Mat source = Utils.javaImageToMat(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            Imgproc.cvtColor(source, source, Imgproc.COLOR_BGR2GRAY);
+            Mat destination = new Mat(source.rows(), source.cols(), source.type());
+
+            Imgproc.equalizeHist(source, destination);
+
+            setImageToImageView(Utils.matToJavaImage(destination));
+
+            setLogs("The contrast-enhacing effect was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void enhanceBrightness(ActionEvent actionEvent) {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            Stage enhanceStage = new Stage();
+            enhanceStage.setTitle("Enhance brightness");
+            enhanceStage.setHeight(135);
+            enhanceStage.setWidth(260);
+            enhanceStage.setResizable(false);
+
+            HBox alphaHBox = new HBox(3);
+            Label alphaSign = new Label("Alpha: ");
+            Slider alphaSlider = new Slider();
+            Label alphaLabel = new Label();
+            alphaHBox.getChildren().addAll(alphaSign, alphaSlider, alphaLabel);
+            alphaHBox.setAlignment(Pos.CENTER);
+
+            HBox betaHBox = new HBox(3);
+            Label betaSign = new Label("Beta: ");
+            Slider betaSlider = new Slider();
+            Label betaLabel = new Label();
+            betaHBox.getChildren().addAll(betaSign, betaSlider, betaLabel);
+            betaHBox.setAlignment(Pos.CENTER);
+
+            VBox vBox = new VBox(4);
+            Button confirm = new Button("Confirm");
+            vBox.getChildren().addAll(alphaHBox, betaHBox, confirm);
+            vBox.setAlignment(Pos.CENTER);
+
+            enhanceStage.setScene(new Scene(vBox));
+            enhanceStage.show();
+
+            alphaSlider.setMin(1.0);
+            alphaSlider.setMax(20.0);
+            betaSlider.setMin(1.0);
+            betaSlider.setMax(100.0);
+            alphaSlider.setValue(2.0);
+            betaSlider.setValue(50.0);
+
+            enhanceStage.setOnCloseRequest(event -> setImageToImageView(SwingFXUtils.fromFXImage(
+                    getOriginalImage(), null)));
+
+            confirm.setOnAction(event -> {
+                setOriginalImage(sampleImage.getImage());
+                setCurrentProcessedImage(sampleImage.getImage());
+                enhanceStage.close();
+            });
+
+            ChangeListener<Number> changeListener = (observable, oldValue, newValue) -> {
+                alphaLabel.setText(String.valueOf((int) alphaSlider.getValue()));
+                betaLabel.setText(String.valueOf((int) betaSlider.getValue()));
+                Mat source = Utils.javaImageToMat(
+                        SwingFXUtils.fromFXImage(getOriginalImage(), null));
+                Mat destination = new Mat(source.rows(), source.cols(), source.type());
+                BufferedImage enhancedImage = Processings.enhanceBrightness(source, destination, alphaSlider.getValue(), betaSlider.getValue());
+                MainController.this.setImageToImageView(enhancedImage);
+            };
+            alphaSlider.valueProperty().addListener(changeListener);
+            betaSlider.valueProperty().addListener(changeListener);
+            setLogs("The brightness-enhacing effect was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

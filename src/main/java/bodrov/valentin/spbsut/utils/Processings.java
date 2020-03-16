@@ -1,6 +1,9 @@
 package bodrov.valentin.spbsut.utils;
 
+import org.opencv.core.Mat;
+
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Processings {
 
@@ -169,5 +172,15 @@ public class Processings {
             }
         }
         return image;
+    }
+
+    public static BufferedImage enhanceBrightness(Mat source, Mat destination, double alpha, double beta) {
+        source.convertTo(destination, -1, alpha, beta);
+        try {
+            return Utils.matToJavaImage(destination);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
