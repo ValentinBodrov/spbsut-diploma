@@ -4,7 +4,6 @@ import bodrov.valentin.spbsut.utils.Processings;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,6 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
@@ -817,11 +817,10 @@ public class MainController {
             setLogs("The contrast-enhacing effect was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
-            e.printStackTrace();
         }
     }
 
-    public void enhanceBrightness(ActionEvent actionEvent) {
+    public void enhanceBrightness() {
         try {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
@@ -877,11 +876,47 @@ public class MainController {
                         SwingFXUtils.fromFXImage(getOriginalImage(), null));
                 Mat destination = new Mat(source.rows(), source.cols(), source.type());
                 BufferedImage enhancedImage = Processings.enhanceBrightness(source, destination, alphaSlider.getValue(), betaSlider.getValue());
-                MainController.this.setImageToImageView(enhancedImage);
+                setImageToImageView(enhancedImage);
+                setOriginalImage(SwingFXUtils.toFXImage(enhancedImage, null));
             };
             alphaSlider.valueProperty().addListener(changeListener);
             betaSlider.valueProperty().addListener(changeListener);
             setLogs("The brightness-enhacing effect was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+        }
+    }
+
+    public void doBlur() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            Mat source = Utils.javaImageToMat(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            Mat destination = new Mat();
+            Imgproc.GaussianBlur(source, destination, new Size(45, 45), 0);
+            setImageToImageView(Utils.matToJavaImage(destination));
+            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            setLogs("The blurring effect was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void doMedianBlur() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            Mat source = Utils.javaImageToMat(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            Mat destination = new Mat();
+            Imgproc.medianBlur(source, destination, 15);
+            setImageToImageView(Utils.matToJavaImage(destination));
+            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            setLogs("The blurring effect was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
             e.printStackTrace();
