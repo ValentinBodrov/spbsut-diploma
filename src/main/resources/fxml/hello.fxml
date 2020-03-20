@@ -91,6 +91,22 @@
                                   text="Median Blur"/>
                     </items>
                 </Menu>
+                <Menu mnemonicParsing="false" text="Filters">
+                    <items>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#doBilateralFilter"
+                                  text="Bilateral Filter"/>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#doBoxFilter"
+                                  text="Box Filter"/>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#doSQRBoxFilter"
+                                  text="SQRBox Filter"/>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#do2DFilter"
+                                  text="Filter 2D"/>
+                    </items>
+                </Menu>
             </menus>
         </MenuBar>
     </top>

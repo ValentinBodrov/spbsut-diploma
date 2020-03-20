@@ -23,9 +23,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
+import org.opencv.core.Point;
+import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
@@ -922,4 +921,93 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    public void doBilateralFilter() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            Mat source = Utils.javaImageToMat(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            Mat destination = new Mat();
+            Imgproc.bilateralFilter(source, destination, 15, 80, 70, Core.BORDER_DEFAULT);
+            setImageToImageView(Utils.matToJavaImage(destination));
+            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            setLogs("The bilateral filter was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void doBoxFilter() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            Mat source = Utils.javaImageToMat(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            Mat destination = new Mat();
+            Size size = new Size(45, 45);
+            Point point = new Point(-1, -1);
+            Imgproc.boxFilter(source, destination, -1, size, point, true, Core.BORDER_DEFAULT);
+            setImageToImageView(Utils.matToJavaImage(destination));
+            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            setLogs("The box filter was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void doSQRBoxFilter() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            Mat source = Utils.javaImageToMat(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            Mat destination = new Mat();
+            Imgproc.sqrBoxFilter(source, destination, -1, new Size(1, 1));
+            setImageToImageView(Utils.matToJavaImage(destination));
+            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            setLogs("The box filter was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void do2DFilter() {
+        try {
+            if (getCurrentProcessedImage() == null) {
+                throw new Exception("There's no processed image");
+            }
+            Mat source = Utils.javaImageToMat(
+                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
+            Mat destination = new Mat();
+
+            Mat kernel = Mat.ones(2, 2, CvType.CV_32F);
+
+            for (int i = 0; i < kernel.rows(); i++) {
+                for (int j = 0; j < kernel.cols(); j++) {
+                    double[] m = kernel.get(i, j);
+
+                    for (int k = 1; k < m.length; k++) {
+                        m[k] = m[k] / (2 * 2);
+                    }
+                    kernel.put(i, j, m);
+                }
+            }
+            Imgproc.filter2D(source, destination, -1, kernel);
+
+            setImageToImageView(Utils.matToJavaImage(destination));
+            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            setLogs("The box filter was applied");
+        } catch (Exception e) {
+            setLogs(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -23,6 +23,11 @@ Native Java DIP (digital image processing) application
     - making image blurred
         - gaussian blur
         - median blur
+    - making image filtered
+        - bilateral filter
+        - box filter
+        - SQR-box filter
+        - 2D-filter
 - saving processed image
 
 **Future features**
@@ -30,8 +35,6 @@ Native Java DIP (digital image processing) application
 - different types of pics processing
     - ...
 - dealing with scalability of image
-- different types of filters (gaussian, box etc)
-    - filtering image
 - ...
 
 **Bugs those should be fixed** 
