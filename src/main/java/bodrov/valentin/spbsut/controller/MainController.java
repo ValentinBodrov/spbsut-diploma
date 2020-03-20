@@ -1,6 +1,7 @@
 package bodrov.valentin.spbsut.controller;
 
-import bodrov.valentin.spbsut.utils.Processings;
+import bodrov.valentin.spbsut.processing.NativeProcessing;
+import bodrov.valentin.spbsut.processing.OpenCvProcessing;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
@@ -225,7 +226,7 @@ public class MainController {
     }
 
     public void openLocal() {
-        BufferedImage image = null;
+        BufferedImage image;
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(
@@ -313,10 +314,10 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage greyscaledImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                greyscaledImage = Processings.getGreyscaledImage(image,
+                greyscaledImage = NativeProcessing.getGreyscaledImage(image,
                         startX, startY, releaseX, releaseY);
             } else {
-                greyscaledImage = Processings.getGreyscaledImage(image,
+                greyscaledImage = NativeProcessing.getGreyscaledImage(image,
                         0, 0, image.getWidth(), image.getHeight());
             }
             setLogs("The greyscale effect was successfully applied to image");
@@ -335,10 +336,10 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage sepiaImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                sepiaImage = Processings.getSepiaImage(image,
+                sepiaImage = NativeProcessing.getSepiaImage(image,
                         startX, startY, releaseX, releaseY);
             } else {
-                sepiaImage = Processings.getSepiaImage(image,
+                sepiaImage = NativeProcessing.getSepiaImage(image,
                         0, 0, image.getWidth(), image.getHeight());
             }
             setLogs("The sepia effect was successfully applied to image");
@@ -357,10 +358,10 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage negativeImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                negativeImage = Processings.getNegativeImage(image,
+                negativeImage = NativeProcessing.getNegativeImage(image,
                         startX, startY, releaseX, releaseY);
             } else {
-                negativeImage = Processings.getNegativeImage(image,
+                negativeImage = NativeProcessing.getNegativeImage(image,
                         0, 0, image.getWidth(), image.getHeight());
             }
             setLogs("The negative effect was successfully applied to image");
@@ -378,7 +379,7 @@ public class MainController {
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage mirroredImage =
-                    Processings.getMirroredImage(image, Processings.HORIZONTAL);
+                    NativeProcessing.getMirroredImage(image, NativeProcessing.HORIZONTAL);
             setLogs("The horizontal mirroring effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(mirroredImage, null));
             setImageToImageView(mirroredImage);
@@ -395,7 +396,7 @@ public class MainController {
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage mirroredImage =
-                    Processings.getMirroredImage(image, Processings.VERTICAL);
+                    NativeProcessing.getMirroredImage(image, NativeProcessing.VERTICAL);
             setLogs("The vertical mirroring effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(mirroredImage, null));
             setImageToImageView(mirroredImage);
@@ -412,7 +413,7 @@ public class MainController {
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage rotatedImage =
-                    Processings.getRotatedImage(image, Processings.RIGHT);
+                    NativeProcessing.getRotatedImage(image, NativeProcessing.RIGHT);
             setLogs("The left rotation effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(rotatedImage, null));
             setImageToImageView(rotatedImage);
@@ -429,7 +430,7 @@ public class MainController {
             BufferedImage image =
                     SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
             BufferedImage rotatedImage =
-                    Processings.getRotatedImage(image, Processings.LEFT);
+                    NativeProcessing.getRotatedImage(image, NativeProcessing.LEFT);
             setLogs("The left rotation effect was successfully applied to image");
             setOriginalImage(SwingFXUtils.toFXImage(rotatedImage, null));
             setImageToImageView(rotatedImage);
@@ -449,22 +450,22 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
             BufferedImage changedImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                changedImage = Processings.getChangedImage(image,
+                changedImage = NativeProcessing.getChangedImage(image,
                         originalImage,
                         startX,
                         startY,
                         releaseX,
                         releaseY,
                         redSlider.getValue(),
-                        Processings.RED);
+                        NativeProcessing.RED);
             } else {
-                changedImage = Processings.getChangedImage(image,
+                changedImage = NativeProcessing.getChangedImage(image,
                         originalImage,
                         0, 0,
                         image.getWidth(),
                         image.getHeight(),
                         redSlider.getValue(),
-                        Processings.RED);
+                        NativeProcessing.RED);
             }
             setLogs("The red channel was successfully changed");
             setImageToImageView(changedImage);
@@ -484,21 +485,21 @@ public class MainController {
                     SwingFXUtils.fromFXImage(getOriginalImage(), null);
             BufferedImage changedImage;
             if (getSelectedImage() != null && goingToBeSelected) {
-                changedImage = Processings.getChangedImage(image,
+                changedImage = NativeProcessing.getChangedImage(image,
                         originalImage,
                         startX,
                         startY,
                         releaseX,
                         releaseY,
                         greenSlider.getValue(),
-                        Processings.GREEN);
+                        NativeProcessing.GREEN);
             } else {
-                changedImage = Processings.getChangedImage(image,
+                changedImage = NativeProcessing.getChangedImage(image,
                         originalImage, 0, 0,
                         image.getWidth(),
                         image.getHeight(),
                         greenSlider.getValue(),
-                        Processings.GREEN);
+                        NativeProcessing.GREEN);
             }
             setLogs("The green channel was successfully changed");
             setImageToImageView(changedImage);
@@ -519,22 +520,22 @@ public class MainController {
             BufferedImage changedImage;
             if (getSelectedImage() != null && goingToBeSelected) {
                 changedImage =
-                        Processings.getChangedImage(image,
+                        NativeProcessing.getChangedImage(image,
                                 originalImage,
                                 startX,
                                 startY,
                                 releaseX,
                                 releaseY,
                                 blueSlider.getValue(),
-                                Processings.BLUE);
+                                NativeProcessing.BLUE);
             } else {
-                changedImage = Processings.getChangedImage(image,
+                changedImage = NativeProcessing.getChangedImage(image,
                         originalImage,
                         0, 0,
                         image.getWidth(),
                         image.getHeight(),
                         blueSlider.getValue(),
-                        Processings.BLUE);
+                        NativeProcessing.BLUE);
             }
             setLogs("The blue channel was successfully changed");
             setImageToImageView(changedImage);
@@ -803,16 +804,9 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-
-            Mat source = Utils.javaImageToMat(
-                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
-            Imgproc.cvtColor(source, source, Imgproc.COLOR_BGR2GRAY);
-            Mat destination = new Mat(source.rows(), source.cols(), source.type());
-
-            Imgproc.equalizeHist(source, destination);
-
-            setImageToImageView(Utils.matToJavaImage(destination));
-
+            BufferedImage enhancedImage = OpenCvProcessing.enhanceContrast(getOriginalImage());
+            setImageToImageView(enhancedImage);
+            setOriginalImage(SwingFXUtils.toFXImage(enhancedImage, null));
             setLogs("The contrast-enhacing effect was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
@@ -861,7 +855,6 @@ public class MainController {
 
             enhanceStage.setOnCloseRequest(event -> setImageToImageView(SwingFXUtils.fromFXImage(
                     getOriginalImage(), null)));
-
             confirm.setOnAction(event -> {
                 setOriginalImage(sampleImage.getImage());
                 setCurrentProcessedImage(sampleImage.getImage());
@@ -871,12 +864,8 @@ public class MainController {
             ChangeListener<Number> changeListener = (observable, oldValue, newValue) -> {
                 alphaLabel.setText(String.valueOf((int) alphaSlider.getValue()));
                 betaLabel.setText(String.valueOf((int) betaSlider.getValue()));
-                Mat source = Utils.javaImageToMat(
-                        SwingFXUtils.fromFXImage(getOriginalImage(), null));
-                Mat destination = new Mat(source.rows(), source.cols(), source.type());
-                BufferedImage enhancedImage = Processings.enhanceBrightness(source, destination, alphaSlider.getValue(), betaSlider.getValue());
+                BufferedImage enhancedImage = OpenCvProcessing.enhanceBrightness(getOriginalImage(), alphaSlider.getValue(), betaSlider.getValue());
                 setImageToImageView(enhancedImage);
-                setOriginalImage(SwingFXUtils.toFXImage(enhancedImage, null));
             };
             alphaSlider.valueProperty().addListener(changeListener);
             betaSlider.valueProperty().addListener(changeListener);
@@ -886,18 +875,15 @@ public class MainController {
         }
     }
 
-    public void doBlur() {
+    public void doGaussianBlur() {
         try {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            Mat source = Utils.javaImageToMat(
-                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
-            Mat destination = new Mat();
-            Imgproc.GaussianBlur(source, destination, new Size(45, 45), 0);
-            setImageToImageView(Utils.matToJavaImage(destination));
-            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
-            setLogs("The blurring effect was applied");
+            BufferedImage blurredImage = OpenCvProcessing.doGaussianBlur(getOriginalImage());
+            setImageToImageView(blurredImage);
+            setOriginalImage(SwingFXUtils.toFXImage(blurredImage, null));
+            setLogs("The gaussian-blurring effect was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
             e.printStackTrace();
@@ -909,13 +895,10 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            Mat source = Utils.javaImageToMat(
-                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
-            Mat destination = new Mat();
-            Imgproc.medianBlur(source, destination, 15);
-            setImageToImageView(Utils.matToJavaImage(destination));
-            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
-            setLogs("The blurring effect was applied");
+            BufferedImage blurredImage = OpenCvProcessing.doMedianBlur(getOriginalImage());
+            setImageToImageView(blurredImage);
+            setOriginalImage(SwingFXUtils.toFXImage(blurredImage, null));
+            setLogs("The median-blurring effect was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
             e.printStackTrace();
@@ -927,12 +910,9 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            Mat source = Utils.javaImageToMat(
-                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
-            Mat destination = new Mat();
-            Imgproc.bilateralFilter(source, destination, 15, 80, 70, Core.BORDER_DEFAULT);
-            setImageToImageView(Utils.matToJavaImage(destination));
-            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            BufferedImage filteredImage = OpenCvProcessing.doBilateralFilter(getOriginalImage());
+            setImageToImageView(filteredImage);
+            setOriginalImage(SwingFXUtils.toFXImage(filteredImage, null));
             setLogs("The bilateral filter was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
@@ -945,14 +925,9 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            Mat source = Utils.javaImageToMat(
-                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
-            Mat destination = new Mat();
-            Size size = new Size(45, 45);
-            Point point = new Point(-1, -1);
-            Imgproc.boxFilter(source, destination, -1, size, point, true, Core.BORDER_DEFAULT);
-            setImageToImageView(Utils.matToJavaImage(destination));
-            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
+            BufferedImage filteredImage = OpenCvProcessing.doBoxFilter(getOriginalImage());
+            setImageToImageView(filteredImage);
+            setOriginalImage(SwingFXUtils.toFXImage(filteredImage, null));
             setLogs("The box filter was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
@@ -965,13 +940,10 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            Mat source = Utils.javaImageToMat(
-                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
-            Mat destination = new Mat();
-            Imgproc.sqrBoxFilter(source, destination, -1, new Size(1, 1));
-            setImageToImageView(Utils.matToJavaImage(destination));
-            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
-            setLogs("The box filter was applied");
+            BufferedImage filteredImage = OpenCvProcessing.doSQRBoxFilter(getOriginalImage());
+            setImageToImageView(filteredImage);
+            setOriginalImage(SwingFXUtils.toFXImage(filteredImage, null));
+            setLogs("The SQR-box filter was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
             e.printStackTrace();
@@ -983,27 +955,10 @@ public class MainController {
             if (getCurrentProcessedImage() == null) {
                 throw new Exception("There's no processed image");
             }
-            Mat source = Utils.javaImageToMat(
-                    SwingFXUtils.fromFXImage(getOriginalImage(), null));
-            Mat destination = new Mat();
-
-            Mat kernel = Mat.ones(2, 2, CvType.CV_32F);
-
-            for (int i = 0; i < kernel.rows(); i++) {
-                for (int j = 0; j < kernel.cols(); j++) {
-                    double[] m = kernel.get(i, j);
-
-                    for (int k = 1; k < m.length; k++) {
-                        m[k] = m[k] / (2 * 2);
-                    }
-                    kernel.put(i, j, m);
-                }
-            }
-            Imgproc.filter2D(source, destination, -1, kernel);
-
-            setImageToImageView(Utils.matToJavaImage(destination));
-            setOriginalImage(SwingFXUtils.toFXImage(Utils.matToJavaImage(destination), null));
-            setLogs("The box filter was applied");
+            BufferedImage filteredImage = OpenCvProcessing.do2DFilter(getOriginalImage());
+            setImageToImageView(filteredImage);
+            setOriginalImage(SwingFXUtils.toFXImage(filteredImage, null));
+            setLogs("The 2D-filter was applied");
         } catch (Exception e) {
             setLogs(e.getMessage());
             e.printStackTrace();

@@ -84,8 +84,8 @@
                                   onAction="#enhanceBrightness"
                                   text="Enhance brightness of image..."/>
                         <MenuItem mnemonicParsing="false"
-                                  onAction="#doBlur"
-                                  text="Blur"/>
+                                  onAction="#doGaussianBlur"
+                                  text="Gaussian Blur"/>
                         <MenuItem mnemonicParsing="false"
                                   onAction="#doMedianBlur"
                                   text="Median Blur"/>

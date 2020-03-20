@@ -1,6 +1,6 @@
 package bodrov.valentin.spbsut.api;
 
-import bodrov.valentin.spbsut.utils.Processings;
+import bodrov.valentin.spbsut.processing.NativeProcessing;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -125,14 +125,14 @@ public class ImageProcessingApi {
         BufferedImage mirroredImage = new BufferedImage(
                 image.getWidth(), image.getHeight(),
                 BufferedImage.TYPE_INT_ARGB);
-        if (directionFlag == Processings.HORIZONTAL) {
+        if (directionFlag == NativeProcessing.HORIZONTAL) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0, mirroredX = width - 1; x < width; x++, mirroredX--) {
                     int p = image.getRGB(x, y);
                     mirroredImage.setRGB(mirroredX, y, p);
                 }
             }
-        } else if (directionFlag == Processings.VERTICAL) {
+        } else if (directionFlag == NativeProcessing.VERTICAL) {
             for (int y = 0, mirroredY = height - 1; y < height; y++, mirroredY--) {
                 for (int x = 0; x < width; x++) {
                     int p = image.getRGB(x, y);
@@ -150,13 +150,13 @@ public class ImageProcessingApi {
         int height = image.getHeight();
         BufferedImage rotatedImage = new BufferedImage(
                 height, width, BufferedImage.TYPE_INT_ARGB);
-        if (directionFlag == Processings.RIGHT) {
+        if (directionFlag == NativeProcessing.RIGHT) {
             for (int x = 0; x < width; x++) {
                 for (int y = 0, rotatedY = height - 1; y < height; y++, rotatedY--) {
                     rotatedImage.setRGB(rotatedY, x, image.getRGB(x, y));
                 }
             }
-        } else if (directionFlag == Processings.LEFT) {
+        } else if (directionFlag == NativeProcessing.LEFT) {
             for (int x = 0, rotatedX = width - 1; x < width; x++, rotatedX--) {
                 for (int y = 0; y < height; y++) {
                     rotatedImage.setRGB(y, rotatedX, image.getRGB(x, y));
