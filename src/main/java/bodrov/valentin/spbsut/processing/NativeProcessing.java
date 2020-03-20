@@ -1,10 +1,6 @@
 package bodrov.valentin.spbsut.processing;
 
-import bodrov.valentin.spbsut.utils.Utils;
-import org.opencv.core.Mat;
-
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class NativeProcessing {
 
