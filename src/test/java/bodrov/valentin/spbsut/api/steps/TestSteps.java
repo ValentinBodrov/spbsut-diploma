@@ -1,7 +1,7 @@
 package bodrov.valentin.spbsut.api.steps;
 
 import bodrov.valentin.spbsut.api.ImageProcessingApi;
-import bodrov.valentin.spbsut.utils.Processings;
+import bodrov.valentin.spbsut.processing.NativeProcessing;
 import org.testng.Assert;
 
 import java.awt.image.BufferedImage;
@@ -62,22 +62,22 @@ public class TestSteps {
 
     public static BufferedImage makeImageVerticallyMirrored(BufferedImage openImage) {
         return ImageProcessingApi.getMirroredImage(
-                openImage, Processings.VERTICAL);
+                openImage, NativeProcessing.VERTICAL);
     }
 
     public static BufferedImage makeImageHorizontallyMirrored(BufferedImage openImage) {
         return ImageProcessingApi.getMirroredImage(
-                openImage, Processings.HORIZONTAL);
+                openImage, NativeProcessing.HORIZONTAL);
     }
 
     public static BufferedImage makeImageLeftRotated(BufferedImage openImage) {
         return ImageProcessingApi.getRotatedImage(
-                openImage, Processings.LEFT);
+                openImage, NativeProcessing.LEFT);
     }
 
     public static BufferedImage makeImageRightRotated(BufferedImage openImage) {
         return ImageProcessingApi.getRotatedImage(
-                openImage, Processings.RIGHT);
+                openImage, NativeProcessing.RIGHT);
     }
 
 

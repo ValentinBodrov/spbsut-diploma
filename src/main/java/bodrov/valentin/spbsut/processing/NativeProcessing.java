@@ -1,11 +1,8 @@
-package bodrov.valentin.spbsut.utils;
-
-import org.opencv.core.Mat;
+package bodrov.valentin.spbsut.processing;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-public class Processings {
+public class NativeProcessing {
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
@@ -93,14 +90,14 @@ public class Processings {
         BufferedImage mirroredImage = new BufferedImage(
                 image.getWidth(), image.getHeight(),
                 BufferedImage.TYPE_INT_ARGB);
-        if (directionFlag == Processings.HORIZONTAL) {
+        if (directionFlag == NativeProcessing.HORIZONTAL) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0, mirroredX = width - 1; x < width; x++, mirroredX--) {
                     int p = image.getRGB(x, y);
                     mirroredImage.setRGB(mirroredX, y, p);
                 }
             }
-        } else if (directionFlag == Processings.VERTICAL) {
+        } else if (directionFlag == NativeProcessing.VERTICAL) {
             for (int y = 0, mirroredY = height - 1; y < height; y++, mirroredY--) {
                 for (int x = 0; x < width; x++) {
                     int p = image.getRGB(x, y);
@@ -118,13 +115,13 @@ public class Processings {
         int height = image.getHeight();
         BufferedImage rotatedImage = new BufferedImage(
                 height, width, BufferedImage.TYPE_INT_ARGB);
-        if (directionFlag == Processings.RIGHT) {
+        if (directionFlag == NativeProcessing.RIGHT) {
             for (int x = 0; x < width; x++) {
                 for (int y = 0, rotatedY = height - 1; y < height; y++, rotatedY--) {
                     rotatedImage.setRGB(rotatedY, x, image.getRGB(x, y));
                 }
             }
-        } else if (directionFlag == Processings.LEFT) {
+        } else if (directionFlag == NativeProcessing.LEFT) {
             for (int x = 0, rotatedX = width - 1; x < width; x++, rotatedX--) {
                 for (int y = 0; y < height; y++) {
                     rotatedImage.setRGB(y, rotatedX, image.getRGB(x, y));
@@ -156,13 +153,13 @@ public class Processings {
                 int originalG = (originalP >> 8) & 0xff;
                 int originalB = originalP & 0xff;
 
-                if (colorFlag == Processings.RED) {
+                if (colorFlag == NativeProcessing.RED) {
                     int newR = originalR + (int) sliderValue;
                     r = Math.min(newR, 255);
-                } else if (colorFlag == Processings.GREEN) {
+                } else if (colorFlag == NativeProcessing.GREEN) {
                     int newG = originalG + (int) sliderValue;
                     g = Math.min(newG, 255);
-                } else if (colorFlag == Processings.BLUE) {
+                } else if (colorFlag == NativeProcessing.BLUE) {
                     int newB = originalB + (int) sliderValue;
                     b = Math.min(newB, 255);
                 }
@@ -174,13 +171,4 @@ public class Processings {
         return image;
     }
 
-    public static BufferedImage enhanceBrightness(Mat source, Mat destination, double alpha, double beta) {
-        source.convertTo(destination, -1, alpha, beta);
-        try {
-            return Utils.matToJavaImage(destination);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

@@ -110,11 +110,17 @@ public class Utils {
         return mat;
     }
 
-    public static BufferedImage matToJavaImage(Mat cvImage) throws IOException {
+    public static BufferedImage matToJavaImage(Mat cvImage) {
         MatOfByte buffer = new MatOfByte();
         Imgcodecs.imencode(".png", cvImage, buffer);
         byte[] byteArray = buffer.toArray();
         InputStream in = new ByteArrayInputStream(byteArray);
-        return ImageIO.read(in);
+        try {
+            return ImageIO.read(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 }
