@@ -59,6 +59,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org</groupId>
+            <artifactId>opencv</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

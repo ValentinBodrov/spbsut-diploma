@@ -2,6 +2,7 @@ package bodrov.valentin.spbsut.api.steps;
 
 import bodrov.valentin.spbsut.api.ImageProcessingApi;
 import bodrov.valentin.spbsut.processing.NativeProcessing;
+import javafx.embed.swing.SwingFXUtils;
 import org.testng.Assert;
 
 import java.awt.image.BufferedImage;
@@ -81,5 +82,45 @@ public class TestSteps {
     }
 
 
+    public static BufferedImage makeImageContrastEnhanced(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageContrastEnhanced(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
+
+
+    public static BufferedImage makeImageBrightnessEnhanced(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageBrightnessEnhanced(
+                SwingFXUtils.toFXImage(openImage, null), 2, 50);
+    }
+
+    public static BufferedImage makeImageGaussianBlurred(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageGaussianBlurred(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
+
+    public static BufferedImage makeImageMedianBlurred(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageMedianBlurred(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
+
+    public static BufferedImage makeImageBilateralFiltered(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageBilateralFiltered(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
+
+    public static BufferedImage makeImageBoxFiltered(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageBoxFiltered(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
+
+    public static BufferedImage makeImageSQRBoxFiltered(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageSQRBoxFiltered(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
+
+    public static BufferedImage makeImage2DFiltered(BufferedImage openImage) {
+        return ImageProcessingApi.makeImage2DFiltered(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
 
 }
