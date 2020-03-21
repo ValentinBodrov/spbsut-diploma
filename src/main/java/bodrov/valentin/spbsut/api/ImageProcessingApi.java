@@ -1,6 +1,11 @@
 package bodrov.valentin.spbsut.api;
 
 import bodrov.valentin.spbsut.processing.NativeProcessing;
+import bodrov.valentin.spbsut.utils.Utils;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import org.opencv.core.*;
+import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -9,6 +14,10 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ImageProcessingApi {
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     public static BufferedImage openLocal(String filename) {
         File inputFile = new File(filename);
@@ -164,6 +173,85 @@ public class ImageProcessingApi {
             }
         }
         return rotatedImage;
+    }
+
+    public static BufferedImage makeImageContrastEnhanced(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Imgproc.cvtColor(source, source, Imgproc.COLOR_BGR2GRAY);
+        Mat destination = new Mat(source.rows(), source.cols(), source.type());
+        Imgproc.equalizeHist(source, destination);
+        return Utils.matToJavaImage(destination);
+    }
+
+    public static BufferedImage makeImageBrightnessEnhanced(Image sourceImage, double alpha, double beta) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat(source.rows(), source.cols(), source.type());
+        source.convertTo(destination, -1, alpha, beta);
+        return Utils.matToJavaImage(destination);
+    }
+
+    public static BufferedImage makeImageGaussianBlurred(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat();
+        Imgproc.GaussianBlur(source, destination, new Size(45, 45), 0);
+        return Utils.matToJavaImage(destination);
+    }
+
+    public static BufferedImage makeImageMedianBlurred(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat();
+        Imgproc.medianBlur(source, destination, 15);
+        return Utils.matToJavaImage(destination);
+    }
+
+
+    public static BufferedImage makeImageBilateralFiltered(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat();
+        Imgproc.bilateralFilter(source, destination, 15, 80, 70, Core.BORDER_DEFAULT);
+        return Utils.matToJavaImage(destination);
+    }
+
+    public static BufferedImage makeImageBoxFiltered(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat();
+        Size size = new Size(45, 45);
+        Point point = new Point(-1, -1);
+        Imgproc.boxFilter(source, destination, -1, size, point, true, Core.BORDER_DEFAULT);
+        return Utils.matToJavaImage(destination);
+    }
+
+    public static BufferedImage makeImageSQRBoxFiltered(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat();
+        Imgproc.sqrBoxFilter(source, destination, -1, new Size(1, 1));
+        return Utils.matToJavaImage(destination);
+    }
+
+    public static BufferedImage makeImage2DFiltered(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat();
+        Mat kernel = Mat.ones(2, 2, CvType.CV_32F);
+        for (int i = 0; i < kernel.rows(); i++) {
+            for (int j = 0; j < kernel.cols(); j++) {
+                double[] m = kernel.get(i, j);
+
+                for (int k = 1; k < m.length; k++) {
+                    m[k] = m[k] / (2 * 2);
+                }
+                kernel.put(i, j, m);
+            }
+        }
+        Imgproc.filter2D(source, destination, -1, kernel);
+        return Utils.matToJavaImage(destination);
     }
 
 }

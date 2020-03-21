@@ -136,7 +136,6 @@ public class MainController {
                             blueSlider.setValue(newValue.intValue());
                             changeBlueCustom();
                         });
-
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 

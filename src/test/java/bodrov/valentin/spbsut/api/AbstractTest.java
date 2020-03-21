@@ -9,7 +9,7 @@ public class AbstractTest {
     static String NEWFILENAME = "src/test/resources/images/new_file.png";
     static String WEBSITE = "https://sun9-3.userapi.com/c635106/v635106468/3850c/co6DwNifebg.jpg";
 
-    @AfterClass(enabled = false)
+    @AfterClass()
     public void tearDown() {
         TestSteps.deleteFile(NEWFILENAME);
     }
