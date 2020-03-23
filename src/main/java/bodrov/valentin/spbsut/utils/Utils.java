@@ -2,12 +2,23 @@ package bodrov.valentin.spbsut.utils;
 
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.shape.Rectangle;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 public class Utils {
@@ -63,6 +74,53 @@ public class Utils {
         selectionRectangle.getStrokeDashArray().addAll(10d, 10d);
         selectionRectangle.setFill(null);
         return selectionRectangle;
+    }
+
+    public static Mat javaImageToMat(BufferedImage image) {
+        DataBuffer dataBuffer = image.getRaster().getDataBuffer();
+        byte[] imgPixels = null;
+        Mat mat = null;
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        if (dataBuffer instanceof DataBufferByte) {
+            imgPixels = ((DataBufferByte) dataBuffer).getData();
+        }
+
+        if (dataBuffer instanceof DataBufferInt) {
+
+            int byteSize = width * height;
+            imgPixels = new byte[byteSize * 3];
+
+            int[] imgIntegerPixels = ((DataBufferInt) dataBuffer).getData();
+
+            for (int p = 0; p < byteSize; p++) {
+                imgPixels[p * 3 + 2] = (byte) ((imgIntegerPixels[p] >> 16) & 0xff);
+                imgPixels[p * 3 + 1] = (byte) ((imgIntegerPixels[p] >> 8) & 0xff);
+                imgPixels[p * 3 + 0] = (byte) (imgIntegerPixels[p] & 0xff);
+            }
+        }
+
+        if (imgPixels != null) {
+            mat = new Mat(height, width, CvType.CV_8UC3);
+            mat.put(0, 0, imgPixels);
+        }
+
+        return mat;
+    }
+
+    public static BufferedImage matToJavaImage(Mat cvImage) {
+        MatOfByte buffer = new MatOfByte();
+        Imgcodecs.imencode(".png", cvImage, buffer);
+        byte[] byteArray = buffer.toArray();
+        InputStream in = new ByteArrayInputStream(byteArray);
+        try {
+            return ImageIO.read(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
