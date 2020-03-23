@@ -77,58 +77,71 @@ public class UnitTest extends AbstractTest {
 
     @Test
     public void testEnhanceContrast() {
-        BufferedImage rightRotatedImage = TestSteps.makeImageContrastEnhanced(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage enhancedImage = TestSteps.makeImageContrastEnhanced(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(enhancedImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
     @Test
     public void testEnhanceBrightness() {
-        BufferedImage rightRotatedImage = TestSteps.makeImageBrightnessEnhanced(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage enhancedImage = TestSteps.makeImageBrightnessEnhanced(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(enhancedImage, NEWFILENAME);
+        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
+    }
+
+    @Test
+    public void testEnhanceSharpness() {
+        BufferedImage enhancedImage = TestSteps.makeImageSharpnessEnhanced(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(enhancedImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
     @Test
     public void testGaussianBlur() {
-        BufferedImage rightRotatedImage = TestSteps.makeImageGaussianBlurred(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage gaussianBlurredImage = TestSteps.makeImageGaussianBlurred(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(gaussianBlurredImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
     @Test
     public void testMedianBlur() {
-        BufferedImage rightRotatedImage = TestSteps.makeImageMedianBlurred(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage medianBlurredImage = TestSteps.makeImageMedianBlurred(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(medianBlurredImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
     @Test
     public void testBilateralFilter() {
-        BufferedImage rightRotatedImage = TestSteps.makeImageBilateralFiltered(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage bilateralFilteredImage = TestSteps.makeImageBilateralFiltered(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(bilateralFilteredImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
     @Test
     public void testBoxFilter() {
-        BufferedImage rightRotatedImage = TestSteps.makeImageBoxFiltered(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage boxFilteredImage = TestSteps.makeImageBoxFiltered(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(boxFilteredImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
     @Test
     public void testSQRBoxFilter() {
-        BufferedImage rightRotatedImage = TestSteps.makeImageSQRBoxFiltered(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage sqrBoxFilteredImage = TestSteps.makeImageSQRBoxFiltered(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(sqrBoxFilteredImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
     @Test
     public void test2DFilter() {
-        BufferedImage rightRotatedImage = TestSteps.makeImage2DFiltered(TestSteps.openLocalFile(FILENAME));
-        boolean isSaved = TestSteps.savePictureAs(rightRotatedImage, NEWFILENAME);
+        BufferedImage filtered2dImage = TestSteps.makeImage2DFiltered(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(filtered2dImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
 
+    @Test
+    public void testPixelation() {
+        BufferedImage pixelatedImage = TestSteps.makeImagePixelated(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(pixelatedImage, NEWFILENAME);
+        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
+    }
 }
