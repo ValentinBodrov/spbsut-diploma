@@ -52,6 +52,12 @@ public class MainController {
     public Button cut;
     public ScrollPane centerPane;
     public AnchorPane centerAnchorPane;
+    public Slider pixelationSlider;
+    public Label pixelationLabel;
+    public Slider alphaSlider;
+    public Label alphaLabel;
+    public Slider betaSlider;
+    public Label betaLabel;
     private Image currentProcessedImage;
     private Image originalImage;
     private Image selectedImage;
@@ -535,6 +541,15 @@ public class MainController {
         setLogs("The original image was restored");
     }
 
+    public void applyChanges() throws NoProcessedImageException {
+        if (getCurrentProcessedImage() == null) {
+            setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
+            throw new NoProcessedImageException();
+        }
+        setOriginalImage(getCurrentProcessedImage());
+        setLogs("The changes were applied");
+    }
+
     public void getCoordinates(MouseEvent mouseEvent) {
         setCoordinates(mouseEvent.getX(), mouseEvent.getY());
     }
@@ -786,58 +801,27 @@ public class MainController {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
             throw new NoProcessedImageException();
         }
-        Stage enhanceStage = new Stage();
-        enhanceStage.setTitle("Enhance brightness");
-        enhanceStage.setHeight(135);
-        enhanceStage.setWidth(260);
-        enhanceStage.setResizable(false);
-
-        HBox alphaHBox = new HBox(3);
-        Label alphaSign = new Label("Alpha: ");
-        Slider alphaSlider = new Slider();
-        Label alphaLabel = new Label();
-        alphaHBox.getChildren().addAll(alphaSign, alphaSlider, alphaLabel);
-        alphaHBox.setAlignment(Pos.CENTER);
-
-        HBox betaHBox = new HBox(3);
-        Label betaSign = new Label("Beta: ");
-        Slider betaSlider = new Slider();
-        Label betaLabel = new Label();
-        betaHBox.getChildren().addAll(betaSign, betaSlider, betaLabel);
-        betaHBox.setAlignment(Pos.CENTER);
-
-        VBox vBox = new VBox(4);
-        Button confirm = new Button("Confirm");
-        vBox.getChildren().addAll(alphaHBox, betaHBox, confirm);
-        vBox.setAlignment(Pos.CENTER);
-
-        enhanceStage.setScene(new Scene(vBox));
-        enhanceStage.show();
-
-        alphaSlider.setMin(1.0);
-        alphaSlider.setMax(20.0);
-        betaSlider.setMin(1.0);
-        betaSlider.setMax(100.0);
-        alphaSlider.setValue(2.0);
-        betaSlider.setValue(50.0);
-
-        enhanceStage.setOnCloseRequest(event -> setImageToImageView(SwingFXUtils.fromFXImage(
-                getOriginalImage(), null)));
-        confirm.setOnAction(event -> {
-            setOriginalImage(sampleImage.getImage());
-            setCurrentProcessedImage(sampleImage.getImage());
-            enhanceStage.close();
-        });
-
+        setLogs("Swipe the alpha- and beta-sliders to change the image");
         ChangeListener<Number> changeListener = (observable, oldValue, newValue) -> {
             alphaLabel.setText(String.valueOf((int) alphaSlider.getValue()));
             betaLabel.setText(String.valueOf((int) betaSlider.getValue()));
             BufferedImage enhancedImage = OpenCvProcessing.enhanceBrightness(getOriginalImage(), alphaSlider.getValue(), betaSlider.getValue());
             setImageToImageView(enhancedImage);
+            setLogs("The brightness-enhacing effect was applied");
         };
         alphaSlider.valueProperty().addListener(changeListener);
         betaSlider.valueProperty().addListener(changeListener);
-        setLogs("The brightness-enhacing effect was applied");
+    }
+
+    public void enhanceSharpness() throws NoProcessedImageException {
+        if (getCurrentProcessedImage() == null) {
+            setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
+            throw new NoProcessedImageException();
+        }
+        BufferedImage enhancedImage = OpenCvProcessing.enhanceSharpness(getOriginalImage());
+        setImageToImageView(enhancedImage);
+        setOriginalImage(SwingFXUtils.toFXImage(enhancedImage, null));
+        setLogs("The sharpness-enhacing effect was applied");
     }
 
     public void doGaussianBlur() throws NoProcessedImageException {
@@ -860,6 +844,21 @@ public class MainController {
         setImageToImageView(blurredImage);
         setOriginalImage(SwingFXUtils.toFXImage(blurredImage, null));
         setLogs("The median-blurring effect was applied");
+    }
+
+    public void doPixelation() throws NoProcessedImageException {
+        if (getCurrentProcessedImage() == null) {
+            setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
+            throw new NoProcessedImageException();
+        }
+        setLogs("Swipe the slider to make image more pixelated");
+        pixelationSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            int pixelationCoefficient = (int) pixelationSlider.getValue();
+            pixelationLabel.setText(String.valueOf(pixelationCoefficient));
+            BufferedImage pixelatedImage = OpenCvProcessing.doPixelation(getOriginalImage(), pixelationCoefficient);
+            setImageToImageView(pixelatedImage);
+            setLogs("The pixelation effect was applied");
+        });
     }
 
     public void doBilateralFilter() throws NoProcessedImageException {
