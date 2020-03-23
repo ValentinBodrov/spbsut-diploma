@@ -82,7 +82,7 @@
                                   text="Enhance greyscale contrast"/>
                         <MenuItem mnemonicParsing="false"
                                   onAction="#enhanceBrightness"
-                                  text="Enhance brightness of image..."/>
+                                  text="Enhance brightness of image"/>
                         <MenuItem mnemonicParsing="false"
                                   onAction="#enhanceSharpness"
                                   text="Enhance sharpness of image"/>
