@@ -20,6 +20,8 @@ Native Java DIP (digital image processing) application
 - adding labels and captions on image
 - some kinds of OpenCV-processing:
     - operations with brightness and contrast
+    - operations with sharpness
+    - pixelation
     - making image blurred
         - gaussian blur
         - median blur
