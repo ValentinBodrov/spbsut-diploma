@@ -192,6 +192,15 @@ public class ImageProcessingApi {
         return Utils.matToJavaImage(destination);
     }
 
+    public static BufferedImage makeImageSharpnessEnhanced(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat(source.rows(), source.cols(), source.type());
+        Imgproc.GaussianBlur(source, destination, new Size(0, 0), 10);
+        Core.addWeighted(source, 1.5, destination, -0.5, 0, destination);
+        return Utils.matToJavaImage(destination);
+    }
+
     public static BufferedImage makeImageGaussianBlurred(Image sourceImage) {
         Mat source = Utils.javaImageToMat(
                 SwingFXUtils.fromFXImage(sourceImage, null));
@@ -251,6 +260,21 @@ public class ImageProcessingApi {
             }
         }
         Imgproc.filter2D(source, destination, -1, kernel);
+        return Utils.matToJavaImage(destination);
+    }
+
+    public static BufferedImage makeImagePixelated(Image sourceImage, int pixelationCoefficient) {
+        if (pixelationCoefficient == 0) {
+            return SwingFXUtils.fromFXImage(sourceImage, null);
+        }
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat destination = new Mat();
+        Mat temp = new Mat();
+        float tempWidth = source.width() / pixelationCoefficient;
+        float tempHeight = source.height() / pixelationCoefficient;
+        Imgproc.resize(source, temp, new Size(tempWidth, tempHeight), 0, 0, Imgproc.INTER_LINEAR);
+        Imgproc.resize(temp, destination, new Size(source.width(), source.height()), 0, 0, Imgproc.INTER_NEAREST);
         return Utils.matToJavaImage(destination);
     }
 

@@ -93,6 +93,11 @@ public class TestSteps {
                 SwingFXUtils.toFXImage(openImage, null), 2, 50);
     }
 
+    public static BufferedImage makeImageSharpnessEnhanced(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageSharpnessEnhanced(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
+
     public static BufferedImage makeImageGaussianBlurred(BufferedImage openImage) {
         return ImageProcessingApi.makeImageGaussianBlurred(
                 SwingFXUtils.toFXImage(openImage, null));
@@ -123,4 +128,8 @@ public class TestSteps {
                 SwingFXUtils.toFXImage(openImage, null));
     }
 
+    public static BufferedImage makeImagePixelated(BufferedImage openImage) {
+        return ImageProcessingApi.makeImagePixelated(
+                SwingFXUtils.toFXImage(openImage, null), 10);
+    }
 }
