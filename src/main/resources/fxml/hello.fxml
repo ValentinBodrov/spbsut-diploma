@@ -64,6 +64,8 @@
                                   onAction="#doSepia" text="Sepia"/>
                         <MenuItem fx:id="negative" mnemonicParsing="false"
                                   onAction="#doNegative" text="Negative"/>
+                        <MenuItem fx:id="randomPixels" mnemonicParsing="false"
+                                  onAction="#doPixelRandomizing" text="Pixel randomizing"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Sign">

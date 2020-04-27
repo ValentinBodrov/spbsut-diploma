@@ -6,6 +6,7 @@ import bodrov.valentin.spbsut.utils.NoProcessedImageException;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -202,13 +203,15 @@ public class MainController {
         setOriginalImage(img);
     }
 
-    public void handleHotKeys(KeyEvent keyEvent) {
+    public void handleHotKeys(KeyEvent keyEvent) throws NoProcessedImageException {
         KeyCombination saveImageKeyCombination =
                 new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         KeyCombination loadImageKeyCombination =
                 new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
         KeyCombination copyImageKeyCombination =
                 new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
+        KeyCombination cancelKeyCombination =
+                new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
         if (saveImageKeyCombination.match(keyEvent)) {
             savePictureAs();
         }
@@ -226,6 +229,9 @@ public class MainController {
             ClipboardContent content = new ClipboardContent();
             content.putImage(snapshot);
             clipboard.setContent(content);
+        }
+        if (cancelKeyCombination.match(keyEvent)) {
+            resetChanges();
         }
     }
 
@@ -364,6 +370,25 @@ public class MainController {
         }
         setLogs("The negative effect was successfully applied to image");
         setImageToImageView(negativeImage);
+    }
+
+    public void doPixelRandomizing(ActionEvent actionEvent) throws NoProcessedImageException {
+        if (getCurrentProcessedImage() == null) {
+            setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
+            throw new NoProcessedImageException();
+        }
+        BufferedImage image =
+                SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
+        BufferedImage randomizedImage;
+        if (getSelectedImage() != null && goingToBeSelected) {
+            randomizedImage = NativeProcessing.getRandomPixeledImage(image,
+                    startX, startY, releaseX, releaseY);
+        } else {
+            randomizedImage = NativeProcessing.getRandomPixeledImage(image,
+                    0, 0, image.getWidth(), image.getHeight());
+        }
+        setLogs("The randomizing effect was successfully applied to image");
+        setImageToImageView(randomizedImage);
     }
 
     public void doHorizontalMirroring() throws NoProcessedImageException {
