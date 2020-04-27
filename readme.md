@@ -11,6 +11,7 @@ Native Java DIP (digital image processing) application
     - greyscale
     - sepia
     - negative
+    - randomizing image's pixels
     - custom processing (influencing on red, green or blue channels)
     - pics rotating (on 90 grads)
     - pics vertical and horizontal mirroring
@@ -34,16 +35,19 @@ Native Java DIP (digital image processing) application
 
 **Future features**
 
-- different types of pics processing
-    - ...
-- dealing with scalability of image
-- ...
+- some test scenarios
 
-**Bugs those should be fixed** 
-- some .png pics cannot be opened via using ctrl+v hot-keys
+**Bugs those could be fixed**
+ 
 - signs on large images aren't scalable
-- too slow on extra large pics!!!
-- I can't create an executable jar-file
+- too slow on extra large pics
+- an executable jar-file cannot be created
+
+**Conclusion**
+
+I think it's the final phase of this project - this tool really can process
+images. My skills aren't enough for the developing continuation. There 
+will appear some code support and new test scenarios. 
 
 **Necessary info about OpenCV set-up**
  

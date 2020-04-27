@@ -127,6 +127,28 @@ public class ImageProcessingApi {
         return openImage;
     }
 
+    public static BufferedImage doRandomPixelation(BufferedImage openImage,
+                                           int startX,
+                                           int startY,
+                                           int width, int height) {
+        for (int y = startY; y < height; y++) {
+            for (int x = startX; x < width; x++) {
+                int p = openImage.getRGB(x, y);
+                int a = (p >> 24) & 0xff;
+                int r = (p >> 16) & 0xff;
+                int g = (p >> 8) & 0xff;
+                int b = p & 0xff;
+                r = 255 - r;
+                g = 255 - g;
+                b = 255 - b;
+
+                p = (a << 24) | (r << 16) | (g << 8) | b;
+                openImage.setRGB(x, y, p);
+            }
+        }
+        return openImage;
+    }
+
     public static BufferedImage getMirroredImage(BufferedImage image,
                                                  int directionFlag) {
         int width = image.getWidth();

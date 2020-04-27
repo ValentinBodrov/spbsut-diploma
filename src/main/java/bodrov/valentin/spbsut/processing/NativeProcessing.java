@@ -83,6 +83,22 @@ public class NativeProcessing {
         return image;
     }
 
+    public static BufferedImage getRandomPixelatedImage(BufferedImage image,
+                                                        int startX,
+                                                        int startY,
+                                                        int width,
+                                                        int height) {
+        for (int y = startY; y < height; y++) {
+            for (int x = startX; x < width; x++) {
+                int newX = (int) (Math.random() * width);
+                int newY = (int) (Math.random() * height);
+                int swappedP = image.getRGB(newX, newY);
+                image.setRGB(x, y, swappedP);
+            }
+        }
+        return image;
+    }
+
     public static BufferedImage getMirroredImage(BufferedImage image,
                                                  int directionFlag) {
         int width = image.getWidth();
