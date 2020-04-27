@@ -11,6 +11,7 @@ Native Java DIP (digital image processing) application
     - greyscale
     - sepia
     - negative
+    - randomizing image's pixels
     - custom processing (influencing on red, green or blue channels)
     - pics rotating (on 90 grads)
     - pics vertical and horizontal mirroring
