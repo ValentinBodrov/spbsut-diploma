@@ -61,6 +61,11 @@ public class TestSteps {
                 openImage, 0, 0, openImage.getWidth(), openImage.getHeight());
     }
 
+    public static BufferedImage makeImageRandomPixelated(BufferedImage openImage) {
+        return ImageProcessingApi.doRandomPixelation(
+                openImage, 0, 0, openImage.getWidth(), openImage.getHeight());
+    }
+
     public static BufferedImage makeImageVerticallyMirrored(BufferedImage openImage) {
         return ImageProcessingApi.getMirroredImage(
                 openImage, NativeProcessing.VERTICAL);
@@ -80,7 +85,6 @@ public class TestSteps {
         return ImageProcessingApi.getRotatedImage(
                 openImage, NativeProcessing.RIGHT);
     }
-
 
     public static BufferedImage makeImageContrastEnhanced(BufferedImage openImage) {
         return ImageProcessingApi.makeImageContrastEnhanced(
@@ -132,4 +136,5 @@ public class TestSteps {
         return ImageProcessingApi.makeImagePixelated(
                 SwingFXUtils.toFXImage(openImage, null), 10);
     }
+
 }
