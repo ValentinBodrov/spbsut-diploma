@@ -83,11 +83,11 @@ public class NativeProcessing {
         return image;
     }
 
-    public static BufferedImage getRandomPixeledImage(BufferedImage image,
-                                                      int startX,
-                                                      int startY,
-                                                      int width,
-                                                      int height) {
+    public static BufferedImage getRandomPixelatedImage(BufferedImage image,
+                                                        int startX,
+                                                        int startY,
+                                                        int width,
+                                                        int height) {
         for (int y = startY; y < height; y++) {
             for (int x = startX; x < width; x++) {
                 int newX = (int) (Math.random() * width);

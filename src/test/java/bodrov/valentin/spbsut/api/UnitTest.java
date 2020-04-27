@@ -48,6 +48,13 @@ public class UnitTest extends AbstractTest {
     }
 
     @Test
+    public void testRandomPixelation() {
+        BufferedImage randomPixelationImage = TestSteps.makeImageRandomPixelated(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(randomPixelationImage, NEWFILENAME);
+        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
+    }
+
+    @Test
     public void testVerticalMirroring() {
         BufferedImage verticallyMirroredImage = TestSteps.makeImageVerticallyMirrored(TestSteps.openLocalFile(FILENAME));
         boolean isSaved = TestSteps.savePictureAs(verticallyMirroredImage, NEWFILENAME);

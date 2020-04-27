@@ -6,7 +6,6 @@ import bodrov.valentin.spbsut.utils.NoProcessedImageException;
 import bodrov.valentin.spbsut.utils.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -172,7 +171,6 @@ public class MainController {
 
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
-
         sampleImage.setFitWidth(imageToImport.getWidth());
         sampleImage.setFitHeight(imageToImport.getHeight());
         sampleImage.setImage(imageToImport);
@@ -372,7 +370,7 @@ public class MainController {
         setImageToImageView(negativeImage);
     }
 
-    public void doPixelRandomizing(ActionEvent actionEvent) throws NoProcessedImageException {
+    public void doPixelRandomizing() throws NoProcessedImageException {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
             throw new NoProcessedImageException();
@@ -381,10 +379,10 @@ public class MainController {
                 SwingFXUtils.fromFXImage(getCurrentProcessedImage(), null);
         BufferedImage randomizedImage;
         if (getSelectedImage() != null && goingToBeSelected) {
-            randomizedImage = NativeProcessing.getRandomPixeledImage(image,
+            randomizedImage = NativeProcessing.getRandomPixelatedImage(image,
                     startX, startY, releaseX, releaseY);
         } else {
-            randomizedImage = NativeProcessing.getRandomPixeledImage(image,
+            randomizedImage = NativeProcessing.getRandomPixelatedImage(image,
                     0, 0, image.getWidth(), image.getHeight());
         }
         setLogs("The randomizing effect was successfully applied to image");
