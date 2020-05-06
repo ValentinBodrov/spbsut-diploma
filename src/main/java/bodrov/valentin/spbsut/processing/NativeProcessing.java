@@ -2,7 +2,7 @@ package bodrov.valentin.spbsut.processing;
 
 import java.awt.image.BufferedImage;
 
-public class NativeProcessing {
+public class NativeProcessing extends AbstractProcessing {
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
