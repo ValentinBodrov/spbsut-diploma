@@ -8,7 +8,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.awt.image.BufferedImage;
 
-public class OpenCvProcessing {
+public class OpenCvProcessing extends AbstractProcessing {
 
     public static BufferedImage enhanceContrast(Image sourceImage) {
         Mat source = Utils.javaImageToMat(
