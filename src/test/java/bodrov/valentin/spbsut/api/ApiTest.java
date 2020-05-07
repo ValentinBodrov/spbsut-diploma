@@ -5,6 +5,10 @@ import org.testng.annotations.Test;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * This class provides some functional tests with
+ * test scenarios.
+ */
 public class ApiTest extends AbstractTest {
 
     @Test(description = "loading from local drive -> greyscaling -> saving")
