@@ -3,6 +3,10 @@ package bodrov.valentin.spbsut.api;
 import bodrov.valentin.spbsut.api.steps.TestSteps;
 import org.testng.annotations.AfterClass;
 
+/**
+ * This class provides an abstraction for various
+ * test types. There's method used in all tests, and some constants.
+ */
 public class AbstractTest {
 
     static String FILENAME = "src/test/resources/images/violets.jpg";

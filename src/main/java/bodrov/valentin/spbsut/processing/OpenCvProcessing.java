@@ -8,6 +8,10 @@ import org.opencv.imgproc.Imgproc;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * This class provides all methods for pics processings,
+ * those use opencv methods
+ */
 public class OpenCvProcessing extends AbstractProcessing {
 
     public static BufferedImage enhanceContrast(Image sourceImage) {

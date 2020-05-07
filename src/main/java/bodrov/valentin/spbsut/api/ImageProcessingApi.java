@@ -13,6 +13,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * This class overall provides all static methods
+ * for tests. It also includes all methods for independent
+ * actions with code. The methods here copy some
+ * functional from -Processing classes, so the all
+ * explanations are there.
+ */
 public class ImageProcessingApi {
 
     static {
@@ -128,9 +135,9 @@ public class ImageProcessingApi {
     }
 
     public static BufferedImage doRandomPixelation(BufferedImage openImage,
-                                           int startX,
-                                           int startY,
-                                           int width, int height) {
+                                                   int startX,
+                                                   int startY,
+                                                   int width, int height) {
         for (int y = startY; y < height; y++) {
             for (int x = startX; x < width; x++) {
                 int p = openImage.getRGB(x, y);

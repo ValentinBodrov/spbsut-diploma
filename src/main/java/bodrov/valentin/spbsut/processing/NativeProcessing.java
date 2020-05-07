@@ -2,6 +2,10 @@ package bodrov.valentin.spbsut.processing;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * This class provides all methods for pics processings,
+ * those didn't use third party libraries - there's only java.awt
+ */
 public class NativeProcessing extends AbstractProcessing {
 
     public static final int HORIZONTAL = 0;
@@ -99,6 +103,9 @@ public class NativeProcessing extends AbstractProcessing {
         return image;
     }
 
+    /**
+     * @param directionFlag here is for mirroring direction
+     */
     public static BufferedImage getMirroredImage(BufferedImage image,
                                                  int directionFlag) {
         int width = image.getWidth();
@@ -125,6 +132,9 @@ public class NativeProcessing extends AbstractProcessing {
         return mirroredImage;
     }
 
+    /**
+     * @param directionFlag here is for rotation direction
+     */
     public static BufferedImage getRotatedImage(BufferedImage image,
                                                 int directionFlag) {
         int width = image.getWidth();
@@ -147,6 +157,10 @@ public class NativeProcessing extends AbstractProcessing {
         return rotatedImage;
     }
 
+    /**
+     * @param colorFlag here is for color which
+     *                  channel in ARGB will be changed
+     */
     public static BufferedImage getChangedImage(BufferedImage image,
                                                 BufferedImage originalImage,
                                                 int startX,
