@@ -12,7 +12,6 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    @Override
     public void start(Stage stage) throws Exception {
         String fxmlFile = "/fxml/hello.fxml";
         FXMLLoader loader = new FXMLLoader();
