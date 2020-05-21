@@ -1,6 +1,6 @@
 **My project**
 
-Native Java DIP (digital image processing) application
+Java DIP (digital image processing) application
 
 **Current features**
 
