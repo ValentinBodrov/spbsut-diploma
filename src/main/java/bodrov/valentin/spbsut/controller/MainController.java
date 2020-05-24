@@ -968,4 +968,11 @@ public class MainController {
         setLogs("The 2D-filter was applied");
     }
 
+    public void showAbout() {
+        Alert aboutAlert = new Alert(Alert.AlertType.INFORMATION);
+        aboutAlert.setHeaderText("About");
+        aboutAlert.setContentText(Utils.getAboutInfo());
+        aboutAlert.showAndWait();
+    }
+
 }

@@ -139,4 +139,10 @@ public class Utils {
         return null;
     }
 
+    public static String getAboutInfo() {
+        return "Java DIP (digital image processing) application.\n" +
+                "Created and designed by Valentin Bodrov.\n\n" +
+                "Saint-Petersburg, 2020";
+    }
+
 }
