@@ -9,9 +9,9 @@ import org.testng.annotations.AfterClass;
  */
 public class AbstractTest {
 
-    static String FILENAME = "src/test/resources/images/violets.jpg";
-    static String NEWFILENAME = "src/test/resources/images/new_file.png";
-    static String WEBSITE = "https://sun9-3.userapi.com/c635106/v635106468/3850c/co6DwNifebg.jpg";
+    static final String FILENAME = "src/test/resources/images/violets.jpg";
+    static final String NEWFILENAME = "src/test/resources/images/new_file.png";
+    static final String WEBSITE = "https://sun9-3.userapi.com/c635106/v635106468/3850c/co6DwNifebg.jpg";
 
     @AfterClass()
     public void tearDown() {
