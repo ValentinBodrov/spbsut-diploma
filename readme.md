@@ -35,19 +35,24 @@ Java DIP (digital image processing) application
 
 **Future features**
 
-- some test scenarios
+- selecting the object in front of pic and enhancing sharpness on it
+- splitting the whole project into two semi-separate:
+    - the project itself
+    - the project for testing
+- paint-like brushes
+- transformations (making image rounded or squeeze)
+- meme creating features:
+    - demotivators
+    - addition of white field in the top of pic for texts
+    - making image more little for the further processing simplifying
+- ...  
+- maybe some test scenarios
 
 **Bugs those could be fixed**
  
 - signs on large images aren't scalable
 - too slow on extra large pics
-- an executable jar-file cannot be created
-
-**Conclusion**
-
-I think it's the final phase of this project - this tool really can process
-images. My skills aren't enough for the developing continuation. There 
-will appear some code support and new test scenarios. 
+- an executable jar-file cannot be created 
 
 **Necessary info about OpenCV set-up**
  
