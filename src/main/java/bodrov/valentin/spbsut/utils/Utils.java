@@ -21,8 +21,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
+/**
+ * This class provides some utility methods
+ */
 public class Utils {
 
+    /**
+     * Provides an dialog window and returns the string
+     * from URL-textEdit
+     */
     public static String showUrlInputTextDialog() {
         TextInputDialog dialog = new TextInputDialog();
 
@@ -37,6 +44,9 @@ public class Utils {
         return dialog.getEditor().getText();
     }
 
+    /**
+     * Sets up a graphics for sign-creating
+     */
     public static Graphics2D getGraphics(BufferedImage imageWithFont,
                                          int x, int y, String string,
                                          Font font) {
@@ -76,6 +86,9 @@ public class Utils {
         return selectionRectangle;
     }
 
+    /**
+     * Translates image from BufferedImage to Mat (openCV)
+     */
     public static Mat javaImageToMat(BufferedImage image) {
         DataBuffer dataBuffer = image.getRaster().getDataBuffer();
         byte[] imgPixels = null;
@@ -98,7 +111,7 @@ public class Utils {
             for (int p = 0; p < byteSize; p++) {
                 imgPixels[p * 3 + 2] = (byte) ((imgIntegerPixels[p] >> 16) & 0xff);
                 imgPixels[p * 3 + 1] = (byte) ((imgIntegerPixels[p] >> 8) & 0xff);
-                imgPixels[p * 3 + 0] = (byte) (imgIntegerPixels[p] & 0xff);
+                imgPixels[p * 3] = (byte) (imgIntegerPixels[p] & 0xff);
             }
         }
 
@@ -110,6 +123,9 @@ public class Utils {
         return mat;
     }
 
+    /**
+     * Translates image from Mat (openCV) to BufferedImage
+     */
     public static BufferedImage matToJavaImage(Mat cvImage) {
         MatOfByte buffer = new MatOfByte();
         Imgcodecs.imencode(".png", cvImage, buffer);
@@ -121,6 +137,12 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getAboutInfo() {
+        return "Java DIP (digital image processing) application.\n" +
+                "Created and designed by Valentin Bodrov.\n\n" +
+                "Saint-Petersburg, 2020";
     }
 
 }

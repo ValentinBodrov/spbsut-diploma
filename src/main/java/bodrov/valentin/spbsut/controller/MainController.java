@@ -36,6 +36,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The MainController class provides all main actions with
+ * the application.
+ */
 public class MainController {
 
     public ImageView sampleImage;
@@ -100,6 +104,10 @@ public class MainController {
         this.releaseY = releaseY;
     }
 
+    /**
+     * This method sets up all necessary values in spinners and
+     * slider, bounds them with methods and creates the hot keys
+     */
     @FXML
     private void initialize() {
         redSpinner.setValueFactory(new SpinnerValueFactory.
@@ -169,6 +177,10 @@ public class MainController {
         this.selectedImage = selectedImage;
     }
 
+    /**
+     * This method sets up the necessary parameters for
+     * the current processed image before it's placed to workpane
+     */
     private void setImageToImageView(BufferedImage image) {
         Image imageToImport = SwingFXUtils.toFXImage(image, null);
         sampleImage.setFitWidth(imageToImport.getWidth());
@@ -188,12 +200,19 @@ public class MainController {
         coordinatesBar.setText(String.format("X: %f Y: %f", x, y));
     }
 
+    /**
+     * This methods handles the event when mouse-drag is
+     * over (when the cursor is over the workpane)
+     */
     public void handleDragOver(DragEvent dragEvent) {
         if (dragEvent.getDragboard().hasFiles()) {
             dragEvent.acceptTransferModes(TransferMode.ANY);
         }
     }
 
+    /**
+     * This methods handles the event when mouse-drag is over
+     */
     public void handleDrop(DragEvent dragEvent) throws FileNotFoundException {
         List<File> files = dragEvent.getDragboard().getFiles();
         Image img = new Image(new FileInputStream(files.get(0)));
@@ -201,6 +220,9 @@ public class MainController {
         setOriginalImage(img);
     }
 
+    /**
+     * This methods handles the event when some of key combinations passed
+     */
     public void handleHotKeys(KeyEvent keyEvent) throws NoProcessedImageException {
         KeyCombination saveImageKeyCombination =
                 new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
@@ -313,6 +335,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Only black and white
+     */
     public void doGreyscale() throws NoProcessedImageException {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
@@ -332,6 +357,9 @@ public class MainController {
         setImageToImageView(greyscaledImage);
     }
 
+    /**
+     * Red-colored black and white
+     */
     public void doSepia() throws NoProcessedImageException {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
@@ -370,6 +398,9 @@ public class MainController {
         setImageToImageView(negativeImage);
     }
 
+    /**
+     * Pixel-shuffling
+     */
     public void doPixelRandomizing() throws NoProcessedImageException {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
@@ -445,6 +476,9 @@ public class MainController {
         setImageToImageView(rotatedImage);
     }
 
+    /**
+     * Increasing or decreasing the red channel in ARGB
+     */
     private void changeRedCustom() {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
@@ -481,6 +515,9 @@ public class MainController {
         setImageToImageView(changedImage);
     }
 
+    /**
+     * Increasing or decreasing the green channel in ARGB
+     */
     private void changeGreenCustom() {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
@@ -516,6 +553,9 @@ public class MainController {
         setImageToImageView(changedImage);
     }
 
+    /**
+     * Increasing or decreasing the blue channel in ARGB
+     */
     private void changeBlueCustom() {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
@@ -926,6 +966,13 @@ public class MainController {
         setImageToImageView(filteredImage);
         setOriginalImage(SwingFXUtils.toFXImage(filteredImage, null));
         setLogs("The 2D-filter was applied");
+    }
+
+    public void showAbout() {
+        Alert aboutAlert = new Alert(Alert.AlertType.INFORMATION);
+        aboutAlert.setHeaderText("About");
+        aboutAlert.setContentText(Utils.getAboutInfo());
+        aboutAlert.showAndWait();
     }
 
 }

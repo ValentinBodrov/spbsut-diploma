@@ -8,6 +8,10 @@ import org.testng.Assert;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * This class provides methods-wrappers that bind tests with
+ * methods from API
+ */
 public class TestSteps {
 
     public static BufferedImage openLocalFile(String filename) {

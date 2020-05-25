@@ -13,6 +13,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * This class overall provides all static methods
+ * for tests. It also includes all methods for independent
+ * actions with code. The methods here copy some
+ * functional from -Processing classes, so the all
+ * explanations are there.
+ */
 public class ImageProcessingApi {
 
     static {
@@ -36,7 +43,7 @@ public class ImageProcessingApi {
             return null;
         }
         BufferedImage image = null;
-        URL url = null;
+        URL url;
         try {
             url = new URL(website);
             image = ImageIO.read(url);
@@ -128,9 +135,9 @@ public class ImageProcessingApi {
     }
 
     public static BufferedImage doRandomPixelation(BufferedImage openImage,
-                                           int startX,
-                                           int startY,
-                                           int width, int height) {
+                                                   int startX,
+                                                   int startY,
+                                                   int width, int height) {
         for (int y = startY; y < height; y++) {
             for (int x = startX; x < width; x++) {
                 int p = openImage.getRGB(x, y);
@@ -293,8 +300,8 @@ public class ImageProcessingApi {
                 SwingFXUtils.fromFXImage(sourceImage, null));
         Mat destination = new Mat();
         Mat temp = new Mat();
-        float tempWidth = source.width() / pixelationCoefficient;
-        float tempHeight = source.height() / pixelationCoefficient;
+        float tempWidth = (float) source.width() / pixelationCoefficient;
+        float tempHeight = (float) source.height() / pixelationCoefficient;
         Imgproc.resize(source, temp, new Size(tempWidth, tempHeight), 0, 0, Imgproc.INTER_LINEAR);
         Imgproc.resize(temp, destination, new Size(source.width(), source.height()), 0, 0, Imgproc.INTER_NEAREST);
         return Utils.matToJavaImage(destination);

@@ -8,7 +8,11 @@ import org.opencv.imgproc.Imgproc;
 
 import java.awt.image.BufferedImage;
 
-public class OpenCvProcessing {
+/**
+ * This class provides all methods for pics processings,
+ * those use opencv methods
+ */
+public class OpenCvProcessing extends AbstractProcessing {
 
     public static BufferedImage enhanceContrast(Image sourceImage) {
         Mat source = Utils.javaImageToMat(
@@ -106,8 +110,8 @@ public class OpenCvProcessing {
                 SwingFXUtils.fromFXImage(sourceImage, null));
         Mat destination = new Mat();
         Mat temp = new Mat();
-        float tempWidth = source.width() / pixelationCoefficient;
-        float tempHeight = source.height() / pixelationCoefficient;
+        float tempWidth = (float) source.width() / pixelationCoefficient;
+        float tempHeight = (float) source.height() / pixelationCoefficient;
         Imgproc.resize(source, temp, new Size(tempWidth, tempHeight), 0, 0, Imgproc.INTER_LINEAR);
         Imgproc.resize(temp, destination, new Size(source.width(), source.height()), 0, 0, Imgproc.INTER_NEAREST);
         return Utils.matToJavaImage(destination);

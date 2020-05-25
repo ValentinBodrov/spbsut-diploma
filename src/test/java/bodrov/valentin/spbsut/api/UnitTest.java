@@ -5,6 +5,10 @@ import org.testng.annotations.Test;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * This class provides some unit tests for
+ * all methods from source code
+ */
 public class UnitTest extends AbstractTest {
 
     @Test
