@@ -307,4 +307,29 @@ public class ImageProcessingApi {
         return Utils.matToJavaImage(destination);
     }
 
+    public static BufferedImage makeImageInForegroundDetected(Image sourceImage) {
+        Mat source = Utils.javaImageToMat(
+                SwingFXUtils.fromFXImage(sourceImage, null));
+        Mat result = new Mat();
+        Mat bgdModel = new Mat();
+        Mat fgdModel = new Mat();
+        Mat scalarMat = new Mat(1, 1, CvType.CV_8U, new Scalar(3));
+        Imgproc.grabCut(source, result,
+                new Rect(1, 1, source.width(), source.height()),
+                bgdModel, fgdModel, 15, Imgproc.GC_INIT_WITH_RECT);
+        Core.compare(result, scalarMat, result, Core.CMP_EQ);
+        Mat foreground = new Mat(source.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
+        source.copyTo(foreground, result);
+
+        Mat foregroundDestination = new Mat(foreground.rows(), foreground.cols(), foreground.type());
+        Imgproc.GaussianBlur(foreground, foregroundDestination, new Size(0, 0), 10);
+        Core.addWeighted(foreground, 1.5, foregroundDestination, -0.5, 0, foregroundDestination);
+
+        Mat destination = new Mat();
+        double alpha = 0.45;
+        double beta = 0.55;
+        Core.addWeighted(source, alpha, foregroundDestination, beta, 0.0, destination);
+        return Utils.matToJavaImage(destination);
+    }
+
 }
