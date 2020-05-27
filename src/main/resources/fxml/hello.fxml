@@ -86,8 +86,8 @@
                                   onAction="#doPixelation"
                                   text="Pixelation"/>
                         <MenuItem mnemonicParsing="false"
-                                  onAction="#doObjectDetection"
-                                  text="Object Detection"/>
+                                  onAction="#doForegroundObjectDetection"
+                                  text="Foreground Object Detection"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Filters">

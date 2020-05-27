@@ -924,7 +924,7 @@ public class MainController {
         });
     }
 
-    public void doObjectDetection() throws NoProcessedImageException {
+    public void doForegroundObjectDetection() throws NoProcessedImageException {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
             throw new NoProcessedImageException();
