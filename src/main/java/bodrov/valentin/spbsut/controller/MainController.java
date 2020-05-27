@@ -924,6 +924,17 @@ public class MainController {
         });
     }
 
+    public void doObjectDetection() throws NoProcessedImageException {
+        if (getCurrentProcessedImage() == null) {
+            setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
+            throw new NoProcessedImageException();
+        }
+        BufferedImage detectedImage = OpenCvProcessing.doObjectDetection(getOriginalImage());
+        setImageToImageView(detectedImage);
+        setOriginalImage(SwingFXUtils.toFXImage(detectedImage, null));
+        setLogs("The object was detected and visually selected");
+    }
+
     public void doBilateralFilter() throws NoProcessedImageException {
         if (getCurrentProcessedImage() == null) {
             setLogs(NoProcessedImageException.NO_PROCESSED_IMAGE);
