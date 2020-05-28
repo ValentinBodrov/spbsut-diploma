@@ -141,4 +141,8 @@ public class TestSteps {
                 SwingFXUtils.toFXImage(openImage, null), 10);
     }
 
+    public static BufferedImage makeImageWithForegroundDetection(BufferedImage openImage) {
+        return ImageProcessingApi.makeImageInForegroundDetected(
+                SwingFXUtils.toFXImage(openImage, null));
+    }
 }
