@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
 <BorderPane prefHeight="823.0" prefWidth="1296.0"
             xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -80,14 +93,12 @@
                                   onAction="#doGaussianBlur"
                                   text="Gaussian Blur"/>
                         <MenuItem mnemonicParsing="false"
-                                  onAction="#doMedianBlur"
-                                  text="Median Blur"/>
+                                  onAction="#doMedianBlur" text="Median Blur"/>
                         <MenuItem mnemonicParsing="false"
-                                  onAction="#doPixelation"
-                                  text="Pixelation"/>
+                                  onAction="#doPixelation" text="Pixelation"/>
                         <MenuItem mnemonicParsing="false"
                                   onAction="#doForegroundObjectDetection"
-                                  text="Foreground Object Detection"/>
+                                  text="Foreground Object Detection (beta)"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Filters">
@@ -96,20 +107,17 @@
                                   onAction="#doBilateralFilter"
                                   text="Bilateral Filter"/>
                         <MenuItem mnemonicParsing="false"
-                                  onAction="#doBoxFilter"
-                                  text="Box Filter"/>
+                                  onAction="#doBoxFilter" text="Box Filter"/>
                         <MenuItem mnemonicParsing="false"
                                   onAction="#doSQRBoxFilter"
                                   text="SQRBox Filter"/>
-                        <MenuItem mnemonicParsing="false"
-                                  onAction="#do2DFilter"
+                        <MenuItem mnemonicParsing="false" onAction="#do2DFilter"
                                   text="Filter 2D"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false"
-                                  onAction="#showAbout"
+                        <MenuItem mnemonicParsing="false" onAction="#showAbout"
                                   text="About"/>
                     </items>
                 </Menu>
@@ -138,56 +146,56 @@
                     BorderPane.alignment="CENTER">
             <children>
                 <Label layoutX="14.0" layoutY="65.0" text="Alpha:"/>
-                <Slider fx:id="alphaSlider" layoutY="65.0" min="1" max="20"
-                        prefHeight="14.0" prefWidth="176.0"
-                        AnchorPane.leftAnchor="0.0"
+                <Slider fx:id="alphaSlider" layoutX="10.0" layoutY="65.0"
+                        max="20" min="1" prefHeight="14.0" prefWidth="166.0"
+                        AnchorPane.leftAnchor="10.0"
                         AnchorPane.rightAnchor="103.0"
                         AnchorPane.topAnchor="90.0"/>
                 <Label fx:id="alphaLabel" layoutX="183.0" layoutY="90.0"/>
                 <Label layoutX="14.0" layoutY="133.0" text="Beta:"/>
-                <Slider fx:id="betaSlider" layoutY="220.0" min="1.0" max="100.0"
-                        prefHeight="14.0" prefWidth="176.0"
-                        AnchorPane.leftAnchor="0.0"
+                <Slider fx:id="betaSlider" layoutX="10.0" layoutY="220.0"
+                        max="100.0" min="1.0" prefHeight="14.0"
+                        prefWidth="166.0" AnchorPane.leftAnchor="10.0"
                         AnchorPane.rightAnchor="103.0"
                         AnchorPane.topAnchor="155.0"/>
                 <Label fx:id="betaLabel" layoutX="183.0" layoutY="155.0"/>
                 <Label layoutX="14.0" layoutY="198.0"
                        text="Pixelation coefficient:"/>
-                <Slider fx:id="pixelationSlider" layoutY="220.0" max="50"
-                        prefHeight="14.0" prefWidth="176.0"
-                        AnchorPane.leftAnchor="0.0"
+                <Slider fx:id="pixelationSlider" layoutX="10.0" layoutY="220.0"
+                        max="50" prefHeight="14.0" prefWidth="166.0"
+                        AnchorPane.leftAnchor="10.0"
                         AnchorPane.rightAnchor="103.0"
                         AnchorPane.topAnchor="220.0"/>
                 <Label fx:id="pixelationLabel" layoutX="183.0" layoutY="220.0"/>
                 <Label layoutX="14.0" layoutY="263.0" text="Red:"/>
-                <Slider fx:id="redSlider" layoutY="285.0" max="255.0" min="0.0"
-                        prefHeight="14.0" prefWidth="176.0"
-                        AnchorPane.leftAnchor="0.0"
+                <Slider fx:id="redSlider" layoutX="10.0" layoutY="285.0"
+                        max="255.0" min="0.0" prefHeight="14.0"
+                        prefWidth="166.0" AnchorPane.leftAnchor="10.0"
                         AnchorPane.rightAnchor="103.0"
                         AnchorPane.topAnchor="285.0"/>
                 <Spinner fx:id="redSpinner" editable="true" layoutX="183.0"
-                         layoutY="280.0" prefHeight="25.0" prefWidth="82.0"/>
+                         layoutY="280.0" prefHeight="25.0" prefWidth="73.0"/>
                 <Label layoutX="14.0" layoutY="328.0" text="Green:"/>
-                <Slider fx:id="greenSlider" layoutY="350.0" max="255.0"
-                        prefHeight="14.0" prefWidth="176.0"
-                        AnchorPane.leftAnchor="0.0"
+                <Slider fx:id="greenSlider" layoutX="10.0" layoutY="350.0"
+                        max="255.0" prefHeight="14.0" prefWidth="166.0"
+                        AnchorPane.leftAnchor="10.0"
                         AnchorPane.rightAnchor="103.0"
                         AnchorPane.topAnchor="350.0"/>
                 <Spinner fx:id="greenSpinner" editable="true" layoutX="183.0"
-                         layoutY="345.0" prefHeight="25.0" prefWidth="82.0"/>
+                         layoutY="345.0" prefHeight="25.0" prefWidth="73.0"/>
                 <Label layoutX="14.0" layoutY="393.0" text="Blue:"/>
-                <Slider fx:id="blueSlider" layoutY="415.0" max="255.0"
-                        prefHeight="14.0" prefWidth="176.0"
-                        AnchorPane.leftAnchor="0.0"
+                <Slider fx:id="blueSlider" layoutX="10.0" layoutY="415.0"
+                        max="255.0" prefHeight="14.0" prefWidth="166.0"
+                        AnchorPane.leftAnchor="10.0"
                         AnchorPane.rightAnchor="103.0"
                         AnchorPane.topAnchor="415.0"/>
                 <Spinner fx:id="blueSpinner" editable="true" layoutX="183.0"
-                         layoutY="410.0" prefHeight="25.0" prefWidth="82.0"/>
-                <Button fx:id="resetChanges" layoutX="88.0" layoutY="446.0"
+                         layoutY="410.0" prefHeight="25.0" prefWidth="73.0"/>
+                <Button fx:id="resetChanges" layoutX="162.0" layoutY="455.0"
                         mnemonicParsing="false" onAction="#resetChanges"
                         prefHeight="25.0" prefWidth="103.0"
                         text="Reset Changes"/>
-                <Button fx:id="applyChanges" layoutX="88.0" layoutY="486.0"
+                <Button fx:id="applyChanges" layoutX="13.0" layoutY="455.0"
                         mnemonicParsing="false" onAction="#applyChanges"
                         prefHeight="25.0" prefWidth="103.0"
                         text="Apply Changes"/>
@@ -195,10 +203,10 @@
         </AnchorPane>
     </right>
     <left>
-        <AnchorPane prefHeight="718.0" prefWidth="72.0"
+        <AnchorPane prefHeight="770.0" prefWidth="85.0"
                     BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="select" layoutX="5.0" layoutY="130.0"
+                <Button fx:id="select" layoutX="12.0" layoutY="100.0"
                         mnemonicParsing="false" onAction="#doSelection"
                         prefWidth="26.0">
                     <graphic>
@@ -211,7 +219,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="cut" layoutX="5.0" layoutY="230.0"
+                <Button fx:id="cut" layoutX="12.0" layoutY="200.0"
                         mnemonicParsing="false" prefWidth="26.0">
                     <graphic>
                         <ImageView fx:id="cutImageView" fitHeight="49.0"
@@ -223,7 +231,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="rotateLeft" layoutX="5.0" layoutY="330.0"
+                <Button fx:id="rotateLeft" layoutX="12.0" layoutY="300.0"
                         mnemonicParsing="false" onAction="#rotateLeft">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"
@@ -235,7 +243,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="rotateRight" layoutX="5.0" layoutY="430.0"
+                <Button fx:id="rotateRight" layoutX="12.0" layoutY="400.0"
                         mnemonicParsing="false" onAction="#rotateRight">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"
@@ -247,8 +255,8 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="horizontalMirroring" layoutX="5.0"
-                        layoutY="530.0" mnemonicParsing="false"
+                <Button fx:id="horizontalMirroring" layoutX="12.0"
+                        layoutY="500.0" mnemonicParsing="false"
                         onAction="#doHorizontalMirroring">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"
@@ -260,7 +268,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="verticalMirroring" layoutX="5.0" layoutY="630.0"
+                <Button fx:id="verticalMirroring" layoutX="12.0" layoutY="600.0"
                         mnemonicParsing="false" onAction="#doVerticalMirroring">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="46.0"

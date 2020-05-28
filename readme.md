@@ -31,7 +31,7 @@ Java DIP (digital image processing) application
         - box filter
         - SQR-box filter
         - 2D-filter
-    - selecting the object in front of pic and enhancing sharpness on it
+    - selecting the object in front of pic and enhancing sharpness on it (beta)
 - saving processed image
 
 **Future features**
@@ -40,7 +40,7 @@ Java DIP (digital image processing) application
     - the project itself
     - the project for testing
 - paint-like brushes
-- styles
+- color schemes
 - transformations (making image rounded or squeeze)
 - meme creating features:
     - demotivators
