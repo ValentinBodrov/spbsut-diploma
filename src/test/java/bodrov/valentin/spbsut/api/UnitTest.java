@@ -155,4 +155,12 @@ public class UnitTest extends AbstractTest {
         boolean isSaved = TestSteps.savePictureAs(pixelatedImage, NEWFILENAME);
         TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
     }
+
+    @Test
+    public void testForegroundObjectDetection() {
+        BufferedImage imageWithForegroundObject = TestSteps.makeImageWithForegroundDetection(TestSteps.openLocalFile(FILENAME));
+        boolean isSaved = TestSteps.savePictureAs(imageWithForegroundObject, NEWFILENAME);
+        TestSteps.fileShouldBeSaved(isSaved, NEWFILENAME);
+    }
+    
 }

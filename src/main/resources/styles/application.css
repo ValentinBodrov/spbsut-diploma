@@ -1,0 +1,22 @@
+#select,
+#cut,
+#rotateLeft,
+#rotateRight,
+#horizontalMirroring,
+#verticalMirroring {
+    -fx-background-radius: 20px;
+    -fx-border-radius: 10px;
+}
+
+.label {
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 15px;
+}
+
+#centerPane {
+    -fx-background-color: rgba(231, 231, 231, .80);
+}
+
+.root {
+    -fx-background-color: rgba(255, 255, 255, .80);
+}

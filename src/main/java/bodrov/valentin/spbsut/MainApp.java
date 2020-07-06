@@ -16,10 +16,11 @@ public class MainApp extends Application {
     }
 
     public void start(Stage stage) throws Exception {
-        String fxmlFile = "/fxml/hello.fxml";
+        String fxmlFile = "/fxml/application.fxml";
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(
                 getClass().getResourceAsStream(fxmlFile));
+        root.getStylesheets().add(getClass().getResource("/styles/application.css").toExternalForm());
         stage.setTitle("JavaFX Image Processor");
         stage.setScene(new Scene(root));
         stage.show();
